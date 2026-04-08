@@ -1,4 +1,4 @@
-package me.steinsut.entropylib.api.model;
+package me.steinsut.entropylib.api.renderer;
 
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
@@ -15,9 +15,9 @@ import java.util.function.Supplier;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
 
-public final class ModelDataType<D, B extends ByteBuf> {
-    public static final Codec<ModelDataType<?, ?>> CODEC = Registries.MODEL_DATA_TYPE_REGISTRY.byNameCodec();
-    public static final StreamCodec<RegistryFriendlyByteBuf, ModelDataType<?, ?>> STREAM_CODEC = ByteBufCodecs.registry(Registries.MODEL_DATA_TYPE_REGISTRY_KEY);
+public final class DynRendererDataType<D, B extends ByteBuf> {
+    public static final Codec<DynRendererDataType<?, ?>> CODEC = Registries.DYN_RENDERER_DATA_TYPE_REGISTRY.byNameCodec();
+    public static final StreamCodec<RegistryFriendlyByteBuf, DynRendererDataType<?, ?>> STREAM_CODEC = ByteBufCodecs.registry(Registries.DYN_RENDERER_DATA_TYPE_REGISTRY_KEY);
 
     private static final String VALUE_IO_KEY = "model";
 
@@ -26,11 +26,11 @@ public final class ModelDataType<D, B extends ByteBuf> {
     private final Codec<D> dataCodec;
     private final StreamCodec<B, D> dataStreamCodec;
 
-    public ModelDataType(Codec<D> dataCodec, StreamCodec<B, D> dataStreamCodec, Supplier<D> defaultSupplier) {
+    public DynRendererDataType(Codec<D> dataCodec, StreamCodec<B, D> dataStreamCodec, Supplier<D> defaultSupplier) {
         this(dataCodec, dataStreamCodec, defaultSupplier, new HashMap<>());
     }
 
-    public ModelDataType(Codec<D> dataCodec, StreamCodec<B, D> dataStreamCodec, Supplier<D> defaultSupplier, Map<Identifier, Supplier<D>> presets) {
+    public DynRendererDataType(Codec<D> dataCodec, StreamCodec<B, D> dataStreamCodec, Supplier<D> defaultSupplier, Map<Identifier, Supplier<D>> presets) {
         this.defaultSupplier = defaultSupplier;
         this.presets = presets;
         this.dataCodec = dataCodec;
@@ -84,16 +84,16 @@ public final class ModelDataType<D, B extends ByteBuf> {
             return this;
         }
 
-        public ModelDataType<_D, _B> build() {
-            return new ModelDataType<>(this.codec, this.streamCodec, this.defaultSupplier, this.presets);
+        public DynRendererDataType<_D, _B> build() {
+            return new DynRendererDataType<>(this.codec, this.streamCodec, this.defaultSupplier, this.presets);
         }
     }
 
     public static class Holder<_D, _B extends ByteBuf> {
-        private final ModelDataType<_D, _B> dataType;
+        private final DynRendererDataType<_D, _B> dataType;
         private _D data;
 
-        private Holder(ModelDataType<_D, _B> dataType, _D data) {
+        private Holder(DynRendererDataType<_D, _B> dataType, _D data) {
             this.dataType = dataType;
             this.data = data;
         }
@@ -117,7 +117,7 @@ public final class ModelDataType<D, B extends ByteBuf> {
         }
 
         public void readFromInput(ValueInput in) {
-            Optional<_D> result = in.read(ModelDataType.VALUE_IO_KEY, this.dataType.dataCodec);
+            Optional<_D> result = in.read(DynRendererDataType.VALUE_IO_KEY, this.dataType.dataCodec);
 
             this.data = result.orElseGet(this.dataType.defaultSupplier);
         }
@@ -127,7 +127,7 @@ public final class ModelDataType<D, B extends ByteBuf> {
         }
 
         public void writeToOutput(ValueOutput out) {
-            out.store(ModelDataType.VALUE_IO_KEY, this.dataType.dataCodec, this.data);
+            out.store(DynRendererDataType.VALUE_IO_KEY, this.dataType.dataCodec, this.data);
         }
 
         public void writeToStream(_B buf) {

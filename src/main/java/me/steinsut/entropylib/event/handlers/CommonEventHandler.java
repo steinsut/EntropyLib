@@ -25,6 +25,6 @@ public class CommonEventHandler implements IModEventHandler, INeoEventHandler {
     }
 
     private void createNewRegistries(final NewRegistryEvent event) {
-        event.register(Registries.MODEL_DATA_TYPE_REGISTRY);
+        event.register(Registries.DYN_RENDERER_DATA_TYPE_REGISTRY);
     }
 }
