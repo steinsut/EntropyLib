@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
 
-public class ModelDataType<D, B extends ByteBuf> {
+public final class ModelDataType<D, B extends ByteBuf> {
     private static final String VALUE_IO_KEY = "model";
 
     private final Supplier<D> defaultSupplier;
