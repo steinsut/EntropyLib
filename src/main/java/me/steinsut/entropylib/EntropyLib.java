@@ -2,6 +2,7 @@ package me.steinsut.entropylib;
 
 import com.mojang.logging.LogUtils;
 import me.steinsut.entropylib.api.EntropyLibApi;
+import me.steinsut.entropylib.event.handlers.CommonEventHandler;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -15,14 +16,11 @@ public class EntropyLib {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public EntropyLib(IEventBus modEventBus, ModContainer modContainer) {
-        modEventBus.addListener(this::commonSetup);
-
-        NeoForge.EVENT_BUS.register(this);
-
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-    }
 
-    private void commonSetup(FMLCommonSetupEvent event) {
-        LOGGER.info("Overengineering in progress...");
+        var commonEventHandler = new CommonEventHandler();
+
+        commonEventHandler.registerModEventHandlers(modEventBus);
+        commonEventHandler.registerNeoEventHandlers(NeoForge.EVENT_BUS);
     }
 }
