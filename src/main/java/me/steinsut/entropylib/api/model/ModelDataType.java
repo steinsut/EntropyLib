@@ -2,35 +2,39 @@ package me.steinsut.entropylib.api.model;
 
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
+import me.steinsut.entropylib.api.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Supplier;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
 
 public final class ModelDataType<D, B extends ByteBuf> {
+    public static final Codec<ModelDataType<?, ?>> CODEC = Registries.MODEL_DATA_TYPE_REGISTRY.byNameCodec();
+    public static final StreamCodec<RegistryFriendlyByteBuf, ModelDataType<?, ?>> STREAM_CODEC = ByteBufCodecs.registry(Registries.MODEL_DATA_TYPE_REGISTRY_KEY);
+
     private static final String VALUE_IO_KEY = "model";
 
     private final Supplier<D> defaultSupplier;
     private final Map<Identifier, Supplier<D>> presets;
-    private final Codec<D> codec;
-    private final StreamCodec<B, D> streamCodec;
+    private final Codec<D> dataCodec;
+    private final StreamCodec<B, D> dataStreamCodec;
 
-    public ModelDataType(Codec<D> codec, StreamCodec<B, D> streamCodec, Supplier<D> defaultSupplier) {
-        this(codec, streamCodec, defaultSupplier, new HashMap<>());
+    public ModelDataType(Codec<D> dataCodec, StreamCodec<B, D> dataStreamCodec, Supplier<D> defaultSupplier) {
+        this(dataCodec, dataStreamCodec, defaultSupplier, new HashMap<>());
     }
 
-    public ModelDataType(Codec<D> codec, StreamCodec<B, D> streamCodec, Supplier<D> defaultSupplier, Map<Identifier, Supplier<D>> presets) {
+    public ModelDataType(Codec<D> dataCodec, StreamCodec<B, D> dataStreamCodec, Supplier<D> defaultSupplier, Map<Identifier, Supplier<D>> presets) {
         this.defaultSupplier = defaultSupplier;
         this.presets = presets;
-        this.codec = codec;
-        this.streamCodec = streamCodec;
+        this.dataCodec = dataCodec;
+        this.dataStreamCodec = dataStreamCodec;
     }
 
     public Holder<D, B> createHolder() {
@@ -44,6 +48,14 @@ public final class ModelDataType<D, B extends ByteBuf> {
             LOGGER.warn("Preset \"{}\" is null or does not exist", preset);
             return this.createHolder();
         }
+    }
+
+    public boolean hasPreset(Identifier id) {
+        return this.presets.containsKey(id);
+    }
+
+    public Collection<Identifier> getAllPresetsIds() {
+        return Collections.unmodifiableSet(this.presets.keySet());
     }
 
     public static class Builder<_D, _B extends ByteBuf> {
@@ -105,21 +117,21 @@ public final class ModelDataType<D, B extends ByteBuf> {
         }
 
         public void readFromInput(ValueInput in) {
-            Optional<_D> result = in.read(ModelDataType.VALUE_IO_KEY, this.dataType.codec);
+            Optional<_D> result = in.read(ModelDataType.VALUE_IO_KEY, this.dataType.dataCodec);
 
             this.data = result.orElseGet(this.dataType.defaultSupplier);
         }
 
         public void readFromStream(_B buf) {
-            this.data = this.dataType.streamCodec.decode(buf);
+            this.data = this.dataType.dataStreamCodec.decode(buf);
         }
 
         public void writeToOutput(ValueOutput out) {
-            out.store(ModelDataType.VALUE_IO_KEY, this.dataType.codec, this.data);
+            out.store(ModelDataType.VALUE_IO_KEY, this.dataType.dataCodec, this.data);
         }
 
         public void writeToStream(_B buf) {
-            this.dataType.streamCodec.encode(buf, this.data);
+            this.dataType.dataStreamCodec.encode(buf, this.data);
         }
 
         public _D getData() {
