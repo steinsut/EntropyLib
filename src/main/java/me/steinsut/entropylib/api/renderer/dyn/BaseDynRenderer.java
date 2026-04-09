@@ -1,4 +1,4 @@
-package me.steinsut.entropylib.api.renderer;
+package me.steinsut.entropylib.api.renderer.dyn;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -14,12 +14,10 @@ public abstract class BaseDynRenderer<D, S extends BaseRenderState> {
         this.dataHolder = dataType.createHolder();
     }
 
-    public void setData(DynRendererDataType.Holder<?, ?> holder) {
-        this.dataHolder.copyFrom(holder);
-    }
+    public void copyDataFrom(DynRendererDataType.Holder<?, ?> holder) { this.dataHolder.copyFrom(holder); }
 
-    public D getData() {
-        return this.dataHolder.getData();
+    public DynRendererDataType.Holder<D, ?> getDataHolder() {
+        return this.dataHolder;
     }
 
     public abstract void submit(S renderState, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState cameraState);

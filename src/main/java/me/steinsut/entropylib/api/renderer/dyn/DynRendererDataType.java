@@ -1,4 +1,4 @@
-package me.steinsut.entropylib.api.renderer;
+package me.steinsut.entropylib.api.renderer.dyn;
 
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
@@ -19,7 +19,7 @@ public final class DynRendererDataType<D, B extends ByteBuf> {
     public static final Codec<DynRendererDataType<?, ?>> CODEC = Registries.DYN_RENDERER_DATA_TYPE_REGISTRY.byNameCodec();
     public static final StreamCodec<RegistryFriendlyByteBuf, DynRendererDataType<?, ?>> STREAM_CODEC = ByteBufCodecs.registry(Registries.DYN_RENDERER_DATA_TYPE_REGISTRY_KEY);
 
-    private static final String VALUE_IO_KEY = "model";
+    private static final String VALUE_IO_KEY = "dyn";
 
     private final Supplier<D> defaultSupplier;
     private final Map<Identifier, Supplier<D>> presets;
@@ -45,7 +45,7 @@ public final class DynRendererDataType<D, B extends ByteBuf> {
         if (preset != null && this.presets.containsKey(preset)) {
             return new Holder<>(this, this.presets.get(preset).get());
         } else {
-            LOGGER.warn("Preset \"{}\" is null or does not exist", preset);
+            LOGGER.warn("Preset \"{}\" is null or does not exist, falling back to default preset", preset);
             return this.createHolder();
         }
     }
