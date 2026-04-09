@@ -1,9 +1,9 @@
 package me.steinsut.entropylib.api.entity;
 
-import me.steinsut.entropylib.api.renderer.DynRenderedEntityRenderState;
-import me.steinsut.entropylib.api.renderer.dyn.DynRendererDataType;
-import me.steinsut.entropylib.api.renderer.dyn.entity.EntityDynRendererType;
-import me.steinsut.entropylib.api.renderer.dyn.entity.IDynRenderedEntity;
+import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
+import me.steinsut.entropylib.api.dynrenderer.DynRendererDataType;
+import me.steinsut.entropylib.api.dynrenderer.entity.EntityDynRendererType;
+import me.steinsut.entropylib.api.dynrenderer.entity.IDynRenderedEntity;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

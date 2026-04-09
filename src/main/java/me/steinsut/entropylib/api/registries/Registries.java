@@ -1,8 +1,8 @@
 package me.steinsut.entropylib.api.registries;
 
 import me.steinsut.entropylib.api.EntropyLibApi;
-import me.steinsut.entropylib.api.renderer.dyn.BaseDynRendererType;
-import me.steinsut.entropylib.api.renderer.dyn.DynRendererDataType;
+import me.steinsut.entropylib.api.dynrenderer.BaseDynRendererType;
+import me.steinsut.entropylib.api.dynrenderer.DynRendererDataType;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;

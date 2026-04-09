@@ -1,9 +1,7 @@
 package me.steinsut.entropylib.api.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import me.steinsut.entropylib.api.renderer.DynRenderedEntityRenderState;
-import me.steinsut.entropylib.api.renderer.dyn.entity.EntityDynRenderer;
-import me.steinsut.entropylib.api.renderer.dyn.entity.IDynRenderedEntity;
+import me.steinsut.entropylib.api.dynrenderer.entity.IDynRenderedEntity;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -25,6 +23,8 @@ public abstract class DynRenderedEntityRenderer<E extends Entity & IDynRenderedE
     @Override
     public void submit(S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
         super.submit(state, poseStack, submitNodeCollector, camera);
+
+        // TODO: state.dynRenderer can currently be null, should change that if possible
         if (state.dynRenderer != null) {
             state.dynRenderer.copyDataFrom(state.dynRendererData);
             state.dynRenderer.submit(state, poseStack, submitNodeCollector, camera);

@@ -1,4 +1,4 @@
-package me.steinsut.entropylib.api.renderer.dyn;
+package me.steinsut.entropylib.api.dynrenderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.SubmitNodeCollector;

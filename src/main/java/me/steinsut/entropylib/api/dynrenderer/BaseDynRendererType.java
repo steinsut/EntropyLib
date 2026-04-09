@@ -1,4 +1,4 @@
-package me.steinsut.entropylib.api.renderer.dyn;
+package me.steinsut.entropylib.api.dynrenderer;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
