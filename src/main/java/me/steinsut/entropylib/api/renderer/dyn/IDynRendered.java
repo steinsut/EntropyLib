@@ -5,7 +5,4 @@ import net.neoforged.neoforge.client.renderstate.BaseRenderState;
 
 public sealed interface IDynRendered<S extends BaseRenderState> permits IDynRenderedEntity {
     DynRendererDataType.Holder<?, ?> getDynRendererDataHolder();
-
-    boolean isDynRendererInvalidated();
-    void resetDynRendererInvalidation();
 }

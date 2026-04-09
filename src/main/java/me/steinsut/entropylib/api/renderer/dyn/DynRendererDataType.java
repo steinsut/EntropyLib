@@ -101,19 +101,19 @@ public final class DynRendererDataType<D, B extends ByteBuf> {
         @SuppressWarnings("unchecked")
         public void copyTo(Holder<?, ?> holder) {
             if (this.dataType != holder.dataType) {
-                throw new RuntimeException("Holders belong to different data types");
+                ((Holder<_D, _B>) holder).data = this.data;
+            } else {
+                LOGGER.error("Cannot copy value to holder, holders belong to different data types");
             }
-
-            ((Holder<_D, _B>) holder).data = this.data;
         }
 
         @SuppressWarnings("unchecked")
         public void copyFrom(Holder<?, ?> holder) {
-            if (this.dataType != holder.dataType) {
-                throw new RuntimeException("Holders belong to different data types");
+            if (this.dataType == holder.dataType) {
+                this.data = ((Holder<_D, _B>) holder).data;
+            } else {
+                LOGGER.error("Cannot copy from holder, holders belong to different data types");
             }
-
-            this.data = ((Holder<_D, _B>) holder).data;
         }
 
         public void readFromInput(ValueInput in) {

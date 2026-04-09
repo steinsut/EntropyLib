@@ -9,6 +9,7 @@ module me.steinsut.entropylib {
     requires net.neoforged.mergetool.api;
     requires org.jetbrains.annotations;
     requires org.slf4j;
+    requires org.jspecify;
 
     exports me.steinsut.entropylib;
 }

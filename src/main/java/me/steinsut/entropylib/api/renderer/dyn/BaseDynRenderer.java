@@ -7,14 +7,16 @@ import net.neoforged.neoforge.client.renderstate.BaseRenderState;
 
 public abstract class BaseDynRenderer<D, S extends BaseRenderState> {
     private final DynRendererDataType<D, ?> dataType;
-    private DynRendererDataType.Holder<D, ?> dataHolder;
+    private final DynRendererDataType.Holder<D, ?> dataHolder;
 
     public BaseDynRenderer(DynRendererDataType<D, ?> dataType) {
         this.dataType = dataType;
         this.dataHolder = dataType.createHolder();
     }
 
-    public void copyDataFrom(DynRendererDataType.Holder<?, ?> holder) { this.dataHolder.copyFrom(holder); }
+    public void copyDataFrom(DynRendererDataType.Holder<?, ?> holder) {
+        this.dataHolder.copyFrom(holder);
+    }
 
     public DynRendererDataType.Holder<D, ?> getDataHolder() {
         return this.dataHolder;
