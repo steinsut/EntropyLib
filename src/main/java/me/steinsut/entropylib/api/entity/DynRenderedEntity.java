@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
+import static me.steinsut.entropylib.api.registries.Registries.DYN_RENDERER_TYPE_REGISTRY;
 
 public abstract class DynRenderedEntity<S extends DynRenderedEntityRenderState<S>> extends Entity implements IDynRenderedEntity<S> {
     protected EntityDynRendererType<?, ?, S> dynRendererType;
@@ -26,13 +27,14 @@ public abstract class DynRenderedEntity<S extends DynRenderedEntityRenderState<S
         return this.dynRendererType;
     }
 
-    public void setDynRenderer(Holder<EntityDynRendererType<?, ?, S>> typeHolder) {
-        var type = typeHolder.value();
+    public void setDynRenderer(EntityDynRendererType<?, ?, S> type) {
         if (type.isCompatible(this.typeHolder())) {
             this.dynRendererType = type;
             this.dynRendererData = type.getDataType().createHolder();
         } else {
-            LOGGER.error("DynRenderer type {} is incompatible with entity type {}", typeHolder.getKey().identifier(), this.typeHolder().getKey().identifier());
+            LOGGER.error("DynRenderer type {} is incompatible with entity type {}",
+                    DYN_RENDERER_TYPE_REGISTRY.getKey(type),
+                    this.typeHolder().getKey().identifier());
             if (this.dynRendererType == null) {
                 //TODO: set type to some default here
             }
