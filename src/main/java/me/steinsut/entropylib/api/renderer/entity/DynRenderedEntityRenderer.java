@@ -25,7 +25,9 @@ public abstract class DynRenderedEntityRenderer<E extends Entity & IDynRenderedE
     public void submit(@NonNull S state, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, @NonNull CameraRenderState camera) {
         super.submit(state, poseStack, submitNodeCollector, camera);
 
-        state.dynRenderer.copyDataFrom(state.dynRendererData);
-        state.dynRenderer.submit(state, poseStack, submitNodeCollector, camera);
+        if (state.dynRenderer != null) {
+            state.dynRenderer.copyDataFrom(state.dynRendererData);
+            state.dynRenderer.submit(state, poseStack, submitNodeCollector, camera);
+        }
     }
 }
