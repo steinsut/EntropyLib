@@ -98,12 +98,20 @@ public final class DynRendererDataType<D, B extends ByteBuf> {
             this.data = data;
         }
 
+        public _D getData() {
+            return this.data;
+        }
+
+        public DynRendererDataType<_D, _B> getDataType() {
+            return this.dataType;
+        }
+
         @SuppressWarnings("unchecked")
         public void copyTo(Holder<?, ?> holder) {
             if (this.dataType != holder.dataType) {
                 ((Holder<_D, _B>) holder).data = this.data;
             } else {
-                LOGGER.error("Cannot copy value to holder, holders belong to different data types");
+                LOGGER.warn("Cannot copy value to holder, holders belong to different data types");
             }
         }
 
@@ -112,7 +120,7 @@ public final class DynRendererDataType<D, B extends ByteBuf> {
             if (this.dataType == holder.dataType) {
                 this.data = ((Holder<_D, _B>) holder).data;
             } else {
-                LOGGER.error("Cannot copy from holder, holders belong to different data types");
+                LOGGER.warn("Cannot copy from holder, holders belong to different data types");
             }
         }
 
@@ -122,24 +130,29 @@ public final class DynRendererDataType<D, B extends ByteBuf> {
             this.data = result.orElseGet(this.dataType.defaultSupplier);
         }
 
-        public void readFromStream(_B buf) {
-            this.data = this.dataType.dataStreamCodec.decode(buf);
-        }
-
         public void writeToOutput(ValueOutput out) {
             out.store(DynRendererDataType.VALUE_IO_KEY, this.dataType.dataCodec, this.data);
+        }
+
+        public void readFromStream(_B buf) {
+            this.data = this.dataType.dataStreamCodec.decode(buf);
         }
 
         public void writeToStream(_B buf) {
             this.dataType.dataStreamCodec.encode(buf, this.data);
         }
 
-        public _D getData() {
-            return this.data;
-        }
-
         public void setData(_D data) {
             this.data = data;
+        }
+
+        public void setToPreset(Identifier id) {
+            if (this.dataType.hasPreset(id)) {
+                this.data = this.dataType.presets.get(id).get();
+            }
+            else {
+                LOGGER.warn("Data type does not have preset {}", id);
+            }
         }
     }
 }

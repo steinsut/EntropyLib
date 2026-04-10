@@ -10,13 +10,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
-import static me.steinsut.entropylib.api.registries.Registries.DYN_RENDERER_TYPE_REGISTRY;
 
-public abstract class DynRenderedEntity<S extends DynRenderedEntityRenderState<S>> extends Entity implements IDynRenderedEntity<S> {
+public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderState<S>> extends Entity implements IDynRenderedEntity<S> {
     protected EntityDynRendererType<?, ?, S> dynRendererType;
     protected DynRendererDataType.Holder<?, ?> dynRendererData;
 
-    public DynRenderedEntity(EntityType<?> type, Level level, Holder<EntityDynRendererType<?, ?, S>> dynRendererType) {
+    public BaseDynRenderedEntity(EntityType<?> type, Level level, Holder<EntityDynRendererType<?, ?, S>> dynRendererType) {
         super(type, level);
 
         this.setDynRendererType(dynRendererType);
@@ -27,16 +26,26 @@ public abstract class DynRenderedEntity<S extends DynRenderedEntityRenderState<S
         return this.dynRendererType;
     }
 
-    public void setDynRenderer(EntityDynRendererType<?, ?, S> type) {
+    @Override
+    public void setDynRendererType(Holder<EntityDynRendererType<?, ?, S>> typeHolder) {
+        var type = typeHolder.value();
+
         if (type.isCompatible(this.typeHolder())) {
             this.dynRendererType = type;
             this.dynRendererData = type.getDataType().createHolder();
         } else {
-            LOGGER.error("DynRenderer type {} is incompatible with entity type {}",
-                    DYN_RENDERER_TYPE_REGISTRY.getKey(type),
+            LOGGER.warn("DynRenderer type {} is incompatible with entity type {}",
+                    typeHolder.getKey().identifier(),
                     this.typeHolder().getKey().identifier());
             if (this.dynRendererType == null) {
-                //TODO: set type to some default here
+                this.dynRendererType = this.getFallbackDynRendererType();
+                this.dynRendererData = this.dynRendererType.getDataType().createHolder();
+
+                if (this.dynRendererType.getDynRendererInstance().isEmpty()) {
+                    this.dynRendererType.instantiateDynRenderer(null);
+                }
+
+                this.setFallbackDynRendererData();
             }
         }
     }
