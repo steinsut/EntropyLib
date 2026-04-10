@@ -41,7 +41,7 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
                 this.dynRendererType = this.getFallbackDynRendererType();
                 this.dynRendererData = this.dynRendererType.getDataType().createHolder();
 
-                if (this.dynRendererType.getDynRendererInstance().isEmpty()) {
+                if (this.level().isClientSide() && this.dynRendererType.getDynRendererInstance().isEmpty()) {
                     this.dynRendererType.instantiateDynRenderer(null);
                 }
 

@@ -15,9 +15,11 @@ public class EntropyLib {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public EntropyLib(IEventBus modEventBus, ModContainer modContainer) {
+        LOGGER.info("Hello from EntropyLib! Overengineering in progress...");
+
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
-        var commonEventHandler = new CommonEventHandler();
+        CommonEventHandler commonEventHandler = new CommonEventHandler();
 
         commonEventHandler.registerModEventHandlers(modEventBus);
         commonEventHandler.registerNeoEventHandlers(NeoForge.EVENT_BUS);
