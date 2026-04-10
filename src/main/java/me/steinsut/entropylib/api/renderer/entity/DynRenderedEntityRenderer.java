@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.world.entity.Entity;
+import org.jspecify.annotations.NonNull;
 
 public abstract class DynRenderedEntityRenderer<E extends Entity & IDynRenderedEntity<S>, S extends DynRenderedEntityRenderState<S>> extends EntityRenderer<E, S> {
     protected DynRenderedEntityRenderer(EntityRendererProvider.Context context) {
@@ -14,14 +15,14 @@ public abstract class DynRenderedEntityRenderer<E extends Entity & IDynRenderedE
     }
 
     @Override
-    public void extractRenderState(E entity, S reusedState, float partialTick) {
+    public void extractRenderState(@NonNull E entity, @NonNull S reusedState, float partialTick) {
         super.extractRenderState(entity, reusedState, partialTick);
         reusedState.dynRenderer = entity.getDynRendererType().getDynRendererInstance().orElse(null);
         reusedState.dynRendererData = entity.getDynRendererDataHolder();
     }
 
     @Override
-    public void submit(S state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
+    public void submit(@NonNull S state, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, @NonNull CameraRenderState camera) {
         super.submit(state, poseStack, submitNodeCollector, camera);
 
         state.dynRenderer.copyDataFrom(state.dynRendererData);

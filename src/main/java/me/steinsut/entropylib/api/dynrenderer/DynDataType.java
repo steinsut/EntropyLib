@@ -15,9 +15,9 @@ import java.util.function.Supplier;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
 
-public final class DynRendererDataType<D, B extends ByteBuf> {
-    public static final Codec<DynRendererDataType<?, ?>> CODEC = Registries.DYN_RENDERER_DATA_TYPE_REGISTRY.byNameCodec();
-    public static final StreamCodec<RegistryFriendlyByteBuf, DynRendererDataType<?, ?>> STREAM_CODEC = ByteBufCodecs.registry(Registries.DYN_RENDERER_DATA_TYPE_REGISTRY_KEY);
+public final class DynDataType<D, B extends ByteBuf> {
+    public static final Codec<DynDataType<?, ?>> CODEC = Registries.DYN_RENDERER_DATA_TYPE_REGISTRY.byNameCodec();
+    public static final StreamCodec<RegistryFriendlyByteBuf, DynDataType<?, ?>> STREAM_CODEC = ByteBufCodecs.registry(Registries.DYN_RENDERER_DATA_TYPE_REGISTRY_KEY);
 
     private static final String VALUE_IO_KEY = "dyn";
 
@@ -26,11 +26,11 @@ public final class DynRendererDataType<D, B extends ByteBuf> {
     private final Codec<D> dataCodec;
     private final StreamCodec<B, D> dataStreamCodec;
 
-    public DynRendererDataType(Codec<D> dataCodec, StreamCodec<B, D> dataStreamCodec, Supplier<D> defaultSupplier) {
+    public DynDataType(Codec<D> dataCodec, StreamCodec<B, D> dataStreamCodec, Supplier<D> defaultSupplier) {
         this(dataCodec, dataStreamCodec, defaultSupplier, new HashMap<>());
     }
 
-    public DynRendererDataType(Codec<D> dataCodec, StreamCodec<B, D> dataStreamCodec, Supplier<D> defaultSupplier, Map<Identifier, Supplier<D>> presets) {
+    public DynDataType(Codec<D> dataCodec, StreamCodec<B, D> dataStreamCodec, Supplier<D> defaultSupplier, Map<Identifier, Supplier<D>> presets) {
         this.defaultSupplier = defaultSupplier;
         this.presets = presets;
         this.dataCodec = dataCodec;
@@ -84,16 +84,16 @@ public final class DynRendererDataType<D, B extends ByteBuf> {
             return this;
         }
 
-        public DynRendererDataType<_D, _B> build() {
-            return new DynRendererDataType<>(this.codec, this.streamCodec, this.defaultSupplier, this.presets);
+        public DynDataType<_D, _B> build() {
+            return new DynDataType<>(this.codec, this.streamCodec, this.defaultSupplier, this.presets);
         }
     }
 
     public static class Holder<_D, _B extends ByteBuf> {
-        private final DynRendererDataType<_D, _B> dataType;
+        private final DynDataType<_D, _B> dataType;
         private _D data;
 
-        private Holder(DynRendererDataType<_D, _B> dataType, _D data) {
+        private Holder(DynDataType<_D, _B> dataType, _D data) {
             this.dataType = dataType;
             this.data = data;
         }
@@ -102,7 +102,7 @@ public final class DynRendererDataType<D, B extends ByteBuf> {
             return this.data;
         }
 
-        public DynRendererDataType<_D, _B> getDataType() {
+        public DynDataType<_D, _B> getDataType() {
             return this.dataType;
         }
 
@@ -125,13 +125,13 @@ public final class DynRendererDataType<D, B extends ByteBuf> {
         }
 
         public void readFromInput(ValueInput in) {
-            Optional<_D> result = in.read(DynRendererDataType.VALUE_IO_KEY, this.dataType.dataCodec);
+            Optional<_D> result = in.read(DynDataType.VALUE_IO_KEY, this.dataType.dataCodec);
 
             this.data = result.orElseGet(this.dataType.defaultSupplier);
         }
 
         public void writeToOutput(ValueOutput out) {
-            out.store(DynRendererDataType.VALUE_IO_KEY, this.dataType.dataCodec, this.data);
+            out.store(DynDataType.VALUE_IO_KEY, this.dataType.dataCodec, this.data);
         }
 
         public void readFromStream(_B buf) {

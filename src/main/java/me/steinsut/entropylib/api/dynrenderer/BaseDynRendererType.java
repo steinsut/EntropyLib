@@ -13,13 +13,13 @@ public abstract class BaseDynRendererType<R extends BaseDynRenderer<D, S>, D, S 
     public static final Codec<BaseDynRendererType<?, ?, ?>> CODEC = DYN_RENDERER_TYPE_REGISTRY.byNameCodec();
     public static final StreamCodec<RegistryFriendlyByteBuf, BaseDynRendererType<?, ?, ?>> STREAM_CODEC = ByteBufCodecs.registry(DYN_RENDERER_TYPE_REGISTRY_KEY);
 
-    protected final DynRendererDataType<D, ?> dataType;
+    protected final DynDataType<D, ?> dataType;
 
-    public BaseDynRendererType(DynRendererDataType<D, ?> dataType) {
+    public BaseDynRendererType(DynDataType<D, ?> dataType) {
         this.dataType = dataType;
     }
 
-    public final DynRendererDataType<D, ?> getDataType() {
+    public final DynDataType<D, ?> getDataType() {
         return this.dataType;
     }
 }
