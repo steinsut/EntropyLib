@@ -17,8 +17,10 @@ public abstract class DynRenderedEntityRenderer<E extends Entity & IDynRenderedE
     @Override
     public void extractRenderState(@NonNull E entity, @NonNull S reusedState, float partialTick) {
         super.extractRenderState(entity, reusedState, partialTick);
+
         reusedState.dynRenderer = entity.getDynRendererType().getDynRendererInstance().orElse(null);
         reusedState.dynRendererData = entity.getDynRendererDataHolder();
+        reusedState.fallbackDynRenderer = entity.getFallbackDynRenderer();
     }
 
     @Override
@@ -26,8 +28,11 @@ public abstract class DynRenderedEntityRenderer<E extends Entity & IDynRenderedE
         super.submit(state, poseStack, submitNodeCollector, camera);
 
         if (state.dynRenderer != null) {
-            state.dynRenderer.copyDataFrom(state.dynRendererData);
+            state.dynRenderer.useDataFrom(state.dynRendererData);
             state.dynRenderer.submit(state, poseStack, submitNodeCollector, camera);
+        }
+        else {
+            state.fallbackDynRenderer.submit(state, poseStack, submitNodeCollector, camera);
         }
     }
 }

@@ -14,12 +14,8 @@ public abstract class BaseDynRenderer<D, S extends BaseRenderState> {
         this.dataHolder = dataType.createHolder();
     }
 
-    public void copyDataFrom(DynDataType.Holder<?, ?> holder) {
+    public void useDataFrom(DynDataType.Holder<?, ?> holder) {
         this.dataHolder.copyFrom(holder);
-    }
-
-    public DynDataType.Holder<D, ?> getDataHolder() {
-        return this.dataHolder;
     }
 
     public abstract void submit(S renderState, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState cameraState);

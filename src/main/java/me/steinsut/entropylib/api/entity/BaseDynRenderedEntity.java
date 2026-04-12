@@ -37,16 +37,6 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
             LOGGER.warn("DynRenderer type {} is incompatible with entity type {}",
                     typeHolder.getKey().identifier(),
                     this.typeHolder().getKey().identifier());
-            if (this.dynRendererType == null) {
-                this.dynRendererType = this.getFallbackDynRendererType();
-                this.dynRendererData = this.dynRendererType.getDataType().createHolder();
-
-                if (this.level().isClientSide() && this.dynRendererType.getDynRendererInstance().isEmpty()) {
-                    this.dynRendererType.instantiateDynRenderer(null);
-                }
-
-                this.setFallbackDynRendererData();
-            }
         }
     }
 
