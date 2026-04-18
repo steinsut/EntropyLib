@@ -8,6 +8,7 @@ import me.steinsut.entropylib.network.ClientboundSetEntityDynRType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 
@@ -39,7 +40,10 @@ public class CommonEventHandler implements IModEventHandler, INeoEventHandler {
     private void registerPayloads(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar(EntropyLibApi.NETWORK_PROTOCOL_VERSION);
 
-        registrar.playToClient(
+        final PayloadRegistrar mainRegistrar = registrar.executesOn(HandlerThread.MAIN);
+        final PayloadRegistrar networkRegistrar = registrar.executesOn(HandlerThread.NETWORK);
+
+        mainRegistrar.playToClient(
                 ClientboundSetEntityDynRType.TYPE,
                 ClientboundSetEntityDynRType.STREAM_CODEC,
                 ClientboundSetEntityDynRType::handleOnMain

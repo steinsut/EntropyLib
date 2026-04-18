@@ -24,13 +24,11 @@ public record ClientboundSetEntityDynRType(int id, EntityDynRendererType<?, ?, ?
     );
 
     public static void handleOnMain(final ClientboundSetEntityDynRType data, final IPayloadContext context) {
-        context.enqueueWork(() -> {
-            Level level = context.player().level();
-            IDynRenderedEntity<?> entity = (IDynRenderedEntity<?>) level.getEntity(data.id);
-            if (entity != null) {
-                entity.setDynRendererType(data.dynType);
-            }
-        });
+        Level level = context.player().level();
+        IDynRenderedEntity<?> entity = (IDynRenderedEntity<?>) level.getEntity(data.id);
+        if (entity != null) {
+            entity.setDynRendererType(data.dynType);
+        }
     }
 
     @Override
