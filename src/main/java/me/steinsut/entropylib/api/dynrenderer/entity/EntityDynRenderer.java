@@ -6,7 +6,7 @@ import me.steinsut.entropylib.api.dynrenderer.DynDataType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 public abstract class EntityDynRenderer<D, S extends DynRenderedEntityRenderState<S>> extends BaseDynRenderer<D, S> {
-    public EntityDynRenderer(EntityRendererProvider.Context context, DynDataType<D, ?> dataType) {
+    public EntityDynRenderer(EntityRendererProvider.Context context, DynDataType<D> dataType) {
         super(dataType);
     }
 }

@@ -6,10 +6,10 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.neoforged.neoforge.client.renderstate.BaseRenderState;
 
 public abstract class BaseDynRenderer<D, S extends BaseRenderState> {
-    private final DynDataType<D, ?> dataType;
+    private final DynDataType<D> dataType;
     private final DynDataType.Holder<D, ?> dataHolder;
 
-    public BaseDynRenderer(DynDataType<D, ?> dataType) {
+    public BaseDynRenderer(DynDataType<D> dataType) {
         this.dataType = dataType;
         this.dataHolder = dataType.createHolder();
     }

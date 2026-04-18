@@ -9,39 +9,40 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import org.jspecify.annotations.NonNull;
 
 import java.util.*;
 import java.util.function.Supplier;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
 
-public final class DynDataType<D, B extends ByteBuf> {
-    public static final Codec<DynDataType<?, ?>> CODEC = Registries.DYN_RENDERER_DATA_TYPE_REGISTRY.byNameCodec();
-    public static final StreamCodec<RegistryFriendlyByteBuf, DynDataType<?, ?>> STREAM_CODEC = ByteBufCodecs.registry(Registries.DYN_RENDERER_DATA_TYPE_REGISTRY_KEY);
+public final class DynDataType<D> {
+    public static final Codec<DynDataType<?>> CODEC = Registries.DYN_RENDERER_DATA_TYPE_REGISTRY.byNameCodec();
+    public static final StreamCodec<RegistryFriendlyByteBuf, DynDataType<?>> STREAM_CODEC = ByteBufCodecs.registry(Registries.DYN_RENDERER_DATA_TYPE_REGISTRY_KEY);
 
     private static final String VALUE_IO_KEY = "dyn";
 
     private final Supplier<D> defaultSupplier;
     private final Map<Identifier, Supplier<D>> presets;
     private final Codec<D> dataCodec;
-    private final StreamCodec<B, D> dataStreamCodec;
+    private final StreamCodec<? super RegistryFriendlyByteBuf, D> dataStreamCodec;
 
-    public DynDataType(Codec<D> dataCodec, StreamCodec<B, D> dataStreamCodec, Supplier<D> defaultSupplier) {
+    public DynDataType(Codec<D> dataCodec, StreamCodec<? super RegistryFriendlyByteBuf, D> dataStreamCodec, Supplier<D> defaultSupplier) {
         this(dataCodec, dataStreamCodec, defaultSupplier, new HashMap<>());
     }
 
-    public DynDataType(Codec<D> dataCodec, StreamCodec<B, D> dataStreamCodec, Supplier<D> defaultSupplier, Map<Identifier, Supplier<D>> presets) {
+    public DynDataType(Codec<D> dataCodec, StreamCodec<? super RegistryFriendlyByteBuf, D> dataStreamCodec, Supplier<D> defaultSupplier, Map<Identifier, Supplier<D>> presets) {
         this.defaultSupplier = defaultSupplier;
         this.presets = presets;
         this.dataCodec = dataCodec;
         this.dataStreamCodec = dataStreamCodec;
     }
 
-    public Holder<D, B> createHolder() {
+    public Holder<D, ByteBuf> createHolder() {
         return new Holder<>(this, defaultSupplier.get());
     }
 
-    public Holder<D, B> createHolder(Identifier preset) {
+    public Holder<D, ByteBuf> createHolder(Identifier preset) {
         if (preset != null && this.presets.containsKey(preset)) {
             return new Holder<>(this, this.presets.get(preset).get());
         } else {
@@ -58,24 +59,24 @@ public final class DynDataType<D, B extends ByteBuf> {
         return Collections.unmodifiableSet(this.presets.keySet());
     }
 
-    public static class Builder<_D, _B extends ByteBuf> {
+    public static class Builder<_D> {
         private final Supplier<_D> defaultSupplier;
         private final Map<Identifier, Supplier<_D>> presets;
         private final Codec<_D> codec;
-        private final StreamCodec<_B, _D> streamCodec;
+        private final StreamCodec<? super RegistryFriendlyByteBuf, _D> streamCodec;
 
-        public static <_D, _B extends ByteBuf> Builder<_D, _B> of(Codec<_D> codec, StreamCodec<_B, _D> streamCodec, Supplier<_D> defaultSupplier) {
+        public static <_D> Builder<_D> of(Codec<_D> codec, StreamCodec<? super RegistryFriendlyByteBuf, _D> streamCodec, Supplier<_D> defaultSupplier) {
             return new Builder<>(codec, streamCodec, defaultSupplier);
         }
 
-        private Builder(Codec<_D> codec, StreamCodec<_B, _D> streamCodec, Supplier<_D> defaultSupplier) {
+        private Builder(Codec<_D> codec, StreamCodec<? super RegistryFriendlyByteBuf, _D> streamCodec, Supplier<_D> defaultSupplier) {
             this.defaultSupplier = defaultSupplier;
             this.presets = new HashMap<>();
             this.codec = codec;
             this.streamCodec = streamCodec;
         }
 
-        public Builder<_D, _B> withPreset(Identifier id, Supplier<_D> supplier) {
+        public Builder<_D> withPreset(Identifier id, Supplier<_D> supplier) {
             if (this.presets.containsKey(id)) {
                 throw new RuntimeException("Preset already exists: " + id);
             }
@@ -84,25 +85,42 @@ public final class DynDataType<D, B extends ByteBuf> {
             return this;
         }
 
-        public DynDataType<_D, _B> build() {
+        public DynDataType<_D> build() {
             return new DynDataType<>(this.codec, this.streamCodec, this.defaultSupplier, this.presets);
         }
     }
 
     public static class Holder<_D, _B extends ByteBuf> {
-        private final DynDataType<_D, _B> dataType;
+        private final DynDataType<_D> dataType;
         private _D data;
 
-        private Holder(DynDataType<_D, _B> dataType, _D data) {
+        private Holder(DynDataType<_D> dataType, _D data) {
             this.dataType = dataType;
             this.data = data;
         }
+
+        public static StreamCodec<RegistryFriendlyByteBuf, Holder<?, ?>> STREAM_CODEC = new StreamCodec<>() {
+            @Override
+            public void encode(@NonNull RegistryFriendlyByteBuf buf, Holder<?, ?> holder) {
+                DynDataType.STREAM_CODEC.encode(buf, holder.dataType);
+                holder.encodeData(buf);
+            }
+
+            public @NonNull Holder<?, ?> decode(@NonNull RegistryFriendlyByteBuf buf) {
+                DynDataType<?> dataType = DynDataType.STREAM_CODEC.decode(buf);
+                Holder<?, ?> holder = dataType.createHolder();
+                holder.decodeData(buf);
+
+                return holder;
+            }
+        };
+
 
         public _D getData() {
             return this.data;
         }
 
-        public DynDataType<_D, _B> getDataType() {
+        public DynDataType<_D> getDataType() {
             return this.dataType;
         }
 
@@ -124,21 +142,21 @@ public final class DynDataType<D, B extends ByteBuf> {
             }
         }
 
-        public void readFromInput(ValueInput in) {
+        public void readData(ValueInput in) {
             Optional<_D> result = in.read(DynDataType.VALUE_IO_KEY, this.dataType.dataCodec);
 
             this.data = result.orElseGet(this.dataType.defaultSupplier);
         }
 
-        public void writeToOutput(ValueOutput out) {
+        public void writeData(ValueOutput out) {
             out.store(DynDataType.VALUE_IO_KEY, this.dataType.dataCodec, this.data);
         }
 
-        public void readFromStream(_B buf) {
+        public void decodeData(RegistryFriendlyByteBuf buf) {
             this.data = this.dataType.dataStreamCodec.decode(buf);
         }
 
-        public void writeToStream(_B buf) {
+        public void encodeData(RegistryFriendlyByteBuf buf) {
             this.dataType.dataStreamCodec.encode(buf, this.data);
         }
 

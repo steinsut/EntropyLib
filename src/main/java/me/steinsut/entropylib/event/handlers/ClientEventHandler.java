@@ -3,6 +3,7 @@ package me.steinsut.entropylib.event.handlers;
 import me.steinsut.entropylib.api.dynrenderer.entity.EntityDynRendererType;
 import me.steinsut.entropylib.event.IModEventHandler;
 import me.steinsut.entropylib.network.ClientboundSetEntityDynRType;
+import me.steinsut.entropylib.network.ClientboundUpdateEntityDynRData;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
@@ -30,6 +31,12 @@ public class ClientEventHandler implements IModEventHandler {
                 ClientboundSetEntityDynRType.TYPE,
                 HandlerThread.MAIN,
                 ClientboundSetEntityDynRType::handleOnMain
+        );
+
+        event.register(
+                ClientboundUpdateEntityDynRData.TYPE,
+                HandlerThread.MAIN,
+                ClientboundUpdateEntityDynRData::handleOnMain
         );
     }
 }

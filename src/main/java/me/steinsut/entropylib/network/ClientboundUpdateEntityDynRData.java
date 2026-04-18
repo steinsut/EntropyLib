@@ -1,7 +1,7 @@
 package me.steinsut.entropylib.network;
 
 import me.steinsut.entropylib.api.EntropyLibApi;
-import me.steinsut.entropylib.api.dynrenderer.entity.EntityDynRendererType;
+import me.steinsut.entropylib.api.dynrenderer.DynDataType;
 import me.steinsut.entropylib.api.dynrenderer.entity.IDynRenderedEntity;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -12,23 +12,23 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jspecify.annotations.NonNull;
 
-public record ClientboundSetEntityDynRType(int id, EntityDynRendererType<?, ?, ?> dynType) implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<ClientboundSetEntityDynRType> TYPE =
-            new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "cb_set_ent_dynr_t"));
+public record ClientboundUpdateEntityDynRData(int id, DynDataType.Holder<?, ?> holder) implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<ClientboundUpdateEntityDynRData> TYPE =
+            new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "cb_set_ent_dyndata"));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundSetEntityDynRType> STREAM_CODEC = StreamCodec.composite(
+    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundUpdateEntityDynRData> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT,
-            ClientboundSetEntityDynRType::id,
-            EntityDynRendererType.STREAM_CODEC,
-            ClientboundSetEntityDynRType::dynType,
-            ClientboundSetEntityDynRType::new
+            ClientboundUpdateEntityDynRData::id,
+            DynDataType.Holder.STREAM_CODEC,
+            ClientboundUpdateEntityDynRData::holder,
+            ClientboundUpdateEntityDynRData::new
     );
 
-    public static void handleOnMain(final ClientboundSetEntityDynRType data, final IPayloadContext context) {
+    public static void handleOnMain(final ClientboundUpdateEntityDynRData data, final IPayloadContext context) {
         Level level = context.player().level();
         IDynRenderedEntity<?> entity = (IDynRenderedEntity<?>) level.getEntity(data.id);
         if (entity != null) {
-            entity.setDynRendererType(data.dynType);
+            entity.getDynDataHolder().copyFrom(data.holder);
         }
     }
 

@@ -4,10 +4,12 @@ import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
 import me.steinsut.entropylib.api.dynrenderer.DynDataType;
 import me.steinsut.entropylib.api.dynrenderer.entity.EntityDynRendererType;
 import me.steinsut.entropylib.api.dynrenderer.entity.IDynRenderedEntity;
-import net.minecraft.core.Holder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import org.jspecify.annotations.NonNull;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
 import static me.steinsut.entropylib.api.registries.Registries.DYN_RENDERER_TYPE_REGISTRY;
@@ -43,5 +45,15 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
     @Override
     public DynDataType.Holder<?, ?> getDynDataHolder() {
         return this.dynRendererData;
+    }
+
+    @Override
+    protected void readAdditionalSaveData(@NonNull ValueInput input) {
+        dynRendererData.readData(input);
+    }
+
+    @Override
+    protected void addAdditionalSaveData(@NonNull ValueOutput output) {
+        dynRendererData.writeData(output);
     }
 }

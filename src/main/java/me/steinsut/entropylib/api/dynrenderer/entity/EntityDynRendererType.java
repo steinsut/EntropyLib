@@ -27,14 +27,14 @@ public final class EntityDynRendererType<R extends EntityDynRenderer<D, S>, D, S
 
 
     private R rendererInstance;
-    private final BiFunction<EntityRendererProvider.Context, DynDataType<D, ?>, R> dynRendererFactory;
+    private final BiFunction<EntityRendererProvider.Context, DynDataType<D>, R> dynRendererFactory;
     private final Set<Holder<EntityType<?>>> compatibleEntities;
 
-    public EntityDynRendererType(DynDataType<D, ?> dataType, BiFunction<EntityRendererProvider.Context, DynDataType<D, ?>, R> dynRendererFactory) {
+    public EntityDynRendererType(DynDataType<D> dataType, BiFunction<EntityRendererProvider.Context, DynDataType<D>, R> dynRendererFactory) {
         this(dataType, dynRendererFactory, new HashSet<>());
     }
 
-    public EntityDynRendererType(DynDataType<D, ?> dataType, BiFunction<EntityRendererProvider.Context, DynDataType<D, ?>, R> dynRendererFactory, Set<Holder<EntityType<?>>> compatibleEntities) {
+    public EntityDynRendererType(DynDataType<D> dataType, BiFunction<EntityRendererProvider.Context, DynDataType<D>, R> dynRendererFactory, Set<Holder<EntityType<?>>> compatibleEntities) {
         super(dataType);
 
         this.compatibleEntities = compatibleEntities;
@@ -54,17 +54,17 @@ public final class EntityDynRendererType<R extends EntityDynRenderer<D, S>, D, S
     }
 
     public static class Builder<_R extends EntityDynRenderer<_D, _S>, _D, _S extends DynRenderedEntityRenderState<_S>> {
-        private final BiFunction<EntityRendererProvider.Context, DynDataType<_D, ?>, _R> dynRendererFactory;
-        private final DynDataType<_D, ?> dataType;
+        private final BiFunction<EntityRendererProvider.Context, DynDataType<_D>, _R> dynRendererFactory;
+        private final DynDataType<_D> dataType;
         private Set<Holder<EntityType<?>>> compatibleEntities;
 
-        private Builder(DynDataType<_D, ?> dataType, BiFunction<EntityRendererProvider.Context, DynDataType<_D, ?>, _R> dynRendererFactory) {
+        private Builder(DynDataType<_D> dataType, BiFunction<EntityRendererProvider.Context, DynDataType<_D>, _R> dynRendererFactory) {
             this.dataType = dataType;
             this.dynRendererFactory = dynRendererFactory;
         }
 
         public static <_R extends EntityDynRenderer<_D, _S>, _D, _S extends DynRenderedEntityRenderState<_S>> Builder<_R, _D, _S>
-            of(DynDataType<_D, ?> dataType, BiFunction<EntityRendererProvider.Context, DynDataType<_D, ?>, _R> dynRendererFactory) {
+            of(DynDataType<_D> dataType, BiFunction<EntityRendererProvider.Context, DynDataType<_D>, _R> dynRendererFactory) {
             return new Builder<>(dataType, dynRendererFactory);
         }
         
