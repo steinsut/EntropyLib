@@ -19,7 +19,7 @@ public abstract class DynRenderedEntityRenderer<E extends Entity & IDynRenderedE
         super.extractRenderState(entity, reusedState, partialTick);
 
         reusedState.dynRenderer = entity.getDynRendererType().getDynRendererInstance().orElse(null);
-        reusedState.dynRendererData = entity.getDynRendererDataHolder();
+        reusedState.dynRendererData = entity.getDynDataHolder();
         reusedState.fallbackDynRenderer = entity.getFallbackDynRenderer();
     }
 

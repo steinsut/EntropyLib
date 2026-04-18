@@ -5,16 +5,27 @@ import me.steinsut.entropylib.api.dynrenderer.BaseDynRendererType;
 import me.steinsut.entropylib.api.dynrenderer.DynDataType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.Holder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.EntityType;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
+import static me.steinsut.entropylib.api.registries.Registries.DYN_RENDERER_TYPE_REGISTRY_KEY;
 
 public final class EntityDynRendererType<R extends EntityDynRenderer<D, S>, D, S extends DynRenderedEntityRenderState<S>> extends BaseDynRendererType<R, D, S> {
+    public static final StreamCodec<RegistryFriendlyByteBuf, EntityDynRendererType<?, ?, ?>> STREAM_CODEC =
+            ByteBufCodecs.registry(DYN_RENDERER_TYPE_REGISTRY_KEY).map(
+                    (t) -> (EntityDynRendererType<?, ?, ?>) t,
+                    Function.identity());
+
+
     private R rendererInstance;
     private final BiFunction<EntityRendererProvider.Context, DynDataType<D, ?>, R> dynRendererFactory;
     private final Set<Holder<EntityType<?>>> compatibleEntities;

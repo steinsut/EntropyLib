@@ -10,12 +10,13 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
+import static me.steinsut.entropylib.api.registries.Registries.DYN_RENDERER_TYPE_REGISTRY;
 
 public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderState<S>> extends Entity implements IDynRenderedEntity<S> {
     protected EntityDynRendererType<?, ?, S> dynRendererType;
     protected DynDataType.Holder<?, ?> dynRendererData;
 
-    public BaseDynRenderedEntity(EntityType<?> type, Level level, Holder<EntityDynRendererType<?, ?, S>> dynRendererType) {
+    public BaseDynRenderedEntity(EntityType<?> type, Level level, EntityDynRendererType<?, ?, S> dynRendererType) {
         super(type, level);
 
         this.setDynRendererType(dynRendererType);
@@ -27,21 +28,20 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
     }
 
     @Override
-    public void setDynRendererType(Holder<EntityDynRendererType<?, ?, S>> typeHolder) {
-        var type = typeHolder.value();
-
+    public void setDynRendererType(EntityDynRendererType<?, ?, ?> type) {
         if (type.isCompatible(this.typeHolder())) {
-            this.dynRendererType = type;
+            //noinspection unchecked
+            this.dynRendererType = (EntityDynRendererType<?, ?, S>) type;
             this.dynRendererData = type.getDataType().createHolder();
         } else {
-            LOGGER.warn("DynRenderer type {} is incompatible with entity type {}",
-                    typeHolder.getKey().identifier(),
+            LOGGER.warn("DynRenderer dynType {} is incompatible with entity dynType {}",
+                    DYN_RENDERER_TYPE_REGISTRY.getKey(type),
                     this.typeHolder().getKey().identifier());
         }
     }
 
     @Override
-    public DynDataType.Holder<?, ?> getDynRendererDataHolder() {
+    public DynDataType.Holder<?, ?> getDynDataHolder() {
         return this.dynRendererData;
     }
 }

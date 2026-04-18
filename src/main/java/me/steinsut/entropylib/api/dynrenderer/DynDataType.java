@@ -151,7 +151,7 @@ public final class DynDataType<D, B extends ByteBuf> {
                 this.data = this.dataType.presets.get(id).get();
             }
             else {
-                LOGGER.warn("Data type does not have preset {}", id);
+                LOGGER.warn("Data dynType does not have preset {}", id);
             }
         }
     }
