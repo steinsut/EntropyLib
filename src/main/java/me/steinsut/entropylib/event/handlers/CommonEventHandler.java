@@ -20,13 +20,14 @@ import static me.steinsut.entropylib.EntropyLib.LOGGER;
 public class CommonEventHandler implements IModEventHandler, INeoEventHandler {
     @Override
     public void registerModEventHandlers(IEventBus bus) {
+        bus.addListener(this::commonSetup);
         bus.addListener(this::createNewRegistries);
         bus.addListener(this::registerPayloads);
     }
 
     @Override
     public void registerNeoEventHandlers(IEventBus bus) {
-        bus.addListener(this::commonSetup);
+
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -46,14 +47,12 @@ public class CommonEventHandler implements IModEventHandler, INeoEventHandler {
 
         mainRegistrar.playToClient(
                 ClientboundSetEntityDynRType.TYPE,
-                ClientboundSetEntityDynRType.STREAM_CODEC,
-                ClientboundSetEntityDynRType::handleOnMain
+                ClientboundSetEntityDynRType.STREAM_CODEC
         );
 
         mainRegistrar.playToClient(
                 ClientboundUpdateEntityDynRData.TYPE,
-                ClientboundUpdateEntityDynRData.STREAM_CODEC,
-                ClientboundUpdateEntityDynRData::handleOnMain
+                ClientboundUpdateEntityDynRData.STREAM_CODEC
         );
     }
 }
