@@ -7,6 +7,6 @@ import net.minecraft.client.renderer.entity.state.EntityRenderState;
 
 public class DynRenderedEntityRenderState<S extends DynRenderedEntityRenderState<S>> extends EntityRenderState {
     public EntityDynRenderer<?, S> dynRenderer;
-    public DynDataType.Holder<?, ?> dynRendererData;
+    public DynDataType.Holder<?> dynRendererData;
     public ContextlessDynRenderer<?, S> fallbackDynRenderer;
 }

@@ -5,7 +5,6 @@ import me.steinsut.entropylib.api.dynrenderer.entity.EntityDynRendererType;
 import me.steinsut.entropylib.api.dynrenderer.entity.IDynRenderedEntity;
 import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
 import me.steinsut.entropylib.network.ClientboundSetEntityDynRType;
-import me.steinsut.entropylib.network.ClientboundUpdateEntityDynRData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -20,7 +19,7 @@ import static me.steinsut.entropylib.api.registries.Registries.DYN_RENDERER_TYPE
 
 public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderState<S>> extends Entity implements IDynRenderedEntity<S> {
     protected EntityDynRendererType<?, ?, S> dynRendererType;
-    protected DynDataType.Holder<?, ?> dynRendererData;
+    protected DynDataType.Holder<?> dynRendererData;
 
     public BaseDynRenderedEntity(EntityType<?> type, Level level, EntityDynRendererType<?, ?, S> dynRendererType) {
         super(type, level);
@@ -55,7 +54,7 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
     }
 
     @Override
-    public DynDataType.Holder<?, ?> getDynDataHolder() {
+    public DynDataType.Holder<?> getDynDataHolder() {
         return this.dynRendererData;
     }
 

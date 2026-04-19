@@ -1,7 +1,6 @@
 package me.steinsut.entropylib.api.dynrenderer;
 
 import com.mojang.serialization.Codec;
-import io.netty.buffer.ByteBuf;
 import me.steinsut.entropylib.api.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -38,11 +37,11 @@ public final class DynDataType<D> {
         this.dataStreamCodec = dataStreamCodec;
     }
 
-    public Holder<D, ByteBuf> createHolder() {
+    public Holder<D> createHolder() {
         return new Holder<>(this, defaultSupplier.get());
     }
 
-    public Holder<D, ByteBuf> createHolder(Identifier preset) {
+    public Holder<D> createHolder(Identifier preset) {
         if (preset != null && this.presets.containsKey(preset)) {
             return new Holder<>(this, this.presets.get(preset).get());
         } else {
@@ -90,7 +89,7 @@ public final class DynDataType<D> {
         }
     }
 
-    public static class Holder<_D, _B extends ByteBuf> {
+    public static class Holder<_D> {
         private final DynDataType<_D> dataType;
         private _D data;
 
@@ -99,16 +98,16 @@ public final class DynDataType<D> {
             this.data = data;
         }
 
-        public static StreamCodec<RegistryFriendlyByteBuf, Holder<?, ?>> STREAM_CODEC = new StreamCodec<>() {
+        public static StreamCodec<RegistryFriendlyByteBuf, Holder<?>> STREAM_CODEC = new StreamCodec<>() {
             @Override
-            public void encode(@NonNull RegistryFriendlyByteBuf buf, Holder<?, ?> holder) {
+            public void encode(@NonNull RegistryFriendlyByteBuf buf, Holder<?> holder) {
                 DynDataType.STREAM_CODEC.encode(buf, holder.dataType);
                 holder.encodeData(buf);
             }
 
-            public @NonNull Holder<?, ?> decode(@NonNull RegistryFriendlyByteBuf buf) {
+            public @NonNull Holder<?> decode(@NonNull RegistryFriendlyByteBuf buf) {
                 DynDataType<?> dataType = DynDataType.STREAM_CODEC.decode(buf);
-                Holder<?, ?> holder = dataType.createHolder();
+                Holder<?> holder = dataType.createHolder();
                 holder.decodeData(buf);
 
                 return holder;
@@ -125,18 +124,18 @@ public final class DynDataType<D> {
         }
 
         @SuppressWarnings("unchecked")
-        public void copyTo(Holder<?, ?> holder) {
+        public void copyTo(Holder<?> holder) {
             if (this.dataType != holder.dataType) {
-                ((Holder<_D, _B>) holder).data = this.data;
+                ((Holder<_D>) holder).data = this.data;
             } else {
                 LOGGER.warn("Cannot copy value to holder, holders belong to different data types");
             }
         }
 
         @SuppressWarnings("unchecked")
-        public void copyFrom(Holder<?, ?> holder) {
+        public void copyFrom(Holder<?> holder) {
             if (this.dataType == holder.dataType) {
-                this.data = ((Holder<_D, _B>) holder).data;
+                this.data = ((Holder<_D>) holder).data;
             } else {
                 LOGGER.warn("Cannot copy from holder, holders belong to different data types");
             }

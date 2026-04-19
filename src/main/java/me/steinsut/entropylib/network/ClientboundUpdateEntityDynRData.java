@@ -12,7 +12,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jspecify.annotations.NonNull;
 
-public record ClientboundUpdateEntityDynRData(int id, DynDataType.Holder<?, ?> holder) implements CustomPacketPayload {
+public record ClientboundUpdateEntityDynRData(int id, DynDataType.Holder<?> holder) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<ClientboundUpdateEntityDynRData> TYPE =
             new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "cb_set_ent_dyndata"));
 
