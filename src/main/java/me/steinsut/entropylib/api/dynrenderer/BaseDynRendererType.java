@@ -6,8 +6,8 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.neoforge.client.renderstate.BaseRenderState;
 
-import static me.steinsut.entropylib.api.registries.Registries.DYN_RENDERER_TYPE_REGISTRY;
-import static me.steinsut.entropylib.api.registries.Registries.DYN_RENDERER_TYPE_REGISTRY_KEY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_RENDERER_TYPE_REGISTRY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_RENDERER_TYPE_REGISTRY_KEY;
 
 public abstract class BaseDynRendererType<R extends BaseDynRenderer<D, S>, D, S extends BaseRenderState> {
     public static final Codec<BaseDynRendererType<?, ?, ?>> CODEC = DYN_RENDERER_TYPE_REGISTRY.byNameCodec();

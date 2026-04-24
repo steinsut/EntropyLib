@@ -1,7 +1,7 @@
 package me.steinsut.entropylib.event.handlers;
 
 import me.steinsut.entropylib.api.EntropyLibApi;
-import me.steinsut.entropylib.api.registries.Registries;
+import me.steinsut.entropylib.api.registries.CommonRegistries;
 import me.steinsut.entropylib.event.IModEventHandler;
 import me.steinsut.entropylib.event.INeoEventHandler;
 import me.steinsut.entropylib.network.ClientboundSetEntityDynRType;
@@ -12,8 +12,6 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
-
-import java.util.function.Function;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
 
@@ -35,8 +33,8 @@ public class CommonEventHandler implements IModEventHandler, INeoEventHandler {
     }
 
     private void createNewRegistries(final NewRegistryEvent event) {
-        event.register(Registries.DYN_RENDERER_DATA_TYPE_REGISTRY);
-        event.register(Registries.DYN_RENDERER_TYPE_REGISTRY);
+        event.register(CommonRegistries.DYN_RENDERER_DATA_TYPE_REGISTRY);
+        event.register(CommonRegistries.DYN_RENDERER_TYPE_REGISTRY);
     }
 
     private void registerPayloads(final RegisterPayloadHandlersEvent event) {

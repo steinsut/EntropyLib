@@ -8,7 +8,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 
-public class Registries {
+public class CommonRegistries {
     private static final int DYN_RENDERER_DATA_TYPE_MAX_ID = 65535;
     private static final int DYN_RENDERER_TYPE_MAX_ID = 255;
 

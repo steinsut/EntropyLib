@@ -15,7 +15,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.NonNull;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
-import static me.steinsut.entropylib.api.registries.Registries.DYN_RENDERER_TYPE_REGISTRY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_RENDERER_TYPE_REGISTRY;
 
 public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderState<S>> extends Entity implements IDynRenderedEntity<S> {
     protected EntityDynRendererType<?, ?, S> dynRendererType;
@@ -60,11 +60,11 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
 
     @Override
     protected void readAdditionalSaveData(@NonNull ValueInput input) {
-        dynRendererData.readData(input);
+        this.dynRendererData.readData(input);
     }
 
     @Override
     protected void addAdditionalSaveData(@NonNull ValueOutput output) {
-        dynRendererData.writeData(output);
+        this.dynRendererData.writeData(output);
     }
 }

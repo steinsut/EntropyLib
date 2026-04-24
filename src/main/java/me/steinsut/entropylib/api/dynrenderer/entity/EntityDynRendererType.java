@@ -17,7 +17,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
-import static me.steinsut.entropylib.api.registries.Registries.DYN_RENDERER_TYPE_REGISTRY_KEY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_RENDERER_TYPE_REGISTRY_KEY;
 
 public final class EntityDynRendererType<R extends EntityDynRenderer<D, S>, D, S extends DynRenderedEntityRenderState<S>> extends BaseDynRendererType<R, D, S> {
     public static final StreamCodec<RegistryFriendlyByteBuf, EntityDynRendererType<?, ?, ?>> STREAM_CODEC =

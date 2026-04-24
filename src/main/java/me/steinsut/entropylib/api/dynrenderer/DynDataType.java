@@ -1,7 +1,7 @@
 package me.steinsut.entropylib.api.dynrenderer;
 
 import com.mojang.serialization.Codec;
-import me.steinsut.entropylib.api.registries.Registries;
+import me.steinsut.entropylib.api.registries.CommonRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -16,8 +16,8 @@ import java.util.function.Supplier;
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
 
 public final class DynDataType<D> {
-    public static final Codec<DynDataType<?>> CODEC = Registries.DYN_RENDERER_DATA_TYPE_REGISTRY.byNameCodec();
-    public static final StreamCodec<RegistryFriendlyByteBuf, DynDataType<?>> STREAM_CODEC = ByteBufCodecs.registry(Registries.DYN_RENDERER_DATA_TYPE_REGISTRY_KEY);
+    public static final Codec<DynDataType<?>> CODEC = CommonRegistries.DYN_RENDERER_DATA_TYPE_REGISTRY.byNameCodec();
+    public static final StreamCodec<RegistryFriendlyByteBuf, DynDataType<?>> STREAM_CODEC = ByteBufCodecs.registry(CommonRegistries.DYN_RENDERER_DATA_TYPE_REGISTRY_KEY);
 
     private static final String VALUE_IO_KEY = "dyn";
 
