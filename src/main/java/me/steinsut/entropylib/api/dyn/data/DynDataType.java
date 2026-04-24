@@ -89,6 +89,8 @@ public final class DynDataType<D> {
     }
 
     public static final class Holder<_D> {
+        public static final String VALUE_IO_DYN_DATA_KEY = "r_data";
+
         private final DynDataType<_D> dataType;
         private _D data;
 
@@ -141,13 +143,13 @@ public final class DynDataType<D> {
         }
 
         public void readData(ValueInput in) {
-            in.read("r_data", this.dataType.dataCodec).ifPresent((d) -> {
+            in.read(VALUE_IO_DYN_DATA_KEY, this.dataType.dataCodec).ifPresent((d) -> {
                 this.data = d;
             });
         }
 
         public void writeData(ValueOutput out) {
-            out.store("r_data", this.dataType.dataCodec, this.data);
+            out.store(VALUE_IO_DYN_DATA_KEY, this.dataType.dataCodec, this.data);
         }
 
         public void decodeData(RegistryFriendlyByteBuf buf) {

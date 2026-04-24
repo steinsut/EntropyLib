@@ -21,6 +21,10 @@ import static me.steinsut.entropylib.EntropyLib.LOGGER;
 import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_RENDERER_TYPE_REGISTRY;
 
 public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderState<S>> extends Entity implements IDynRenderedEntity<S> {
+    public static final String VALUE_IO_DYN_KEY = "dyn";
+    public static final String VALUE_IO_DYN_RENDERER_TYPE_KEY = "r_type";
+    public static final String VALUE_IO_SYNC_POLICY_KEY = "s_pol";
+
     protected EntityDynRendererType<?, ?, S> dynRendererType;
     protected DynDataType.Holder<?> dynRendererData;
     protected EntityDynSyncPolicy dynSyncPolicy;
@@ -72,8 +76,8 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
 
     @Override
     protected void readAdditionalSaveData(@NonNull ValueInput input) {
-        input.child("dyn").ifPresent((c) -> {
-            c.read("r_type", BaseDynRendererType.CODEC).ifPresent((t) -> {
+        input.child(VALUE_IO_DYN_KEY).ifPresent((c) -> {
+            c.read(VALUE_IO_DYN_RENDERER_TYPE_KEY, BaseDynRendererType.CODEC).ifPresent((t) -> {
                 //noinspection unchecked
                 this.dynRendererType = (EntityDynRendererType<?, ?, S>) t;
                 this.dynRendererData = this.dynRendererType.getDataType().createHolder();
@@ -85,31 +89,28 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
                 return;
             }
 
-            c.read("s_pol", EntityDynSyncPolicy.CODEC).ifPresent((p) -> {
+            c.read(VALUE_IO_SYNC_POLICY_KEY, EntityDynSyncPolicy.CODEC).ifPresent((p) -> {
                 this.dynSyncPolicy = p;
                 this.dynSyncHandler = p.create();
 
-                c.child("s_data").ifPresent((d) -> {
-                    this.dynSyncHandler.readConfiguration(d);
-                });
+                this.dynSyncHandler.readConfiguration(input);
             });
         });
     }
 
     @Override
     protected void addAdditionalSaveData(@NonNull ValueOutput output) {
-        ValueOutput dynChild = output.child("dyn");
+        ValueOutput dynChild = output.child(VALUE_IO_DYN_KEY);
 
-        dynChild.store("r_type", BaseDynRendererType.CODEC, this.dynRendererType);
+        dynChild.store(VALUE_IO_DYN_RENDERER_TYPE_KEY, BaseDynRendererType.CODEC, this.dynRendererType);
         this.dynRendererData.writeData(dynChild);
 
         if (this.level().isClientSide()) {
             return;
         }
 
-        dynChild.store("s_pol", EntityDynSyncPolicy.CODEC, this.dynSyncPolicy);
-        ValueOutput syncDataChild = dynChild.child("s_data");
-        this.dynSyncHandler.writeConfiguration(syncDataChild);
+        dynChild.store(VALUE_IO_SYNC_POLICY_KEY, EntityDynSyncPolicy.CODEC, this.dynSyncPolicy);
+        this.dynSyncHandler.writeConfiguration(dynChild);
     }
 
     @Override
