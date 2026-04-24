@@ -3,7 +3,7 @@ package me.steinsut.entropylib.network.sync;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-public class EntityDynTickSyncHandler implements EntityDynSyncHandler {
+public class EntityDynTickSyncHandler implements IEntityDynSyncHandler {
     public static final int DEFAULT_TICKS_PER_SYNC = 20;
 
     private int ticksPerSync;

@@ -3,7 +3,7 @@ package me.steinsut.entropylib.network.sync;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-public interface EntityDynSyncHandler {
+public interface IEntityDynSyncHandler {
     void onDataUpdate();
     void onEntityTick();
     void reset();

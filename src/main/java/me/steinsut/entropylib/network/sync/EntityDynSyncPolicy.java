@@ -9,13 +9,13 @@ import static me.steinsut.entropylib.api.registries.ServerRegistries.ENTITY_DYN_
 public class EntityDynSyncPolicy {
     public static Codec<EntityDynSyncPolicy> CODEC = ENTITY_DYN_SYNC_POLICY_REGISTRY.byNameCodec();
 
-    private final Supplier<EntityDynSyncHandler> handlerSupplier;
+    private final Supplier<IEntityDynSyncHandler> handlerSupplier;
 
-    public EntityDynSyncPolicy(Supplier<EntityDynSyncHandler> handlerSupplier) {
+    public EntityDynSyncPolicy(Supplier<IEntityDynSyncHandler> handlerSupplier) {
         this.handlerSupplier = handlerSupplier;
     }
 
-    public EntityDynSyncHandler create() {
+    public IEntityDynSyncHandler create() {
         return this.handlerSupplier.get();
     }
 }
