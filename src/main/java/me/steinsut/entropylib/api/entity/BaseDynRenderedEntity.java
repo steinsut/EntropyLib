@@ -53,7 +53,7 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
                 );
             }
         } else {
-            LOGGER.warn("DynRenderer dynType {} is incompatible with entity dynType {}",
+            LOGGER.warn("DynRendererType {} is incompatible with entity type {}",
                     DYN_RENDERER_TYPE_REGISTRY.getKey(type),
                     this.typeHolder().getKey().identifier());
         }
