@@ -1,8 +1,8 @@
 package me.steinsut.entropylib.api.entity;
 
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
-import me.steinsut.entropylib.api.dyn.entity.EntityDynRendererType;
-import me.steinsut.entropylib.api.dyn.entity.IDynRenderedEntity;
+import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRendererType;
+import me.steinsut.entropylib.api.dyn.renderer.entity.IDynRenderedEntity;
 import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
 import me.steinsut.entropylib.network.ClientboundSetEntityDynRType;
 import net.minecraft.server.level.ServerLevel;

@@ -1,7 +1,7 @@
 package me.steinsut.entropylib.api.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import me.steinsut.entropylib.api.dyn.entity.IDynRenderedEntity;
+import me.steinsut.entropylib.api.dyn.renderer.entity.IDynRenderedEntity;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

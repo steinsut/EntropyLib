@@ -1,4 +1,4 @@
-package me.steinsut.entropylib.api.dyn.entity;
+package me.steinsut.entropylib.api.dyn.renderer.entity;
 
 import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
 import me.steinsut.entropylib.api.dyn.renderer.BaseDynRendererType;
