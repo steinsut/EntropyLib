@@ -78,9 +78,7 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
                 this.dynRendererType = (EntityDynRendererType<?, ?, S>) t;
                 this.dynRendererData = this.dynRendererType.getDataType().createHolder();
 
-                c.child("r_data").ifPresent((d) -> {
-                    this.dynRendererData.readData(d);
-                });
+                this.dynRendererData.readData(input);
             });
 
             if (this.level().isClientSide()) {
@@ -103,8 +101,7 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
         ValueOutput dynChild = output.child("dyn");
 
         dynChild.store("r_type", BaseDynRendererType.CODEC, this.dynRendererType);
-        ValueOutput dataChild = dynChild.child("r_data");
-        this.dynRendererData.writeData(dataChild);
+        this.dynRendererData.writeData(dynChild);
 
         if (this.level().isClientSide()) {
             return;

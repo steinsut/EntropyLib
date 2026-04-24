@@ -1,6 +1,7 @@
 package me.steinsut.entropylib.api.dyn.data;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DynamicOps;
 import me.steinsut.entropylib.api.registries.CommonRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -18,8 +19,6 @@ import static me.steinsut.entropylib.EntropyLib.LOGGER;
 public final class DynDataType<D> {
     public static final Codec<DynDataType<?>> CODEC = CommonRegistries.DYN_RENDERER_DATA_TYPE_REGISTRY.byNameCodec();
     public static final StreamCodec<RegistryFriendlyByteBuf, DynDataType<?>> STREAM_CODEC = ByteBufCodecs.registry(CommonRegistries.DYN_RENDERER_DATA_TYPE_REGISTRY_KEY);
-
-    private static final String VALUE_IO_KEY = "dyn";
 
     private final Supplier<D> defaultSupplier;
     private final Map<Identifier, Supplier<D>> presets;
@@ -58,7 +57,7 @@ public final class DynDataType<D> {
         return Collections.unmodifiableSet(this.presets.keySet());
     }
 
-    public static class Builder<_D> {
+    public static final class Builder<_D> {
         private final Supplier<_D> defaultSupplier;
         private final Map<Identifier, Supplier<_D>> presets;
         private final Codec<_D> codec;
@@ -89,7 +88,7 @@ public final class DynDataType<D> {
         }
     }
 
-    public static class Holder<_D> {
+    public static final class Holder<_D> {
         private final DynDataType<_D> dataType;
         private _D data;
 
@@ -142,13 +141,13 @@ public final class DynDataType<D> {
         }
 
         public void readData(ValueInput in) {
-            Optional<_D> result = in.read(DynDataType.VALUE_IO_KEY, this.dataType.dataCodec);
-
-            this.data = result.orElseGet(this.dataType.defaultSupplier);
+            in.read("r_data", this.dataType.dataCodec).ifPresent((d) -> {
+                this.data = d;
+            });
         }
 
         public void writeData(ValueOutput out) {
-            out.store(DynDataType.VALUE_IO_KEY, this.dataType.dataCodec, this.data);
+            out.store("r_data", this.dataType.dataCodec, this.data);
         }
 
         public void decodeData(RegistryFriendlyByteBuf buf) {
