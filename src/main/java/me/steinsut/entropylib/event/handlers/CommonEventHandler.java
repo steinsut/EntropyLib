@@ -5,7 +5,7 @@ import me.steinsut.entropylib.api.registries.CommonRegistries;
 import me.steinsut.entropylib.event.IModEventHandler;
 import me.steinsut.entropylib.event.INeoEventHandler;
 import me.steinsut.entropylib.network.ClientboundSetEntityDynRType;
-import me.steinsut.entropylib.network.ClientboundUpdateEntityDynRData;
+import me.steinsut.entropylib.network.ClientboundUpdateEntityDynData;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -49,8 +49,8 @@ public class CommonEventHandler implements IModEventHandler, INeoEventHandler {
         );
 
         mainRegistrar.playToClient(
-                ClientboundUpdateEntityDynRData.TYPE,
-                ClientboundUpdateEntityDynRData.STREAM_CODEC
+                ClientboundUpdateEntityDynData.TYPE,
+                ClientboundUpdateEntityDynData.STREAM_CODEC
         );
     }
 }

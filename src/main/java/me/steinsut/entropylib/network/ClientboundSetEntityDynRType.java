@@ -14,7 +14,7 @@ import org.jspecify.annotations.NonNull;
 
 public record ClientboundSetEntityDynRType(int id, EntityDynRendererType<?, ?, ?> dynType) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<ClientboundSetEntityDynRType> TYPE =
-            new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "cb_set_ent_dynr_t"));
+            new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "set_ent_dynr_t"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundSetEntityDynRType> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT,
