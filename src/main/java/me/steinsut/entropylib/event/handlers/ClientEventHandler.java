@@ -1,6 +1,6 @@
 package me.steinsut.entropylib.event.handlers;
 
-import me.steinsut.entropylib.api.dynrenderer.entity.EntityDynRendererType;
+import me.steinsut.entropylib.api.dyn.entity.EntityDynRendererType;
 import me.steinsut.entropylib.event.IModEventHandler;
 import me.steinsut.entropylib.network.ClientboundSetEntityDynRType;
 import me.steinsut.entropylib.network.ClientboundUpdateEntityDynRData;

@@ -1,8 +1,8 @@
-package me.steinsut.entropylib.api.dynrenderer.entity;
+package me.steinsut.entropylib.api.dyn.entity;
 
 import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
-import me.steinsut.entropylib.api.dynrenderer.BaseDynRenderer;
-import me.steinsut.entropylib.api.dynrenderer.DynDataType;
+import me.steinsut.entropylib.api.dyn.renderer.BaseDynRenderer;
+import me.steinsut.entropylib.api.dyn.data.DynDataType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 public abstract class EntityDynRenderer<D, S extends DynRenderedEntityRenderState<S>> extends BaseDynRenderer<D, S> {

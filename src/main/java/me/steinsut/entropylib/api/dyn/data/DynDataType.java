@@ -1,4 +1,4 @@
-package me.steinsut.entropylib.api.dynrenderer;
+package me.steinsut.entropylib.api.dyn.data;
 
 import com.mojang.serialization.Codec;
 import me.steinsut.entropylib.api.registries.CommonRegistries;

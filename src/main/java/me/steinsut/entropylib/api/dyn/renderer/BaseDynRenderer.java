@@ -1,6 +1,7 @@
-package me.steinsut.entropylib.api.dynrenderer;
+package me.steinsut.entropylib.api.dyn.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import me.steinsut.entropylib.api.dyn.data.DynDataType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.neoforged.neoforge.client.renderstate.BaseRenderState;

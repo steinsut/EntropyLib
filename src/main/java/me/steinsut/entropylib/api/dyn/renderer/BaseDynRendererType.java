@@ -1,6 +1,7 @@
-package me.steinsut.entropylib.api.dynrenderer;
+package me.steinsut.entropylib.api.dyn.renderer;
 
 import com.mojang.serialization.Codec;
+import me.steinsut.entropylib.api.dyn.data.DynDataType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
