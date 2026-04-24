@@ -22,7 +22,7 @@ public class EntityDynTickSyncHandler implements IEntityDynSyncHandler {
     public void onDataUpdate() {}
 
     @Override
-    public void onEntityTick() {
+    public void onTick() {
         this.tickCount++;
     }
 

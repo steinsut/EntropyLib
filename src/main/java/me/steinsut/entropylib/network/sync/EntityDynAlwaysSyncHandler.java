@@ -8,7 +8,7 @@ public class EntityDynAlwaysSyncHandler implements IEntityDynSyncHandler {
     public void onDataUpdate() {}
 
     @Override
-    public void onEntityTick() {}
+    public void onTick() {}
 
     @Override
     public void reset() {}

@@ -17,8 +17,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.NonNull;
 
-import java.util.Optional;
-
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
 import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_RENDERER_TYPE_REGISTRY;
 
@@ -85,6 +83,10 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
                 });
             });
 
+            if (this.level().isClientSide()) {
+                return;
+            }
+
             c.read("s_pol", EntityDynSyncPolicy.CODEC).ifPresent((p) -> {
                 this.dynSyncPolicy = p;
                 this.dynSyncHandler = p.create();
@@ -104,8 +106,21 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
         ValueOutput dataChild = dynChild.child("r_data");
         this.dynRendererData.writeData(dataChild);
 
+        if (this.level().isClientSide()) {
+            return;
+        }
+
         dynChild.store("s_pol", EntityDynSyncPolicy.CODEC, this.dynSyncPolicy);
         ValueOutput syncDataChild = dynChild.child("s_data");
         this.dynSyncHandler.writeConfiguration(syncDataChild);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (!this.level().isClientSide()) {
+            this.dynSyncHandler.onTick();
+        }
     }
 }

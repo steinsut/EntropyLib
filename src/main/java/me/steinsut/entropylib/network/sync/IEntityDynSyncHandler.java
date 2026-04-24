@@ -5,7 +5,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 
 public interface IEntityDynSyncHandler {
     void onDataUpdate();
-    void onEntityTick();
+    void onTick();
     void reset();
 
     boolean needsSync();

@@ -24,7 +24,7 @@ public class EntityDynUpdateSyncHandler implements IEntityDynSyncHandler {
     }
 
     @Override
-    public void onEntityTick() {}
+    public void onTick() {}
 
     @Override
     public void reset() {
