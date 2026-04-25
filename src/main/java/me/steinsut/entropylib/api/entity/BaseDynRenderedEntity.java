@@ -23,7 +23,9 @@ import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_RENDERE
 public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderState<S>> extends Entity implements IDynRenderedEntity<S> {
     public static final String VALUE_IO_DYN_KEY = "dyn";
     public static final String VALUE_IO_DYN_RENDERER_TYPE_KEY = "r_type";
+    public static final String VALUE_IO_DYN_DATA_KEY = "r_data";
     public static final String VALUE_IO_SYNC_POLICY_KEY = "s_pol";
+    public static final String VALUE_IO_SYNC_CONF_KEY = "s_conf";
 
     protected EntityDynRendererType<?, ?, S> dynRendererType;
     protected DynDataType.Holder<?> dynRendererData;
@@ -82,18 +84,18 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
                 this.dynRendererType = (EntityDynRendererType<?, ?, S>) t;
                 this.dynRendererData = this.dynRendererType.getDataType().createHolder();
 
-                this.dynRendererData.readData(input);
+                c.child(VALUE_IO_DYN_DATA_KEY).ifPresent((d) -> {
+                    this.dynRendererData.readData(d);
+                });
             });
-
-            if (this.level().isClientSide()) {
-                return;
-            }
 
             c.read(VALUE_IO_SYNC_POLICY_KEY, EntityDynSyncPolicy.CODEC).ifPresent((p) -> {
                 this.dynSyncPolicy = p;
                 this.dynSyncHandler = p.create();
 
-                this.dynSyncHandler.readConfiguration(input);
+                c.child(VALUE_IO_SYNC_CONF_KEY).ifPresent((conf) -> {
+                    this.dynSyncHandler.readConfiguration(conf);
+                });
             });
         });
     }
@@ -103,14 +105,12 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
         ValueOutput dynChild = output.child(VALUE_IO_DYN_KEY);
 
         dynChild.store(VALUE_IO_DYN_RENDERER_TYPE_KEY, BaseDynRendererType.CODEC, this.dynRendererType);
-        this.dynRendererData.writeData(dynChild);
-
-        if (this.level().isClientSide()) {
-            return;
-        }
+        ValueOutput dataChild = dynChild.child(VALUE_IO_DYN_DATA_KEY);
+        this.dynRendererData.storeData(dataChild);
 
         dynChild.store(VALUE_IO_SYNC_POLICY_KEY, EntityDynSyncPolicy.CODEC, this.dynSyncPolicy);
-        this.dynSyncHandler.writeConfiguration(dynChild);
+        ValueOutput confChild = dynChild.child(VALUE_IO_SYNC_CONF_KEY);
+        this.dynSyncHandler.writeConfiguration(confChild);
     }
 
     @Override
