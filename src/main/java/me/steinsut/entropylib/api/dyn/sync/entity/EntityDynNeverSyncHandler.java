@@ -1,9 +1,9 @@
-package me.steinsut.entropylib.network.sync;
+package me.steinsut.entropylib.api.dyn.sync.entity;
 
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-public class EntityDynAlwaysSyncHandler implements IEntityDynSyncHandler {
+public class EntityDynNeverSyncHandler implements IEntityDynSyncHandler {
     @Override
     public void onDataUpdate() {}
 
@@ -15,7 +15,7 @@ public class EntityDynAlwaysSyncHandler implements IEntityDynSyncHandler {
 
     @Override
     public boolean needsSync() {
-        return true;
+        return false;
     }
 
     @Override

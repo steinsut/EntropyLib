@@ -1,7 +1,7 @@
 package me.steinsut.entropylib.api.registries;
 
 import me.steinsut.entropylib.api.EntropyLibApi;
-import me.steinsut.entropylib.network.sync.EntityDynSyncPolicy;
+import me.steinsut.entropylib.api.dyn.sync.entity.EntityDynSyncPolicy;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;

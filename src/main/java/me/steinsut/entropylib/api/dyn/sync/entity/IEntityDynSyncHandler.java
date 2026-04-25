@@ -1,4 +1,4 @@
-package me.steinsut.entropylib.network.sync;
+package me.steinsut.entropylib.api.dyn.sync.entity;
 
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;

@@ -1,4 +1,4 @@
-package me.steinsut.entropylib.network.sync;
+package me.steinsut.entropylib.api.dyn.sync.entity;
 
 import com.mojang.serialization.Codec;
 
