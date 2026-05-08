@@ -116,9 +116,7 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
                 this.dynRendererType = (EntityDynRendererType<?, ?, S>) t;
                 this.dynData = this.dynRendererType.getDataType().createHolder();
 
-                c.child(VALUE_IO_DYN_DATA_KEY).ifPresent((d) -> {
-                    this.dynData.getReader().readData(d);
-                });
+                this.dynData.getReader().readData(c);
             });
 
             c.read(VALUE_IO_SYNC_POLICY_KEY, EntityDynSyncPolicy.CODEC).ifPresent((p) -> {
@@ -138,8 +136,7 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
 
         if (this.dynRendererType != null) {
             dynChild.store(VALUE_IO_DYN_RENDERER_TYPE_KEY, EntityDynRendererType.CODEC, this.dynRendererType);
-            ValueOutput dataChild = dynChild.child(VALUE_IO_DYN_DATA_KEY);
-            this.dynData.getWriter().storeData(dataChild);
+            this.dynData.getWriter().storeData(dynChild);
         }
 
         dynChild.store(VALUE_IO_SYNC_POLICY_KEY, EntityDynSyncPolicy.CODEC, this.dynSyncPolicy);

@@ -13,7 +13,6 @@ You should have received a copy of the GNU Lesser General Public License along w
 package me.steinsut.entropylib.api.dyn.data;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import me.steinsut.entropylib.api.registries.CommonRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -32,14 +31,14 @@ public final class DynDataType<D> {
 
     private final Supplier<D> defaultSupplier;
     private final Map<Identifier, Supplier<D>> presets;
-    private final MapCodec<D> dataCodec;
+    private final Codec<D> dataCodec;
     private final StreamCodec<? super RegistryFriendlyByteBuf, D> dataStreamCodec;
 
-    public DynDataType(MapCodec<D> dataCodec, StreamCodec<? super RegistryFriendlyByteBuf, D> dataStreamCodec, Supplier<D> defaultSupplier) {
+    public DynDataType(Codec<D> dataCodec, StreamCodec<? super RegistryFriendlyByteBuf, D> dataStreamCodec, Supplier<D> defaultSupplier) {
         this(dataCodec, dataStreamCodec, defaultSupplier, new HashMap<>());
     }
 
-    public DynDataType(MapCodec<D> dataCodec, StreamCodec<? super RegistryFriendlyByteBuf, D> dataStreamCodec, Supplier<D> defaultSupplier, Map<Identifier, Supplier<D>> presets) {
+    public DynDataType(Codec<D> dataCodec, StreamCodec<? super RegistryFriendlyByteBuf, D> dataStreamCodec, Supplier<D> defaultSupplier, Map<Identifier, Supplier<D>> presets) {
         this.defaultSupplier = defaultSupplier;
         this.presets = presets;
         this.dataCodec = dataCodec;
@@ -70,14 +69,14 @@ public final class DynDataType<D> {
     public static final class Builder<_D> {
         private final Supplier<_D> defaultSupplier;
         private final Map<Identifier, Supplier<_D>> presets;
-        private final MapCodec<_D> codec;
+        private final Codec<_D> codec;
         private final StreamCodec<? super RegistryFriendlyByteBuf, _D> streamCodec;
 
-        public static <_D> Builder<_D> of(MapCodec<_D> codec, StreamCodec<? super RegistryFriendlyByteBuf, _D> streamCodec, Supplier<_D> defaultSupplier) {
+        public static <_D> Builder<_D> of(Codec<_D> codec, StreamCodec<? super RegistryFriendlyByteBuf, _D> streamCodec, Supplier<_D> defaultSupplier) {
             return new Builder<>(codec, streamCodec, defaultSupplier);
         }
 
-        private Builder(MapCodec<_D> codec, StreamCodec<? super RegistryFriendlyByteBuf, _D> streamCodec, Supplier<_D> defaultSupplier) {
+        private Builder(Codec<_D> codec, StreamCodec<? super RegistryFriendlyByteBuf, _D> streamCodec, Supplier<_D> defaultSupplier) {
             this.defaultSupplier = defaultSupplier;
             this.presets = new HashMap<>();
             this.codec = codec;
@@ -132,7 +131,7 @@ public final class DynDataType<D> {
             return this.dataType;
         }
 
-        public MapCodec<_D> getMapCodec() {
+        public Codec<_D> getCodec() {
             return this.dataType.dataCodec;
         }
 
