@@ -136,9 +136,11 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
     protected void addAdditionalSaveData(@NonNull ValueOutput output) {
         ValueOutput dynChild = output.child(VALUE_IO_DYN_KEY);
 
-        dynChild.store(VALUE_IO_DYN_RENDERER_TYPE_KEY, EntityDynRendererType.CODEC, this.dynRendererType);
-        ValueOutput dataChild = dynChild.child(VALUE_IO_DYN_DATA_KEY);
-        this.dynData.getWriter().storeData(dataChild);
+        if (this.dynRendererType != null) {
+            dynChild.store(VALUE_IO_DYN_RENDERER_TYPE_KEY, EntityDynRendererType.CODEC, this.dynRendererType);
+            ValueOutput dataChild = dynChild.child(VALUE_IO_DYN_DATA_KEY);
+            this.dynData.getWriter().storeData(dataChild);
+        }
 
         dynChild.store(VALUE_IO_SYNC_POLICY_KEY, EntityDynSyncPolicy.CODEC, this.dynSyncPolicy);
         ValueOutput confChild = dynChild.child(VALUE_IO_SYNC_CONF_KEY);
