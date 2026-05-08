@@ -110,21 +110,21 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
 
     @Override
     protected void readAdditionalSaveData(@NonNull ValueInput input) {
-        input.child(VALUE_IO_DYN_KEY).ifPresent((c) -> {
-            c.read(VALUE_IO_DYN_RENDERER_TYPE_KEY, EntityDynRendererType.CODEC).ifPresent((t) -> {
+        input.child(VALUE_IO_DYN_KEY).ifPresent((dynChild) -> {
+            dynChild.read(VALUE_IO_DYN_RENDERER_TYPE_KEY, EntityDynRendererType.CODEC).ifPresent((type) -> {
                 //noinspection unchecked
-                this.dynRendererType = (EntityDynRendererType<?, ?, S>) t;
+                this.dynRendererType = (EntityDynRendererType<?, ?, S>) type;
                 this.dynData = this.dynRendererType.getDataType().createHolder();
 
-                this.dynData.getReader().readData(c);
+                this.dynData.getReader().readData(dynChild);
             });
 
-            c.read(VALUE_IO_SYNC_POLICY_KEY, EntityDynSyncPolicy.CODEC).ifPresent((p) -> {
-                this.dynSyncPolicy = p;
-                this.dynSyncHandler = p.create();
+            dynChild.read(VALUE_IO_SYNC_POLICY_KEY, EntityDynSyncPolicy.CODEC).ifPresent((policy) -> {
+                this.dynSyncPolicy = policy;
+                this.dynSyncHandler = policy.create();
 
-                c.child(VALUE_IO_SYNC_CONF_KEY).ifPresent((conf) -> {
-                    this.dynSyncHandler.readConfiguration(conf);
+                dynChild.child(VALUE_IO_SYNC_CONF_KEY).ifPresent((configuration) -> {
+                    this.dynSyncHandler.readConfiguration(configuration);
                 });
             });
         });
