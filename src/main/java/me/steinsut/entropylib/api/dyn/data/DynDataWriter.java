@@ -5,7 +5,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
 
-public class DynDataWriter<D> {
+public final class DynDataWriter<D> {
     private final DynDataType.Holder<D> holder;
 
     public DynDataWriter(DynDataType.Holder<D> holder) {
