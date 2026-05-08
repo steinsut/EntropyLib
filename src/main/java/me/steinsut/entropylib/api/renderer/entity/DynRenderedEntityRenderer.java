@@ -13,7 +13,7 @@ You should have received a copy of the GNU Lesser General Public License along w
 package me.steinsut.entropylib.api.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import me.steinsut.entropylib.api.dyn.renderer.entity.IDynRenderedEntity;
+import me.steinsut.entropylib.api.dyn.entity.IDynRenderedEntity;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -31,7 +31,7 @@ public abstract class DynRenderedEntityRenderer<E extends Entity & IDynRenderedE
         super.extractRenderState(entity, reusedState, partialTick);
 
         reusedState.dynRenderer = entity.getDynRendererType().getDynRendererInstance().orElse(null);
-        reusedState.dynRendererData = entity.getDynDataHolder();
+        reusedState.dynDataWriter = entity.getDynDataWriter();
         reusedState.fallbackDynRenderer = entity.getFallbackDynRenderer();
     }
 
@@ -40,7 +40,7 @@ public abstract class DynRenderedEntityRenderer<E extends Entity & IDynRenderedE
         super.submit(state, poseStack, submitNodeCollector, camera);
 
         if (state.dynRenderer != null) {
-            state.dynRenderer.useDataFrom(state.dynRendererData);
+            state.dynRenderer.readDataFrom(state.dynDataWriter);
             state.dynRenderer.submit(state, poseStack, submitNodeCollector, camera);
         }
         else {

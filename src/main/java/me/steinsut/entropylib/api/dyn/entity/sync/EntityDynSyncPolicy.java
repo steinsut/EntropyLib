@@ -10,11 +10,24 @@ EntropyLib is distributed in the hope that it will be useful, but WITHOUT ANY WA
 You should have received a copy of the GNU Lesser General Public License along with EntropyLib. If not, see <https://www.gnu.org/licenses/>.
 */
 
-package me.steinsut.entropylib.api.dyn.renderer;
+package me.steinsut.entropylib.api.dyn.entity.sync;
 
-import me.steinsut.entropylib.api.dyn.data.DynDataType;
-import net.neoforged.neoforge.client.renderstate.BaseRenderState;
+import com.mojang.serialization.Codec;
 
-public interface IDynRendered<S extends BaseRenderState> {
-    DynDataType.Holder<?> getDynDataHolder();
+import java.util.function.Supplier;
+
+import static me.steinsut.entropylib.api.registries.ServerRegistries.ENTITY_DYN_SYNC_POLICY_REGISTRY;
+
+public class EntityDynSyncPolicy {
+    public static Codec<EntityDynSyncPolicy> CODEC = ENTITY_DYN_SYNC_POLICY_REGISTRY.byNameCodec();
+
+    private final Supplier<IEntityDynSyncHandler> handlerSupplier;
+
+    public EntityDynSyncPolicy(Supplier<IEntityDynSyncHandler> handlerSupplier) {
+        this.handlerSupplier = handlerSupplier;
+    }
+
+    public IEntityDynSyncHandler create() {
+        return this.handlerSupplier.get();
+    }
 }

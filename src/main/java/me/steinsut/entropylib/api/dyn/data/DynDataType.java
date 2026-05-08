@@ -19,8 +19,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.NonNull;
 
 import java.util.*;
@@ -102,74 +100,56 @@ public final class DynDataType<D> {
 
     public static final class Holder<_D> {
         private final DynDataType<_D> dataType;
+        private final DynDataWriter<_D> writer;
+        private final DynDataReader<_D> reader;
         private _D data;
 
         private Holder(DynDataType<_D> dataType, _D data) {
             this.dataType = dataType;
             this.data = data;
+
+            this.writer = new DynDataWriter<>(this);
+            this.reader = new DynDataReader<>(this);
         }
 
         public static StreamCodec<RegistryFriendlyByteBuf, Holder<?>> STREAM_CODEC = new StreamCodec<>() {
             @Override
             public void encode(@NonNull RegistryFriendlyByteBuf buf, Holder<?> holder) {
                 DynDataType.STREAM_CODEC.encode(buf, holder.dataType);
-                holder.encodeData(buf);
+                holder.getWriter().encodeData(buf);
             }
 
             public @NonNull Holder<?> decode(@NonNull RegistryFriendlyByteBuf buf) {
                 DynDataType<?> dataType = DynDataType.STREAM_CODEC.decode(buf);
                 Holder<?> holder = dataType.createHolder();
-                holder.decodeData(buf);
+                holder.getReader().decodeData(buf);
 
                 return holder;
             }
         };
 
-
-        public _D getData() {
-            return this.data;
-        }
-
         public DynDataType<_D> getDataType() {
             return this.dataType;
         }
 
-        @SuppressWarnings("unchecked")
-        public void copyTo(Holder<?> holder) {
-            if (this.dataType != holder.dataType) {
-                ((Holder<_D>) holder).data = this.data;
-            } else {
-                LOGGER.warn("Cannot copy value to holder, holders belong to different data types");
-            }
+        public MapCodec<_D> getMapCodec() {
+            return this.dataType.dataCodec;
         }
 
-        @SuppressWarnings("unchecked")
-        public void copyFrom(Holder<?> holder) {
-            if (this.dataType == holder.dataType) {
-                this.data = ((Holder<_D>) holder).data;
-            } else {
-                LOGGER.warn("Cannot copy from holder, holders belong to different data types");
-            }
+        public StreamCodec<? super RegistryFriendlyByteBuf, _D> getStreamCodec() {
+            return this.dataType.dataStreamCodec;
         }
 
-        public void readData(ValueInput in) {
-            //noinspection deprecation
-            in.read(this.dataType.dataCodec).ifPresent((d) -> {
-                this.data = d;
-            });
+        public DynDataWriter<_D> getWriter() {
+            return this.writer;
         }
 
-        public void storeData(ValueOutput out) {
-            //noinspection deprecation
-            out.store(this.dataType.dataCodec, this.data);
+        public DynDataReader<_D> getReader() {
+            return this.reader;
         }
 
-        public void decodeData(RegistryFriendlyByteBuf buf) {
-            this.data = this.dataType.dataStreamCodec.decode(buf);
-        }
-
-        public void encodeData(RegistryFriendlyByteBuf buf) {
-            this.dataType.dataStreamCodec.encode(buf, this.data);
+        public _D getData() {
+            return this.data;
         }
 
         public void setData(_D data) {

@@ -14,6 +14,7 @@ package me.steinsut.entropylib.api.dyn.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
+import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.neoforged.neoforge.client.renderstate.BaseRenderState;
@@ -27,8 +28,8 @@ public abstract class BaseDynRenderer<D, S extends BaseRenderState> {
         this.dataHolder = dataType.createHolder();
     }
 
-    public void useDataFrom(DynDataType.Holder<?> holder) {
-        this.dataHolder.copyFrom(holder);
+    public void readDataFrom(DynDataWriter<?> writer) {
+        writer.writeToHolder(this.dataHolder);
     }
 
     public abstract void submit(S renderState, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState cameraState);

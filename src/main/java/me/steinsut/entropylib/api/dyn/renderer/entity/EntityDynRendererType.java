@@ -12,6 +12,7 @@ You should have received a copy of the GNU Lesser General Public License along w
 
 package me.steinsut.entropylib.api.dyn.renderer.entity;
 
+import com.mojang.serialization.Codec;
 import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
 import me.steinsut.entropylib.api.dyn.renderer.BaseDynRendererType;
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
@@ -33,20 +34,21 @@ import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_RENDERE
 
 public final class EntityDynRendererType<R extends EntityDynRenderer<D, S>, D, S extends DynRenderedEntityRenderState<S>> extends BaseDynRendererType<R, D, S> {
     public static final StreamCodec<RegistryFriendlyByteBuf, EntityDynRendererType<?, ?, ?>> STREAM_CODEC =
-            ByteBufCodecs.registry(DYN_RENDERER_TYPE_REGISTRY_KEY).map(
+            BaseDynRendererType.STREAM_CODEC.map(
                     (t) -> (EntityDynRendererType<?, ?, ?>) t,
-                    Function.identity());
+                    Function.identity()
+            );
 
+    public static final Codec<EntityDynRendererType<?, ?, ?>> CODEC = BaseDynRendererType.CODEC.xmap(
+            (t) -> (EntityDynRendererType<?, ?, ?>) t,
+            Function.identity()
+    );
 
     private R rendererInstance;
     private final BiFunction<EntityRendererProvider.Context, DynDataType<D>, R> dynRendererFactory;
     private final Set<Holder<EntityType<?>>> compatibleEntities;
 
-    public EntityDynRendererType(DynDataType<D> dataType, BiFunction<EntityRendererProvider.Context, DynDataType<D>, R> dynRendererFactory) {
-        this(dataType, dynRendererFactory, new HashSet<>());
-    }
-
-    public EntityDynRendererType(DynDataType<D> dataType, BiFunction<EntityRendererProvider.Context, DynDataType<D>, R> dynRendererFactory, Set<Holder<EntityType<?>>> compatibleEntities) {
+    private EntityDynRendererType(DynDataType<D> dataType, BiFunction<EntityRendererProvider.Context, DynDataType<D>, R> dynRendererFactory, Set<Holder<EntityType<?>>> compatibleEntities) {
         super(dataType);
 
         this.compatibleEntities = compatibleEntities;

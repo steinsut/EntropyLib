@@ -10,7 +10,7 @@ EntropyLib is distributed in the hope that it will be useful, but WITHOUT ANY WA
 You should have received a copy of the GNU Lesser General Public License along with EntropyLib. If not, see <https://www.gnu.org/licenses/>.
 */
 
-package me.steinsut.entropylib.api.dyn.sync.entity;
+package me.steinsut.entropylib.api.dyn.entity.sync;
 
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;

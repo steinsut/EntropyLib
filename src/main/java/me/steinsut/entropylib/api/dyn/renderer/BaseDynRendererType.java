@@ -28,7 +28,7 @@ public abstract class BaseDynRendererType<R extends BaseDynRenderer<D, S>, D, S 
 
     protected final DynDataType<D> dataType;
 
-    public BaseDynRendererType(DynDataType<D> dataType) {
+    protected BaseDynRendererType(DynDataType<D> dataType) {
         this.dataType = dataType;
     }
 

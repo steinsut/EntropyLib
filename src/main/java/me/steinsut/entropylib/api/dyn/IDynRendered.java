@@ -10,17 +10,11 @@ EntropyLib is distributed in the hope that it will be useful, but WITHOUT ANY WA
 You should have received a copy of the GNU Lesser General Public License along with EntropyLib. If not, see <https://www.gnu.org/licenses/>.
 */
 
-package me.steinsut.entropylib.api.dyn.renderer.entity;
+package me.steinsut.entropylib.api.dyn;
 
-import me.steinsut.entropylib.api.dyn.renderer.IDynRendered;
-import me.steinsut.entropylib.api.dyn.contextless.ContextlessDynRenderer;
-import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
-import me.steinsut.entropylib.api.dyn.sync.entity.EntityDynSyncPolicy;
+import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
+import net.neoforged.neoforge.client.renderstate.BaseRenderState;
 
-public interface IDynRenderedEntity<S extends DynRenderedEntityRenderState<S>> extends IDynRendered<S> {
-    EntityDynRendererType<?, ?, S> getDynRendererType();
-    ContextlessDynRenderer<?, S> getFallbackDynRenderer();
-
-    void setDynRendererType(EntityDynRendererType<?, ?, ?> dynRendererType);
-    void setDynSyncPolicy(EntityDynSyncPolicy policy);
+public interface IDynRendered<S extends BaseRenderState> {
+    DynDataWriter<?> getDynDataWriter();
 }

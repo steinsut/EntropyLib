@@ -14,7 +14,7 @@ package me.steinsut.entropylib.network;
 
 import me.steinsut.entropylib.api.EntropyLibApi;
 import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRendererType;
-import me.steinsut.entropylib.api.dyn.renderer.entity.IDynRenderedEntity;
+import me.steinsut.entropylib.api.dyn.entity.IDynRenderedEntity;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;

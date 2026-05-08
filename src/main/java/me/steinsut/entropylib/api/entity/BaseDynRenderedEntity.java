@@ -13,13 +13,14 @@ You should have received a copy of the GNU Lesser General Public License along w
 package me.steinsut.entropylib.api.entity;
 
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
+import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
+import me.steinsut.entropylib.api.dyn.entity.IDynRenderedEntity;
 import me.steinsut.entropylib.api.dyn.renderer.BaseDynRendererType;
 import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRendererType;
-import me.steinsut.entropylib.api.dyn.renderer.entity.IDynRenderedEntity;
 import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
 import me.steinsut.entropylib.network.ClientboundSetEntityDynRType;
-import me.steinsut.entropylib.api.dyn.sync.entity.EntityDynSyncPolicy;
-import me.steinsut.entropylib.api.dyn.sync.entity.IEntityDynSyncHandler;
+import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncPolicy;
+import me.steinsut.entropylib.api.dyn.entity.sync.IEntityDynSyncHandler;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -40,7 +41,7 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
     public static final String VALUE_IO_SYNC_CONF_KEY = "s_conf";
 
     protected EntityDynRendererType<?, ?, S> dynRendererType;
-    protected DynDataType.Holder<?> dynRendererData;
+    protected DynDataType.Holder<?> dynData;
     protected EntityDynSyncPolicy dynSyncPolicy;
     protected IEntityDynSyncHandler dynSyncHandler;
 
@@ -57,11 +58,16 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
     }
 
     @Override
+    public DynDataWriter<?> getDynDataWriter() {
+        return this.dynData.getWriter();
+    }
+
+    @Override
     public void setDynRendererType(EntityDynRendererType<?, ?, ?> type) {
         if (type.isCompatible(this.typeHolder())) {
             //noinspection unchecked
             this.dynRendererType = (EntityDynRendererType<?, ?, S>) type;
-            this.dynRendererData = type.getDataType().createHolder();
+            this.dynData = type.getDataType().createHolder();
 
             if (!this.level().isClientSide()) {
                 PacketDistributor.sendToPlayersTrackingChunk(
@@ -84,20 +90,34 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
     }
 
     @Override
-    public DynDataType.Holder<?> getDynDataHolder() {
-        return this.dynRendererData;
+    public void readDataFrom(DynDataWriter<?> writer) {
+        writer.writeToHolder(this.dynData);
+
+        if (this.level().isClientSide()) {
+            this.dynSyncHandler.onDataUpdate();
+
+            if (this.dynSyncHandler.needsSync()) {
+                PacketDistributor.sendToPlayersTrackingChunk(
+                        (ServerLevel) this.level(),
+                        this.chunkPosition(),
+                        new ClientboundSetEntityDynRType(this.getId(), this.dynRendererType)
+                );
+
+                this.dynSyncHandler.reset();
+            }
+        }
     }
 
     @Override
     protected void readAdditionalSaveData(@NonNull ValueInput input) {
         input.child(VALUE_IO_DYN_KEY).ifPresent((c) -> {
-            c.read(VALUE_IO_DYN_RENDERER_TYPE_KEY, BaseDynRendererType.CODEC).ifPresent((t) -> {
+            c.read(VALUE_IO_DYN_RENDERER_TYPE_KEY, EntityDynRendererType.CODEC).ifPresent((t) -> {
                 //noinspection unchecked
                 this.dynRendererType = (EntityDynRendererType<?, ?, S>) t;
-                this.dynRendererData = this.dynRendererType.getDataType().createHolder();
+                this.dynData = this.dynRendererType.getDataType().createHolder();
 
                 c.child(VALUE_IO_DYN_DATA_KEY).ifPresent((d) -> {
-                    this.dynRendererData.readData(d);
+                    this.dynData.getReader().readData(d);
                 });
             });
 
@@ -116,9 +136,9 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
     protected void addAdditionalSaveData(@NonNull ValueOutput output) {
         ValueOutput dynChild = output.child(VALUE_IO_DYN_KEY);
 
-        dynChild.store(VALUE_IO_DYN_RENDERER_TYPE_KEY, BaseDynRendererType.CODEC, this.dynRendererType);
+        dynChild.store(VALUE_IO_DYN_RENDERER_TYPE_KEY, EntityDynRendererType.CODEC, this.dynRendererType);
         ValueOutput dataChild = dynChild.child(VALUE_IO_DYN_DATA_KEY);
-        this.dynRendererData.storeData(dataChild);
+        this.dynData.getWriter().storeData(dataChild);
 
         dynChild.store(VALUE_IO_SYNC_POLICY_KEY, EntityDynSyncPolicy.CODEC, this.dynSyncPolicy);
         ValueOutput confChild = dynChild.child(VALUE_IO_SYNC_CONF_KEY);
