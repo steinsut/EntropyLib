@@ -13,8 +13,8 @@ You should have received a copy of the GNU Lesser General Public License along w
 package me.steinsut.entropylib.api.registries;
 
 import me.steinsut.entropylib.api.EntropyLibApi;
-import me.steinsut.entropylib.api.dyn.renderer.BaseDynRendererType;
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
+import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRendererType;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -22,13 +22,13 @@ import net.neoforged.neoforge.registries.RegistryBuilder;
 
 public class CommonRegistries {
     private static final int DYN_RENDERER_DATA_TYPE_MAX_ID = 65535;
-    private static final int DYN_RENDERER_TYPE_MAX_ID = 255;
+    private static final int ENTITY_DYN_RENDERER_TYPE_MAX_ID = 65535;
 
     public static final ResourceKey<Registry<DynDataType<?>>> DYN_RENDERER_DATA_TYPE_REGISTRY_KEY = ResourceKey.createRegistryKey(
             Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "dyn_data_types")
     );
 
-    public static final ResourceKey<Registry<BaseDynRendererType<?, ?, ?>>> DYN_RENDERER_TYPE_REGISTRY_KEY = ResourceKey.createRegistryKey(
+    public static final ResourceKey<Registry<EntityDynRendererType<?, ?, ?>>> ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY = ResourceKey.createRegistryKey(
             Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "dyn_type")
     );
 
@@ -38,9 +38,9 @@ public class CommonRegistries {
             .maxId(DYN_RENDERER_DATA_TYPE_MAX_ID)
             .create();
 
-    public static final Registry<BaseDynRendererType<?, ?, ?>> DYN_RENDERER_TYPE_REGISTRY = new RegistryBuilder<>(DYN_RENDERER_TYPE_REGISTRY_KEY)
+    public static final Registry<EntityDynRendererType<?, ?, ?>> ENTITY_DYN_RENDERER_TYPE_REGISTRY = new RegistryBuilder<>(ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY)
             .sync(true)
             .defaultKey(Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "none"))
-            .maxId(DYN_RENDERER_TYPE_MAX_ID)
+            .maxId(ENTITY_DYN_RENDERER_TYPE_MAX_ID)
             .create();
 }

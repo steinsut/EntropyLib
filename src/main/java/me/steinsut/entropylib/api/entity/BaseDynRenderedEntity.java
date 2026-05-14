@@ -15,7 +15,6 @@ package me.steinsut.entropylib.api.entity;
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import me.steinsut.entropylib.api.dyn.entity.IDynRenderedEntity;
-import me.steinsut.entropylib.api.dyn.renderer.BaseDynRendererType;
 import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRendererType;
 import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
 import me.steinsut.entropylib.network.ClientboundSetEntityDynRType;
@@ -31,7 +30,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.NonNull;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
-import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_RENDERER_TYPE_REGISTRY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY;
 
 public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderState<S>> extends Entity implements IDynRenderedEntity<S> {
     public static final String VALUE_IO_DYN_KEY = "dyn";
@@ -78,7 +77,7 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
             }
         } else {
             LOGGER.warn("DynRendererType {} is incompatible with entity type {}",
-                    DYN_RENDERER_TYPE_REGISTRY.getKey(type),
+                    ENTITY_DYN_RENDERER_TYPE_REGISTRY.getKey(type),
                     this.typeHolder().getKey().identifier());
         }
     }

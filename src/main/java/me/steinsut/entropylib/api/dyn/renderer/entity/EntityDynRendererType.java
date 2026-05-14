@@ -30,19 +30,14 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
-import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_RENDERER_TYPE_REGISTRY_KEY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY;
 
 public final class EntityDynRendererType<R extends EntityDynRenderer<D, S>, D, S extends DynRenderedEntityRenderState<S>> extends BaseDynRendererType<R, D, S> {
     public static final StreamCodec<RegistryFriendlyByteBuf, EntityDynRendererType<?, ?, ?>> STREAM_CODEC =
-            BaseDynRendererType.STREAM_CODEC.map(
-                    (t) -> (EntityDynRendererType<?, ?, ?>) t,
-                    Function.identity()
-            );
+            ByteBufCodecs.registry(ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY);
 
-    public static final Codec<EntityDynRendererType<?, ?, ?>> CODEC = BaseDynRendererType.CODEC.xmap(
-            (t) -> (EntityDynRendererType<?, ?, ?>) t,
-            Function.identity()
-    );
+    public static final Codec<EntityDynRendererType<?, ?, ?>> CODEC = ENTITY_DYN_RENDERER_TYPE_REGISTRY.byNameCodec();
 
     private R rendererInstance;
     private final BiFunction<EntityRendererProvider.Context, DynDataType<D>, R> dynRendererFactory;
