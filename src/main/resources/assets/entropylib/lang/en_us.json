@@ -1,5 +1,10 @@
 {
   "entropylib.configuration.title": "EntropyLib Configs",
   "entropylib.configuration.section.entropylib.common.toml": "EntropyLib Configs",
-  "entropylib.configuration.section.entropylib.common.toml.title": "EntropyLib Configs"
+  "entropylib.configuration.section.entropylib.common.toml.title": "EntropyLib Configs",
+  "commands.dyn.entity.invalid": "%s is not Dyn rendered",
+  "commands.dyn.entity.type.missing": "Can't find EntityDynRendererType %s in registry (report to developers)",
+  "commands.dyn.entity.type.get": "%s has Dyn renderer type %s",
+  "commands.dyn.entity.type.set.success": "Changed Dyn renderer type of %s to %s",
+  "commands.dyn.entity.type.set.incompatible": "Dyn renderer type %s is incompatible with entity type %s"
 }

@@ -17,7 +17,7 @@ import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import me.steinsut.entropylib.api.dyn.entity.IDynRenderedEntity;
 import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRendererType;
 import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
-import me.steinsut.entropylib.network.ClientboundSetEntityDynRType;
+import me.steinsut.entropylib.network.ClientboundSetEntityDynRendererType;
 import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncPolicy;
 import me.steinsut.entropylib.api.dyn.entity.sync.IEntityDynSyncHandler;
 import net.minecraft.server.level.ServerLevel;
@@ -72,7 +72,7 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
                 PacketDistributor.sendToPlayersTrackingChunk(
                         (ServerLevel) this.level(),
                         this.chunkPosition(),
-                        new ClientboundSetEntityDynRType(this.getId(), this.dynRendererType)
+                        new ClientboundSetEntityDynRendererType(this.getId(), this.dynRendererType)
                 );
             }
         } else {
@@ -99,7 +99,7 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
                 PacketDistributor.sendToPlayersTrackingChunk(
                         (ServerLevel) this.level(),
                         this.chunkPosition(),
-                        new ClientboundSetEntityDynRType(this.getId(), this.dynRendererType)
+                        new ClientboundSetEntityDynRendererType(this.getId(), this.dynRendererType)
                 );
 
                 this.dynSyncHandler.reset();

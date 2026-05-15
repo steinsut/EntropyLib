@@ -24,19 +24,19 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jspecify.annotations.NonNull;
 
-public record ClientboundSetEntityDynRType(int id, EntityDynRendererType<?, ?, ?> dynType) implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<ClientboundSetEntityDynRType> TYPE =
+public record ClientboundSetEntityDynRendererType(int id, EntityDynRendererType<?, ?, ?> dynType) implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<ClientboundSetEntityDynRendererType> TYPE =
             new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "set_ent_dynr_t"));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundSetEntityDynRType> STREAM_CODEC = StreamCodec.composite(
+    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundSetEntityDynRendererType> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT,
-            ClientboundSetEntityDynRType::id,
+            ClientboundSetEntityDynRendererType::id,
             EntityDynRendererType.STREAM_CODEC,
-            ClientboundSetEntityDynRType::dynType,
-            ClientboundSetEntityDynRType::new
+            ClientboundSetEntityDynRendererType::dynType,
+            ClientboundSetEntityDynRendererType::new
     );
 
-    public static void handleOnMain(final ClientboundSetEntityDynRType data, final IPayloadContext context) {
+    public static void handleOnMain(final ClientboundSetEntityDynRendererType data, final IPayloadContext context) {
         Level level = context.player().level();
         IDynRenderedEntity<?> entity = (IDynRenderedEntity<?>) level.getEntity(data.id);
         if (entity != null) {

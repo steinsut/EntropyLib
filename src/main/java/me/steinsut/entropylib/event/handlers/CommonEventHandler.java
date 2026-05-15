@@ -14,12 +14,14 @@ package me.steinsut.entropylib.event.handlers;
 
 import me.steinsut.entropylib.api.EntropyLibApi;
 import me.steinsut.entropylib.api.registries.CommonRegistries;
+import me.steinsut.entropylib.commands.EntropyLibCommands;
 import me.steinsut.entropylib.event.IModEventHandler;
 import me.steinsut.entropylib.event.INeoEventHandler;
-import me.steinsut.entropylib.network.ClientboundSetEntityDynRType;
+import me.steinsut.entropylib.network.ClientboundSetEntityDynRendererType;
 import me.steinsut.entropylib.network.ClientboundUpdateEntityDynData;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -37,7 +39,7 @@ public class CommonEventHandler implements IModEventHandler, INeoEventHandler {
 
     @Override
     public void registerNeoEventHandlers(IEventBus bus) {
-
+        bus.addListener(this::registerCommands);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -56,13 +58,17 @@ public class CommonEventHandler implements IModEventHandler, INeoEventHandler {
         final PayloadRegistrar networkRegistrar = registrar.executesOn(HandlerThread.NETWORK);
 
         mainRegistrar.playToClient(
-                ClientboundSetEntityDynRType.TYPE,
-                ClientboundSetEntityDynRType.STREAM_CODEC
+                ClientboundSetEntityDynRendererType.TYPE,
+                ClientboundSetEntityDynRendererType.STREAM_CODEC
         );
 
         mainRegistrar.playToClient(
                 ClientboundUpdateEntityDynData.TYPE,
                 ClientboundUpdateEntityDynData.STREAM_CODEC
         );
+    }
+
+    private void registerCommands(final RegisterCommandsEvent event) {
+        EntropyLibCommands.register(event.getDispatcher(), event.getBuildContext());
     }
 }

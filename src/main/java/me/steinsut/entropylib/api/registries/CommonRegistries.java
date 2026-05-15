@@ -29,18 +29,16 @@ public class CommonRegistries {
     );
 
     public static final ResourceKey<Registry<EntityDynRendererType<?, ?, ?>>> ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY = ResourceKey.createRegistryKey(
-            Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "dyn_type")
+            Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "entity_dyn_renderer_types")
     );
 
     public static final Registry<DynDataType<?>> DYN_RENDERER_DATA_TYPE_REGISTRY = new RegistryBuilder<>(DYN_RENDERER_DATA_TYPE_REGISTRY_KEY)
             .sync(true)
-            .defaultKey(Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "none"))
             .maxId(DYN_RENDERER_DATA_TYPE_MAX_ID)
             .create();
 
     public static final Registry<EntityDynRendererType<?, ?, ?>> ENTITY_DYN_RENDERER_TYPE_REGISTRY = new RegistryBuilder<>(ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY)
             .sync(true)
-            .defaultKey(Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "none"))
             .maxId(ENTITY_DYN_RENDERER_TYPE_MAX_ID)
             .create();
 }
