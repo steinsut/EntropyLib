@@ -92,7 +92,7 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
     public void readDataFrom(DynDataWriter<?> writer) {
         writer.writeToHolder(this.dynData);
 
-        if (this.level().isClientSide()) {
+        if (!this.level().isClientSide()) {
             this.dynSyncHandler.onDataUpdate();
 
             if (this.dynSyncHandler.needsSync()) {
