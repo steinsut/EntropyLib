@@ -42,8 +42,7 @@ public abstract class DynRenderedEntityRenderer<E extends Entity & IDynRenderedE
         if (state.dynRenderer != null) {
             state.dynRenderer.readDataFrom(state.dynDataWriter);
             state.dynRenderer.submit(state, poseStack, submitNodeCollector, camera);
-        }
-        else {
+        } else {
             state.fallbackDynRenderer.submit(state, poseStack, submitNodeCollector, camera);
         }
     }

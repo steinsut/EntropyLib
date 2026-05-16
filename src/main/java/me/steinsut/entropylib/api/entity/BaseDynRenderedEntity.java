@@ -15,11 +15,11 @@ package me.steinsut.entropylib.api.entity;
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import me.steinsut.entropylib.api.dyn.entity.IDynRenderedEntity;
+import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncPolicy;
+import me.steinsut.entropylib.api.dyn.entity.sync.IEntityDynSyncHandler;
 import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRendererType;
 import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
 import me.steinsut.entropylib.network.ClientboundSetEntityDynRendererType;
-import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncPolicy;
-import me.steinsut.entropylib.api.dyn.entity.sync.IEntityDynSyncHandler;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -57,11 +57,6 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
     }
 
     @Override
-    public DynDataWriter<?> getDynDataWriter() {
-        return this.dynData.getWriter();
-    }
-
-    @Override
     public void setDynRendererType(EntityDynRendererType<?, ?, ?> type) {
         if (type.isCompatible(this.typeHolder())) {
             //noinspection unchecked
@@ -80,6 +75,11 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
                     ENTITY_DYN_RENDERER_TYPE_REGISTRY.getKey(type),
                     this.typeHolder().getKey().identifier());
         }
+    }
+
+    @Override
+    public DynDataWriter<?> getDynDataWriter() {
+        return this.dynData.getWriter();
     }
 
     @Override

@@ -13,7 +13,6 @@ You should have received a copy of the GNU Lesser General Public License along w
 package me.steinsut.entropylib.api.renderer.entity;
 
 import me.steinsut.entropylib.api.dyn.contextless.ContextlessDynRenderer;
-import me.steinsut.entropylib.api.dyn.data.DynDataReader;
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRenderer;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;

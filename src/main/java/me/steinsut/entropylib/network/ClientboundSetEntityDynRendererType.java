@@ -13,8 +13,8 @@ You should have received a copy of the GNU Lesser General Public License along w
 package me.steinsut.entropylib.network;
 
 import me.steinsut.entropylib.api.EntropyLibApi;
-import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRendererType;
 import me.steinsut.entropylib.api.dyn.entity.IDynRenderedEntity;
+import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRendererType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -24,7 +24,8 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jspecify.annotations.NonNull;
 
-public record ClientboundSetEntityDynRendererType(int id, EntityDynRendererType<?, ?, ?> dynType) implements CustomPacketPayload {
+public record ClientboundSetEntityDynRendererType(int id,
+                                                  EntityDynRendererType<?, ?, ?> dynType) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<ClientboundSetEntityDynRendererType> TYPE =
             new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "set_ent_dynr_t"));
 

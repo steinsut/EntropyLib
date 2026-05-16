@@ -83,8 +83,8 @@ public class DynEntityCommands {
                                 Commands
                                         .literal("get")
                                         .executes((context ->
-                                                dataGet(context.getSource(),
-                                                        EntityArgument.getEntity(context, "entity"))
+                                                        dataGet(context.getSource(),
+                                                                EntityArgument.getEntity(context, "entity"))
                                                 )
                                         )
                         )
@@ -156,14 +156,13 @@ public class DynEntityCommands {
 
             source.sendSuccess(() -> Component.translatable("commands.dyn.entity.data.get", entity.getDisplayName(), NbtUtils.prettyPrint(tag, false)), false);
             return 1;
-        }
-        else {
+        } else {
             throw ERROR_INVALID_ENTITY.create(entity.getDisplayName());
         }
     }
 
     private static int dataSet(CommandSourceStack source, Entity entity, CompoundTag tag) throws CommandSyntaxException {
-        if (entity instanceof  IDynRenderedEntity<?> dynEntity) {
+        if (entity instanceof IDynRenderedEntity<?> dynEntity) {
             ProblemReporter.Collector collector = new ProblemReporter.Collector();
             CompoundTag dataTag = new CompoundTag();
 
@@ -179,8 +178,7 @@ public class DynEntityCommands {
             dynEntity.readDataFrom(holder.getWriter());
             source.sendSuccess(() -> Component.translatable("commands.dyn.entity.data.set", entity.getDisplayName()), false);
             return 1;
-        }
-        else {
+        } else {
             throw ERROR_INVALID_ENTITY.create(entity.getDisplayName());
         }
     }

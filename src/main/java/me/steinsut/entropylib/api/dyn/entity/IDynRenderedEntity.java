@@ -15,15 +15,17 @@ package me.steinsut.entropylib.api.dyn.entity;
 import me.steinsut.entropylib.api.dyn.IDynRendered;
 import me.steinsut.entropylib.api.dyn.contextless.ContextlessDynRenderer;
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
+import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncPolicy;
 import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRendererType;
 import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
-import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncPolicy;
 
 public interface IDynRenderedEntity<S extends DynRenderedEntityRenderState<S>> extends IDynRendered<S> {
     EntityDynRendererType<?, ?, S> getDynRendererType();
-    ContextlessDynRenderer<?, S> getFallbackDynRenderer();
 
     void setDynRendererType(EntityDynRendererType<?, ?, ?> dynRendererType);
+
+    ContextlessDynRenderer<?, S> getFallbackDynRenderer();
+
     void setDynSyncPolicy(EntityDynSyncPolicy policy);
 
     void readDataFrom(DynDataWriter<?> writer);

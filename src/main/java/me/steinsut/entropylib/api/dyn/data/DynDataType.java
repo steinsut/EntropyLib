@@ -20,7 +20,10 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
@@ -72,15 +75,15 @@ public final class DynDataType<D> {
         private final Codec<_D> codec;
         private final StreamCodec<? super RegistryFriendlyByteBuf, _D> streamCodec;
 
-        public static <_D> Builder<_D> of(Codec<_D> codec, StreamCodec<? super RegistryFriendlyByteBuf, _D> streamCodec, Supplier<_D> defaultSupplier) {
-            return new Builder<>(codec, streamCodec, defaultSupplier);
-        }
-
         private Builder(Codec<_D> codec, StreamCodec<? super RegistryFriendlyByteBuf, _D> streamCodec, Supplier<_D> defaultSupplier) {
             this.defaultSupplier = defaultSupplier;
             this.presets = new HashMap<>();
             this.codec = codec;
             this.streamCodec = streamCodec;
+        }
+
+        public static <_D> Builder<_D> of(Codec<_D> codec, StreamCodec<? super RegistryFriendlyByteBuf, _D> streamCodec, Supplier<_D> defaultSupplier) {
+            return new Builder<>(codec, streamCodec, defaultSupplier);
         }
 
         public Builder<_D> withPreset(Identifier id, Supplier<_D> supplier) {
@@ -98,19 +101,6 @@ public final class DynDataType<D> {
     }
 
     public static final class Holder<_D> {
-        private final DynDataType<_D> dataType;
-        private final DynDataWriter<_D> writer;
-        private final DynDataReader<_D> reader;
-        private _D data;
-
-        private Holder(DynDataType<_D> dataType, _D data) {
-            this.dataType = dataType;
-            this.data = data;
-
-            this.writer = new DynDataWriter<>(this);
-            this.reader = new DynDataReader<>(this);
-        }
-
         public static StreamCodec<RegistryFriendlyByteBuf, Holder<?>> STREAM_CODEC = new StreamCodec<>() {
             @Override
             public void encode(@NonNull RegistryFriendlyByteBuf buf, Holder<?> holder) {
@@ -126,6 +116,18 @@ public final class DynDataType<D> {
                 return holder;
             }
         };
+        private final DynDataType<_D> dataType;
+        private final DynDataWriter<_D> writer;
+        private final DynDataReader<_D> reader;
+        private _D data;
+
+        private Holder(DynDataType<_D> dataType, _D data) {
+            this.dataType = dataType;
+            this.data = data;
+
+            this.writer = new DynDataWriter<>(this);
+            this.reader = new DynDataReader<>(this);
+        }
 
         public DynDataType<_D> getDataType() {
             return this.dataType;
@@ -158,8 +160,7 @@ public final class DynDataType<D> {
         public void setToPreset(Identifier id) {
             if (this.dataType.hasPreset(id)) {
                 this.data = this.dataType.presets.get(id).get();
-            }
-            else {
+            } else {
                 LOGGER.warn("Data dynType does not have preset {}", id);
             }
         }

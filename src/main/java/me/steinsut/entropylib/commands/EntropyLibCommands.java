@@ -7,7 +7,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 
 public class EntropyLibCommands {
-    private static LiteralArgumentBuilder<CommandSourceStack> COMMAND_ROOT =
+    private static final LiteralArgumentBuilder<CommandSourceStack> COMMAND_ROOT =
             Commands.literal("entropy")
                     .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS));
 

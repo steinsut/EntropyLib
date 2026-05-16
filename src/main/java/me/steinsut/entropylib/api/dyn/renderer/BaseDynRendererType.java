@@ -12,15 +12,8 @@ You should have received a copy of the GNU Lesser General Public License along w
 
 package me.steinsut.entropylib.api.dyn.renderer;
 
-import com.mojang.serialization.Codec;
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.neoforge.client.renderstate.BaseRenderState;
-
-import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY;
-import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY;
 
 public abstract class BaseDynRendererType<R extends BaseDynRenderer<D, S>, D, S extends BaseRenderState> {
     protected final DynDataType<D> dataType;

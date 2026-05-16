@@ -13,7 +13,6 @@ You should have received a copy of the GNU Lesser General Public License along w
 package me.steinsut.entropylib;
 
 import me.steinsut.entropylib.api.EntropyLibApi;
-import me.steinsut.entropylib.event.handlers.ClientEventHandler;
 import me.steinsut.entropylib.event.handlers.ServerEventHandler;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;

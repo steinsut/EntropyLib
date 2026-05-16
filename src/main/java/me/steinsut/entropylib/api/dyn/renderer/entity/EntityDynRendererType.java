@@ -13,9 +13,9 @@ You should have received a copy of the GNU Lesser General Public License along w
 package me.steinsut.entropylib.api.dyn.renderer.entity;
 
 import com.mojang.serialization.Codec;
-import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
-import me.steinsut.entropylib.api.dyn.renderer.BaseDynRendererType;
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
+import me.steinsut.entropylib.api.dyn.renderer.BaseDynRendererType;
+import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -27,7 +27,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
 import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY;
@@ -38,10 +37,9 @@ public final class EntityDynRendererType<R extends EntityDynRenderer<D, S>, D, S
             ByteBufCodecs.registry(ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY);
 
     public static final Codec<EntityDynRendererType<?, ?, ?>> CODEC = ENTITY_DYN_RENDERER_TYPE_REGISTRY.byNameCodec();
-
-    private R rendererInstance;
     private final BiFunction<EntityRendererProvider.Context, DynDataType<D>, R> dynRendererFactory;
     private final Set<Holder<EntityType<?>>> compatibleEntities;
+    private R rendererInstance;
 
     private EntityDynRendererType(DynDataType<D> dataType, BiFunction<EntityRendererProvider.Context, DynDataType<D>, R> dynRendererFactory, Set<Holder<EntityType<?>>> compatibleEntities) {
         super(dataType);
@@ -73,15 +71,14 @@ public final class EntityDynRendererType<R extends EntityDynRenderer<D, S>, D, S
         }
 
         public static <_R extends EntityDynRenderer<_D, _S>, _D, _S extends DynRenderedEntityRenderState<_S>> Builder<_R, _D, _S>
-            of(DynDataType<_D> dataType, BiFunction<EntityRendererProvider.Context, DynDataType<_D>, _R> dynRendererFactory) {
+        of(DynDataType<_D> dataType, BiFunction<EntityRendererProvider.Context, DynDataType<_D>, _R> dynRendererFactory) {
             return new Builder<>(dataType, dynRendererFactory);
         }
-        
+
         public Builder<_R, _D, _S> supportsEntityType(Holder<EntityType<?>> type) {
             if (this.compatibleEntities != null && this.compatibleEntities.isEmpty()) {
                 LOGGER.warn("DynRenderer already supports all entities");
-            }
-            else {
+            } else {
                 if (this.compatibleEntities == null) {
                     this.compatibleEntities = new HashSet<>();
                 }

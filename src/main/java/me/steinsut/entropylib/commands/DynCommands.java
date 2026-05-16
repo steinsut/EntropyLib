@@ -6,7 +6,7 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 
 public class DynCommands {
-    private static LiteralArgumentBuilder<CommandSourceStack> DYN_COMMAND_ROOT =
+    private static final LiteralArgumentBuilder<CommandSourceStack> DYN_COMMAND_ROOT =
             net.minecraft.commands.Commands.literal("dyn");
 
     public static void register(ArgumentBuilder<CommandSourceStack, ?> parent, CommandBuildContext buildContext) {

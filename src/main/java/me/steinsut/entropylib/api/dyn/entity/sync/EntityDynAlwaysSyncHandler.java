@@ -17,13 +17,16 @@ import net.minecraft.world.level.storage.ValueOutput;
 
 public class EntityDynAlwaysSyncHandler implements IEntityDynSyncHandler {
     @Override
-    public void onDataUpdate() {}
+    public void onDataUpdate() {
+    }
 
     @Override
-    public void onTick() {}
+    public void onTick() {
+    }
 
     @Override
-    public void reset() {}
+    public void reset() {
+    }
 
     @Override
     public boolean needsSync() {
@@ -31,8 +34,10 @@ public class EntityDynAlwaysSyncHandler implements IEntityDynSyncHandler {
     }
 
     @Override
-    public void readConfiguration(ValueInput input) {}
+    public void readConfiguration(ValueInput input) {
+    }
 
     @Override
-    public void writeConfiguration(ValueOutput output) {}
+    public void writeConfiguration(ValueOutput output) {
+    }
 }
