@@ -31,5 +31,4 @@ public final class DynDataWriter<D> {
     public void encodeData(RegistryFriendlyByteBuf buf) {
         this.holder.getStreamCodec().encode(buf, this.holder.getData());
     }
-
 }
