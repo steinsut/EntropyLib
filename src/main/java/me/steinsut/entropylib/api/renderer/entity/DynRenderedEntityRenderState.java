@@ -20,5 +20,5 @@ import net.minecraft.client.renderer.entity.state.EntityRenderState;
 public class DynRenderedEntityRenderState<S extends DynRenderedEntityRenderState<S>> extends EntityRenderState {
     public EntityDynRenderer<?, S> dynRenderer;
     public DynDataWriter<?> dynDataWriter;
-    public ContextlessDynRenderer<?, S> fallbackDynRenderer;
+    public ContextlessDynRenderer<?, ? super S> fallbackDynRenderer;
 }

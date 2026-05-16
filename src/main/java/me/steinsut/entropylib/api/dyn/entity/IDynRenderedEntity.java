@@ -24,7 +24,7 @@ public interface IDynRenderedEntity<S extends DynRenderedEntityRenderState<S>> e
 
     void setDynRendererType(EntityDynRendererType<?, ?, ?> dynRendererType);
 
-    ContextlessDynRenderer<?, S> getFallbackDynRenderer();
+    ContextlessDynRenderer<?, ? super S> getFallbackDynRenderer();
 
     void setDynSyncPolicy(EntityDynSyncPolicy policy);
 
