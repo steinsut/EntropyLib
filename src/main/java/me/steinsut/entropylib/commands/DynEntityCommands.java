@@ -95,9 +95,10 @@ public class DynEntityCommands {
                                                 Commands.argument("nbt", CompoundTagArgument.compoundTag())
                                         )
                                         .executes((context ->
-                                            dataSet(context.getSource(),
-                                                    EntityArgument.getEntity(context, "entity"),
-                                                    CompoundTagArgument.getCompoundTag(context, "nbt"))
+                                                dataSet(context.getSource(),
+                                                        EntityArgument.getEntity(context, "entity"),
+                                                        CompoundTagArgument.getCompoundTag(context, "nbt"))
+                                                )
                                         )
                         )
         );
