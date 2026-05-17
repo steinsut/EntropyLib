@@ -32,10 +32,10 @@ public class EntropyLib {
     };
 
     /**
-     * Java has the peculiar behavior of lazy loading classes. While this may sound great, it has the obvious drawback
-     * of not loading classes that are never accessed (see me.steinsut.entropylib.api.dyn.entity.sync.Policies)
+     * Java has the peculiar behavior of lazy loading classes. While this may sound great for performance, it has the
+     * obvious drawback of not loading classes that are never accessed (see me.steinsut.entropylib.api.dyn.entity.sync.Policies)
      *
-     * This is to work around that, because the other options are:
+     * This funkiness is to work around that, because the other options are:
      * - Access some public static member of the class somewhere without it being optimized away (lol no)
      * - Put an empty public static method in the class and call it somewhere (lol no)
      *
