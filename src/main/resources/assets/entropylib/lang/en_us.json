@@ -13,6 +13,6 @@
   "commands.dyn.entity.data.error.write": "Failed to write data: %s",
   "commands.dyn.entity.data.set": "Modified Dyn renderer data of %s",
   "commands.dyn.entity.sync.policy.missing": "Can't find EntityDynSyncPolicy %s in registry (report to developers)",
-  "commands.dyn.entity.sync_policy.get": "%s has the following Dyn renderer data: %s",
-  "commands.dyn.entity.sync_policy.set": "Changed Dyn sync policy of %s to: %s"
+  "commands.dyn.entity.sync.policy.get": "%s has the following Dyn renderer data: %s",
+  "commands.dyn.entity.sync.policy.set": "Changed Dyn sync policy of %s to: %s"
 }

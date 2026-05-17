@@ -125,37 +125,41 @@ public class DynEntityCommands {
     private static void registerSyncPolicyCommands(RequiredArgumentBuilder<CommandSourceStack, EntitySelector> parent, CommandBuildContext buildContext) {
         parent.then(
                 Commands
-                        .literal("sync_policy")
+                        .literal("sync")
                         .then(
-                                Commands
-                                        .literal("get")
-                                        .executes((context ->
-                                                        runOnDynEntity(
-                                                                EntityArgument.getEntity(context, "entity"),
-                                                                (e, d) -> syncPolicyGet(context.getSource(), e, d)
-                                                        )
-
-                                                )
-                                        )
-                        )
-                        .then(
-                                Commands
-                                        .literal("set")
+                                Commands.literal("policy")
                                         .then(
                                                 Commands
-                                                        .argument("policy", ResourceArgument.resource(buildContext, ENTITY_DYN_SYNC_POLICY_REGISTRY_KEY))
+                                                        .literal("get")
                                                         .executes((context ->
                                                                         runOnDynEntity(
                                                                                 EntityArgument.getEntity(context, "entity"),
-                                                                                (e, d) -> syncPolicySet(context.getSource(),
-                                                                                        e, d,
-                                                                                        ResourceArgument.getResource(context, "policy", ENTITY_DYN_SYNC_POLICY_REGISTRY_KEY))
+                                                                                (e, d) -> syncPolicyGet(context.getSource(), e, d)
                                                                         )
 
                                                                 )
                                                         )
                                         )
+                                        .then(
+                                                Commands
+                                                        .literal("set")
+                                                        .then(
+                                                                Commands
+                                                                        .argument("policy", ResourceArgument.resource(buildContext, ENTITY_DYN_SYNC_POLICY_REGISTRY_KEY))
+                                                                        .executes((context ->
+                                                                                        runOnDynEntity(
+                                                                                                EntityArgument.getEntity(context, "entity"),
+                                                                                                (e, d) -> syncPolicySet(context.getSource(),
+                                                                                                        e, d,
+                                                                                                        ResourceArgument.getResource(context, "policy", ENTITY_DYN_SYNC_POLICY_REGISTRY_KEY))
+                                                                                        )
+
+                                                                                )
+                                                                        )
+                                                        )
+                                        )
                         )
+
         );
     }
 
@@ -236,13 +240,13 @@ public class DynEntityCommands {
             throw ERROR_MISSING_DYN_SYNC_POLICY.create(policy);
         }
 
-        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.sync_policy.get", entity.getDisplayName(), id.toString()), false);
+        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.sync.policy.get", entity.getDisplayName(), id.toString()), false);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int syncPolicySet(CommandSourceStack source, Entity entity, IDynRenderedEntity<?> dynEntity, Holder<EntityDynSyncPolicy> policyHolder) throws CommandSyntaxException {
         dynEntity.setDynSyncPolicy(policyHolder.value());
-        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.sync_policy.set", entity.getDisplayName(), policyHolder.getRegisteredName()), false);
+        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.sync.policy.set", entity.getDisplayName(), policyHolder.getRegisteredName()), false);
         return Command.SINGLE_SUCCESS;
     }
 
