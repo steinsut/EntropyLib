@@ -28,5 +28,5 @@ public interface IDynRenderedEntity<S extends DynRenderedEntityRenderState<S>> e
 
     void setDynSyncPolicy(EntityDynSyncPolicy policy);
 
-    void readDataFrom(DynDataWriter<?> writer);
+    void readDataFrom(DynDataWriter<?> writer, boolean forceSync);
 }

@@ -175,7 +175,7 @@ public class DynEntityCommands {
                 throw ERROR_DYN_DATA_WRITE.create(collector.getReport());
             }
 
-            dynEntity.readDataFrom(holder.getWriter());
+            dynEntity.readDataFrom(holder.getWriter(), true);
             source.sendSuccess(() -> Component.translatable("commands.dyn.entity.data.set", entity.getDisplayName()), false);
             return 1;
         } else {

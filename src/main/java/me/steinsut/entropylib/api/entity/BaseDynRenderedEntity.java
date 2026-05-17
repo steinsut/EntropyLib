@@ -89,13 +89,13 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
     }
 
     @Override
-    public void readDataFrom(DynDataWriter<?> writer) {
+    public void readDataFrom(DynDataWriter<?> writer, boolean forceSync) {
         writer.writeToHolder(this.dynData);
 
         if (!this.level().isClientSide()) {
             this.dynSyncHandler.onDataUpdate();
 
-            if (this.dynSyncHandler.needsSync()) {
+            if (forceSync || this.dynSyncHandler.needsSync()) {
                 PacketDistributor.sendToPlayersTrackingChunk(
                         (ServerLevel) this.level(),
                         this.chunkPosition(),

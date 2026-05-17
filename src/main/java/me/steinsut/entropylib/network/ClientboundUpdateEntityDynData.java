@@ -40,7 +40,7 @@ public record ClientboundUpdateEntityDynData(int id, DynDataType.Holder<?> holde
         Level level = context.player().level();
         IDynRenderedEntity<?> entity = (IDynRenderedEntity<?>) level.getEntity(data.id);
         if (entity != null) {
-            entity.readDataFrom(data.holder.getWriter());
+            entity.readDataFrom(data.holder.getWriter(), false);
         }
     }
 
