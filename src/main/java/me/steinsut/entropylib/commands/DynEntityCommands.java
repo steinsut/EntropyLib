@@ -1,5 +1,6 @@
 package me.steinsut.entropylib.commands;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
@@ -37,11 +38,9 @@ public class DynEntityCommands {
     private static final DynamicCommandExceptionType ERROR_DYN_DATA_READ = new DynamicCommandExceptionType(
             (m) -> Component.translatable("commands.dyn.entity.data.error.read", m)
     );
-
     private static final DynamicCommandExceptionType ERROR_DYN_DATA_WRITE = new DynamicCommandExceptionType(
             (m) -> Component.translatable("commands.dyn.entity.data.error.write", m)
     );
-
 
     private static void registerTypeCommands(ArgumentBuilder<CommandSourceStack, ?> parent, CommandBuildContext buildContext) {
         parent.then(
@@ -51,10 +50,11 @@ public class DynEntityCommands {
                                 Commands
                                         .literal("get")
                                         .executes((context ->
-                                                        typeGet(
-                                                                context.getSource(),
-                                                                EntityArgument.getEntity(context, "entity")
+                                                        runOnDynEntity(
+                                                                EntityArgument.getEntity(context, "entity"),
+                                                                (e, d) -> typeGet(context.getSource(), e, d)
                                                         )
+
                                                 )
                                         )
                         )
@@ -65,9 +65,13 @@ public class DynEntityCommands {
                                                 Commands
                                                         .argument("type", ResourceArgument.resource(buildContext, ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY))
                                                         .executes((context ->
-                                                                        typeSet(context.getSource(),
+                                                                        runOnDynEntity(
                                                                                 EntityArgument.getEntity(context, "entity"),
-                                                                                ResourceArgument.getResource(context, "type", ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY))
+                                                                                (e, d) -> typeSet(context.getSource(),
+                                                                                        e, d,
+                                                                                        ResourceArgument.getResource(context, "type", ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY))
+                                                                        )
+
                                                                 )
                                                         )
                                         )
@@ -82,107 +86,103 @@ public class DynEntityCommands {
                         .then(
                                 Commands
                                         .literal("get")
-                                        .executes((context ->
-                                                        dataGet(context.getSource(),
-                                                                EntityArgument.getEntity(context, "entity"))
+                                        .executes((context -> runOnDynEntity(
+                                                        EntityArgument.getEntity(context, "entity"),
+                                                        (e, d) -> dataGet(context.getSource(), e, d)
+                                                )
                                                 )
                                         )
-                        )
-                        .then(
-                                Commands
-                                        .literal("set")
                                         .then(
                                                 Commands
-                                                        .argument("nbt", CompoundTagArgument.compoundTag())
-                                                        .executes((context ->
-                                                                        dataSet(context.getSource(),
-                                                                                EntityArgument.getEntity(context, "entity"),
-                                                                                CompoundTagArgument.getCompoundTag(context, "nbt"))
-                                                                )
+                                                        .literal("set")
+                                                        .then(
+                                                                Commands
+                                                                        .argument("nbt", CompoundTagArgument.compoundTag())
+                                                                        .executes((context -> runOnDynEntity(
+                                                                                        EntityArgument.getEntity(context, "entity"),
+                                                                                        (e, d) -> dataSet(
+                                                                                                context.getSource(),
+                                                                                                e, d, CompoundTagArgument.getCompoundTag(context, "nbt")
+                                                                                        )
+                                                                                )
+
+                                                                                )
+                                                                        )
                                                         )
                                         )
                         )
         );
     }
 
-    private static int typeGet(CommandSourceStack source, Entity entity) throws CommandSyntaxException {
-        if (entity instanceof IDynRenderedEntity<?> e) {
-            var dynRendererType = e.getDynRendererType();
-            if (dynRendererType == null) {
-                source.sendSuccess(() -> Component.translatable("commands.dyn.entity.type.get", entity.getDisplayName(), "null"), false);
-                return 1;
-            }
-
-            var id = source.registryAccess().lookupOrThrow(ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY).getKey(dynRendererType);
-            if (id == null) {
-                throw ERROR_MISSING_DYN_RENDERER_TYPE.create(dynRendererType.toString());
-            }
-
-            source.sendSuccess(() -> Component.translatable("commands.dyn.entity.type.get", entity.getDisplayName(), id.toString()), false);
-            return 1;
+    private static int runOnDynEntity(Entity entity, ThrowingBiCommand<Entity, IDynRenderedEntity<?>> function) throws CommandSyntaxException {
+        if (entity instanceof IDynRenderedEntity<?> dynEntity) {
+            return function.run(entity, dynEntity);
         } else {
             throw ERROR_INVALID_ENTITY.create(entity.getDisplayName());
         }
     }
 
-    private static int typeSet(CommandSourceStack source, Entity entity, Holder<EntityDynRendererType<?, ?, ?>> typeHolder) throws CommandSyntaxException {
+    private static int typeGet(CommandSourceStack source, Entity entity, IDynRenderedEntity<?> dynEntity) throws CommandSyntaxException {
+        var dynRendererType = dynEntity.getDynRendererType();
+        if (dynRendererType == null) {
+            source.sendSuccess(() -> Component.translatable("commands.dyn.entity.type.get", entity.getDisplayName(), "null"), false);
+            return Command.SINGLE_SUCCESS;
+        }
+
+        var id = source.registryAccess().lookupOrThrow(ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY).getKey(dynRendererType);
+        if (id == null) {
+            throw ERROR_MISSING_DYN_RENDERER_TYPE.create(dynRendererType.toString());
+        }
+
+        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.type.get", entity.getDisplayName(), id.toString()), false);
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int typeSet(CommandSourceStack source, Entity entity, IDynRenderedEntity<?> dynEntity, Holder<EntityDynRendererType<?, ?, ?>> typeHolder) throws CommandSyntaxException {
         var entityTypeHolder = entity.typeHolder();
-        if (entity instanceof IDynRenderedEntity<?> dynEntity) {
-            var dynType = typeHolder.value();
-            if (!dynType.isCompatible(entityTypeHolder)) {
-                throw ERROR_INCOMPATIBLE_DYN_RENDERER_TYPE.create(typeHolder.getRegisteredName(), entityTypeHolder.getRegisteredName());
-            }
-
-            dynEntity.setDynRendererType(typeHolder.value());
-            source.sendSuccess(() -> Component.translatable("commands.dyn.entity.type.set.success", entity.getDisplayName(), typeHolder.getRegisteredName()), false);
-            return 1;
-        } else {
-            throw ERROR_INVALID_ENTITY.create(entity.getDisplayName());
+        var dynType = typeHolder.value();
+        if (!dynType.isCompatible(entityTypeHolder)) {
+            throw ERROR_INCOMPATIBLE_DYN_RENDERER_TYPE.create(typeHolder.getRegisteredName(), entityTypeHolder.getRegisteredName());
         }
+
+        dynEntity.setDynRendererType(typeHolder.value());
+        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.type.set.success", entity.getDisplayName(), typeHolder.getRegisteredName()), false);
+        return Command.SINGLE_SUCCESS;
     }
 
-    private static int dataGet(CommandSourceStack source, Entity entity) throws CommandSyntaxException {
-        if (entity instanceof IDynRenderedEntity<?> dynEntity) {
-            ProblemReporter.Collector collector = new ProblemReporter.Collector();
-            var dataWriter = dynEntity.getDynDataWriter();
+    private static int dataGet(CommandSourceStack source, Entity entity, IDynRenderedEntity<?> dynEntity) throws CommandSyntaxException {
+        ProblemReporter.Collector collector = new ProblemReporter.Collector();
+        var dataWriter = dynEntity.getDynDataWriter();
 
-            var tagOutput = TagValueOutput.createWithoutContext(collector);
-            dataWriter.storeData(tagOutput);
+        var tagOutput = TagValueOutput.createWithoutContext(collector);
+        dataWriter.storeData(tagOutput);
 
-            var tag = tagOutput.buildResult().getCompoundOrEmpty(BaseDynRenderedEntity.VALUE_IO_DYN_DATA_KEY);
-            if (!collector.isEmpty()) {
-                throw ERROR_DYN_DATA_READ.create(collector.getReport());
-            }
-
-            source.sendSuccess(() -> Component.translatable("commands.dyn.entity.data.get", entity.getDisplayName(), NbtUtils.prettyPrint(tag, false)), false);
-            return 1;
-        } else {
-            throw ERROR_INVALID_ENTITY.create(entity.getDisplayName());
+        var tag = tagOutput.buildResult().getCompoundOrEmpty(BaseDynRenderedEntity.VALUE_IO_DYN_DATA_KEY);
+        if (!collector.isEmpty()) {
+            throw ERROR_DYN_DATA_READ.create(collector.getReport());
         }
+
+        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.data.get", entity.getDisplayName(), NbtUtils.prettyPrint(tag, false)), false);
+        return Command.SINGLE_SUCCESS;
     }
 
-    private static int dataSet(CommandSourceStack source, Entity entity, CompoundTag tag) throws CommandSyntaxException {
-        if (entity instanceof IDynRenderedEntity<?> dynEntity) {
-            ProblemReporter.Collector collector = new ProblemReporter.Collector();
-            CompoundTag dataTag = new CompoundTag();
+    private static int dataSet(CommandSourceStack source, Entity entity, IDynRenderedEntity<?> dynEntity, CompoundTag tag) throws CommandSyntaxException {
+        ProblemReporter.Collector collector = new ProblemReporter.Collector();
+        CompoundTag dataTag = new CompoundTag();
 
-            dataTag.put(BaseDynRenderedEntity.VALUE_IO_DYN_DATA_KEY, tag);
-            var holder = dynEntity.getDynRendererType().getDataType().createHolder();
-            var tagInput = TagValueInput.create(collector, source.registryAccess(), dataTag);
+        dataTag.put(BaseDynRenderedEntity.VALUE_IO_DYN_DATA_KEY, tag);
+        var holder = dynEntity.getDynRendererType().getDataType().createHolder();
+        var tagInput = TagValueInput.create(collector, source.registryAccess(), dataTag);
 
-            holder.getReader().readData(tagInput);
-            if (!collector.isEmpty()) {
-                throw ERROR_DYN_DATA_WRITE.create(collector.getReport());
-            }
-
-            dynEntity.readDataFrom(holder.getWriter(), true);
-            source.sendSuccess(() -> Component.translatable("commands.dyn.entity.data.set", entity.getDisplayName()), false);
-            return 1;
-        } else {
-            throw ERROR_INVALID_ENTITY.create(entity.getDisplayName());
+        holder.getReader().readData(tagInput);
+        if (!collector.isEmpty()) {
+            throw ERROR_DYN_DATA_WRITE.create(collector.getReport());
         }
-    }
 
+        dynEntity.readDataFrom(holder.getWriter(), true);
+        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.data.set", entity.getDisplayName()), false);
+        return Command.SINGLE_SUCCESS;
+    }
 
     public static void register(ArgumentBuilder<CommandSourceStack, ?> parent, CommandBuildContext buildContext) {
         var entityNode = Commands.literal("entity");
@@ -193,5 +193,11 @@ public class DynEntityCommands {
 
         entityNode.then(argumentNode);
         parent.then(entityNode);
+    }
+
+
+    @FunctionalInterface
+    private interface ThrowingBiCommand<T, U> {
+        int run(T t, U u) throws CommandSyntaxException;
     }
 }
