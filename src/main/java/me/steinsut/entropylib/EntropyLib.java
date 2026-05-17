@@ -39,8 +39,8 @@ public class EntropyLib {
      * - Access some public static member of the class somewhere without it being optimized away (lol no)
      * - Put an empty public static method in the class and call it somewhere (lol no)
      *
-     * Thank you Java for forcing my hand into doing stupid shit like this, I can't wait for the next scuffed implementation
-     * of a new feature
+     * Thank you Java for forcing my hand into doing stupid shit like this, I can't wait for the next
+     * scuffed implementation of a feature
      */
     private void forceLoadClasses() {
         for (Class<?> clazz : classes) {
