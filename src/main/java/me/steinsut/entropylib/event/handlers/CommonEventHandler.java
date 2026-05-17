@@ -49,6 +49,7 @@ public class CommonEventHandler implements IModEventHandler, INeoEventHandler {
     private void createNewRegistries(final NewRegistryEvent event) {
         event.register(CommonRegistries.DYN_RENDERER_DATA_TYPE_REGISTRY);
         event.register(CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY);
+        event.register(CommonRegistries.ENTITY_DYN_SYNC_POLICY_REGISTRY);
     }
 
     private void registerPayloads(final RegisterPayloadHandlersEvent event) {

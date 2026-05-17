@@ -78,6 +78,11 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
     }
 
     @Override
+    public EntityDynSyncPolicy getDynSyncPolicy() {
+        return this.dynSyncPolicy;
+    }
+
+    @Override
     public DynDataWriter<?> getDynDataWriter() {
         return this.dynData.getWriter();
     }

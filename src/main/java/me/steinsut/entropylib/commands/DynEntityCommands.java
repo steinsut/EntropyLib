@@ -2,10 +2,12 @@ package me.steinsut.entropylib.commands;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import me.steinsut.entropylib.api.dyn.entity.IDynRenderedEntity;
+import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncPolicy;
 import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRendererType;
 import me.steinsut.entropylib.api.entity.BaseDynRenderedEntity;
 import net.minecraft.commands.CommandBuildContext;
@@ -14,6 +16,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.CompoundTagArgument;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceArgument;
+import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -24,6 +27,7 @@ import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.level.storage.TagValueOutput;
 
 import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_SYNC_POLICY_REGISTRY_KEY;
 
 public class DynEntityCommands {
     private static final DynamicCommandExceptionType ERROR_INVALID_ENTITY = new DynamicCommandExceptionType(
@@ -34,6 +38,9 @@ public class DynEntityCommands {
     );
     private static final DynamicCommandExceptionType ERROR_MISSING_DYN_RENDERER_TYPE = new DynamicCommandExceptionType(
             (t) -> Component.translatable("commands.dyn.entity.type.missing", t)
+    );
+    private static final DynamicCommandExceptionType ERROR_MISSING_DYN_SYNC_POLICY = new DynamicCommandExceptionType(
+            (t) -> Component.translatable("commands.dyn.entity.sync.policy.missing", t)
     );
     private static final DynamicCommandExceptionType ERROR_DYN_DATA_READ = new DynamicCommandExceptionType(
             (m) -> Component.translatable("commands.dyn.entity.data.error.read", m)
@@ -115,7 +122,44 @@ public class DynEntityCommands {
                 );
     }
 
-    private static int runOnDynEntity(Entity entity, ThrowingBiCommand<Entity, IDynRenderedEntity<?>> function) throws CommandSyntaxException {
+    private static void registerSyncPolicyCommands(RequiredArgumentBuilder<CommandSourceStack, EntitySelector> parent, CommandBuildContext buildContext) {
+        parent.then(
+                Commands
+                        .literal("sync_policy")
+                        .then(
+                                Commands
+                                        .literal("get")
+                                        .executes((context ->
+                                                        runOnDynEntity(
+                                                                EntityArgument.getEntity(context, "entity"),
+                                                                (e, d) -> syncPolicyGet(context.getSource(), e, d)
+                                                        )
+
+                                                )
+                                        )
+                        )
+                        .then(
+                                Commands
+                                        .literal("set")
+                                        .then(
+                                                Commands
+                                                        .argument("policy", ResourceArgument.resource(buildContext, ENTITY_DYN_SYNC_POLICY_REGISTRY_KEY))
+                                                        .executes((context ->
+                                                                        runOnDynEntity(
+                                                                                EntityArgument.getEntity(context, "entity"),
+                                                                                (e, d) -> syncPolicySet(context.getSource(),
+                                                                                        e, d,
+                                                                                        ResourceArgument.getResource(context, "policy", ENTITY_DYN_SYNC_POLICY_REGISTRY_KEY))
+                                                                        )
+
+                                                                )
+                                                        )
+                                        )
+                        )
+        );
+    }
+
+    private static int runOnDynEntity(Entity entity, ThrowingBiFunction<Entity, IDynRenderedEntity<?>> function) throws CommandSyntaxException {
         if (entity instanceof IDynRenderedEntity<?> dynEntity) {
             return function.run(entity, dynEntity);
         } else {
@@ -126,7 +170,7 @@ public class DynEntityCommands {
     private static int typeGet(CommandSourceStack source, Entity entity, IDynRenderedEntity<?> dynEntity) throws CommandSyntaxException {
         var dynRendererType = dynEntity.getDynRendererType();
         if (dynRendererType == null) {
-            source.sendSuccess(() -> Component.translatable("commands.dyn.entity.type.get", entity.getDisplayName(), "null"), false);
+            source.sendSuccess(() -> Component.translatable("commands.dyn.entity.type.get.fallback", entity.getDisplayName()), false);
             return Command.SINGLE_SUCCESS;
         }
 
@@ -147,7 +191,7 @@ public class DynEntityCommands {
         }
 
         dynEntity.setDynRendererType(typeHolder.value());
-        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.type.set.success", entity.getDisplayName(), typeHolder.getRegisteredName()), false);
+        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.type.set", entity.getDisplayName(), typeHolder.getRegisteredName()), false);
         return Command.SINGLE_SUCCESS;
     }
 
@@ -185,12 +229,30 @@ public class DynEntityCommands {
         return Command.SINGLE_SUCCESS;
     }
 
+    private static int syncPolicyGet(CommandSourceStack source, Entity entity, IDynRenderedEntity<?> dynEntity) throws CommandSyntaxException {
+        var policy = dynEntity.getDynSyncPolicy();
+        var id = source.registryAccess().lookupOrThrow(ENTITY_DYN_SYNC_POLICY_REGISTRY_KEY).getKey(policy);
+        if (id == null) {
+            throw ERROR_MISSING_DYN_SYNC_POLICY.create(policy);
+        }
+
+        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.sync_policy.get", entity.getDisplayName(), id.toString()), false);
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int syncPolicySet(CommandSourceStack source, Entity entity, IDynRenderedEntity<?> dynEntity, Holder<EntityDynSyncPolicy> policyHolder) throws CommandSyntaxException {
+        dynEntity.setDynSyncPolicy(policyHolder.value());
+        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.sync_policy.set", entity.getDisplayName(), policyHolder.getRegisteredName()), false);
+        return Command.SINGLE_SUCCESS;
+    }
+
     public static void register(ArgumentBuilder<CommandSourceStack, ?> parent, CommandBuildContext buildContext) {
         var entityNode = Commands.literal("entity");
         var argumentNode = Commands.argument("entity", EntityArgument.entity());
 
         registerTypeCommands(argumentNode, buildContext);
         registerDataCommands(argumentNode, buildContext);
+        registerSyncPolicyCommands(argumentNode, buildContext);
 
         entityNode.then(argumentNode);
         parent.then(entityNode);
@@ -198,7 +260,7 @@ public class DynEntityCommands {
 
 
     @FunctionalInterface
-    private interface ThrowingBiCommand<T, U> {
+    private interface ThrowingBiFunction<T, U> {
         int run(T t, U u) throws CommandSyntaxException;
     }
 }
