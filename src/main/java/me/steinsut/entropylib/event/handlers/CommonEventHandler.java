@@ -28,10 +28,13 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
+import static me.steinsut.entropylib.registry.DynSyncPolicies.POLICIES;
 
 public class CommonEventHandler implements IModEventHandler, INeoEventHandler {
     @Override
     public void registerModEventHandlers(IEventBus bus) {
+        POLICIES.register(bus);
+
         bus.addListener(this::commonSetup);
         bus.addListener(this::createNewRegistries);
         bus.addListener(this::registerPayloads);

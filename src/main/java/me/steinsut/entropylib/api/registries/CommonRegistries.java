@@ -43,6 +43,7 @@ public class CommonRegistries {
             .sync(true)
             .maxId(ENTITY_DYN_RENDERER_TYPE_MAX_ID)
             .create();
+
     private static final int ENTITY_DYN_SYNC_POLICY_MAX_ID = 255;
     public static final Registry<EntityDynSyncPolicy> ENTITY_DYN_SYNC_POLICY_REGISTRY = new RegistryBuilder<>(ENTITY_DYN_SYNC_POLICY_REGISTRY_KEY)
             .sync(false)

@@ -32,9 +32,7 @@ public class ClientEventHandler implements IModEventHandler {
 
     private void onAddEntityRendererLayers(final EntityRenderersEvent.AddLayers event) {
         ENTITY_DYN_RENDERER_TYPE_REGISTRY.forEach((t) -> {
-            if (t instanceof EntityDynRendererType<?, ?, ?> et) {
-                et.instantiateDynRenderer(event.getContext());
-            }
+                t.instantiateDynRenderer(event.getContext());
         });
     }
 

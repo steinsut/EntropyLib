@@ -14,6 +14,7 @@ package me.steinsut.entropylib;
 
 import com.mojang.logging.LogUtils;
 import me.steinsut.entropylib.api.EntropyLibApi;
+import me.steinsut.entropylib.api.dyn.entity.sync.Policies;
 import me.steinsut.entropylib.event.handlers.CommonEventHandler;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -26,8 +27,22 @@ import org.slf4j.Logger;
 public class EntropyLib {
     public static final Logger LOGGER = LogUtils.getLogger();
 
+    private Class<?>[] classes = new Class[]{
+            Policies.class
+    };
+
+    private void forceLoadClasses() {
+        for (Class<?> clazz : classes) {
+            try {
+                Class.forName(clazz.getName(), true, clazz.getClassLoader());
+            }
+            catch (ClassNotFoundException e) {}
+        }
+    }
+
     public EntropyLib(IEventBus modEventBus, ModContainer modContainer) {
         LOGGER.info("Hello from EntropyLib! Overengineering in progress...");
+        this.forceLoadClasses();
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
