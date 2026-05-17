@@ -23,7 +23,6 @@ public final class DynDataReader<D> {
     }
 
     public void readData(ValueInput in) {
-        //noinspection deprecation
         in.read(BaseDynRenderedEntity.VALUE_IO_DYN_DATA_KEY, this.holder.getCodec()).ifPresent(this.holder::setData);
     }
 

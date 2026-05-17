@@ -23,7 +23,6 @@ public final class DynDataWriter<D> {
     }
 
     public void storeData(ValueOutput out) {
-        //noinspection deprecation
         ValueOutput dataChild = out.child(BaseDynRenderedEntity.VALUE_IO_DYN_DATA_KEY);
         dataChild.store(BaseDynRenderedEntity.VALUE_IO_DYN_DATA_KEY, this.holder.getCodec(), this.holder.getData());
     }

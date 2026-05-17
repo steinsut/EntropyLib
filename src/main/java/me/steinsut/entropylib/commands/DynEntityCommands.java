@@ -80,38 +80,39 @@ public class DynEntityCommands {
     }
 
     private static void registerDataCommands(ArgumentBuilder<CommandSourceStack, ?> parent, CommandBuildContext buildContext) {
-        parent.then(
-                Commands
-                        .literal("data")
-                        .then(
-                                Commands
-                                        .literal("get")
-                                        .executes((context -> runOnDynEntity(
-                                                        EntityArgument.getEntity(context, "entity"),
-                                                        (e, d) -> dataGet(context.getSource(), e, d)
+        parent
+                .then(
+                        Commands
+                                .literal("data")
+                                .then(
+                                        Commands
+                                                .literal("get")
+                                                .executes((context -> runOnDynEntity(
+                                                                EntityArgument.getEntity(context, "entity"),
+                                                                (e, d) -> dataGet(context.getSource(), e, d)
+                                                        )
+                                                        )
                                                 )
-                                                )
-                                        )
-                                        .then(
-                                                Commands
-                                                        .literal("set")
-                                                        .then(
-                                                                Commands
-                                                                        .argument("nbt", CompoundTagArgument.compoundTag())
-                                                                        .executes((context -> runOnDynEntity(
-                                                                                        EntityArgument.getEntity(context, "entity"),
-                                                                                        (e, d) -> dataSet(
-                                                                                                context.getSource(),
-                                                                                                e, d, CompoundTagArgument.getCompoundTag(context, "nbt")
-                                                                                        )
-                                                                                )
-
+                                )
+                                .then(
+                                        Commands
+                                                .literal("set")
+                                                .then(
+                                                        Commands
+                                                                .argument("nbt", CompoundTagArgument.compoundTag())
+                                                                .executes((context -> runOnDynEntity(
+                                                                                EntityArgument.getEntity(context, "entity"),
+                                                                                (e, d) -> dataSet(
+                                                                                        context.getSource(),
+                                                                                        e, d, CompoundTagArgument.getCompoundTag(context, "nbt")
                                                                                 )
                                                                         )
-                                                        )
-                                        )
-                        )
-        );
+
+                                                                        )
+                                                                )
+                                                )
+                                )
+                );
     }
 
     private static int runOnDynEntity(Entity entity, ThrowingBiCommand<Entity, IDynRenderedEntity<?>> function) throws CommandSyntaxException {
