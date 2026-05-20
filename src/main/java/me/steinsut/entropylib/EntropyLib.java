@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 public class EntropyLib {
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    private Class<?>[] classes = new Class[]{
+    private static final Class<?>[] classes = new Class[]{
             Policies.class
     };
 
@@ -42,7 +42,7 @@ public class EntropyLib {
      * Thank you Java for forcing my hand into doing stupid shit like this, I can't wait for the next
      * scuffed implementation of a feature
      */
-    private void forceLoadClasses() {
+    private static void forceLoadClasses() {
         for (Class<?> clazz : classes) {
             try {
                 Class.forName(clazz.getName(), true, clazz.getClassLoader());
@@ -53,7 +53,7 @@ public class EntropyLib {
 
     public EntropyLib(IEventBus modEventBus, ModContainer modContainer) {
         LOGGER.info("Hello from EntropyLib! Overengineering in progress...");
-        this.forceLoadClasses();
+        forceLoadClasses();
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 

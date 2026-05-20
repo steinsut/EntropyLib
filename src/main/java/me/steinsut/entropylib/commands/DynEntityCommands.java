@@ -48,6 +48,12 @@ public class DynEntityCommands {
     private static final DynamicCommandExceptionType ERROR_DYN_DATA_WRITE = new DynamicCommandExceptionType(
             (m) -> Component.translatable("commands.dyn.entity.data.error.write", m)
     );
+    private static final DynamicCommandExceptionType ERROR_DYN_SYNC_CONFIG_READ = new DynamicCommandExceptionType(
+            (m) -> Component.translatable("commands.dyn.entity.sync.config.error.read", m)
+    );
+    private static final DynamicCommandExceptionType ERROR_DYN_SYNC_CONFIG_WRITE = new DynamicCommandExceptionType(
+            (m) -> Component.translatable("commands.dyn.entity.sync.config.error.write", m)
+    );
 
     private static void registerTypeCommands(ArgumentBuilder<CommandSourceStack, ?> parent, CommandBuildContext buildContext) {
         parent.then(
@@ -94,7 +100,8 @@ public class DynEntityCommands {
                                 .then(
                                         Commands
                                                 .literal("get")
-                                                .executes((context -> runOnDynEntity(
+                                                .executes((context ->
+                                                        runOnDynEntity(
                                                                 EntityArgument.getEntity(context, "entity"),
                                                                 (e, d) -> dataGet(context.getSource(), e, d)
                                                         )
@@ -107,13 +114,14 @@ public class DynEntityCommands {
                                                 .then(
                                                         Commands
                                                                 .argument("nbt", CompoundTagArgument.compoundTag())
-                                                                .executes((context -> runOnDynEntity(
-                                                                                EntityArgument.getEntity(context, "entity"),
-                                                                                (e, d) -> dataSet(
-                                                                                        context.getSource(),
-                                                                                        e, d, CompoundTagArgument.getCompoundTag(context, "nbt")
+                                                                .executes((context ->
+                                                                                runOnDynEntity(
+                                                                                        EntityArgument.getEntity(context, "entity"),
+                                                                                        (e, d) -> dataSet(
+                                                                                                context.getSource(),
+                                                                                                e, d, CompoundTagArgument.getCompoundTag(context, "nbt")
+                                                                                        )
                                                                                 )
-                                                                        )
 
                                                                         )
                                                                 )
@@ -157,6 +165,15 @@ public class DynEntityCommands {
                                                                                 )
                                                                         )
                                                         )
+                                        )
+                        )
+                        .then(
+                                Commands.literal("config")
+                                        .then(
+                                                Commands.literal("get")
+                                                        .executes((context ->
+                                                                runOnDynEntity(EntityArgument.getEntity(context, "entity"),
+                                                                        (e, d) -> syncConfigGet(context.getSource(), e, d))))
                                         )
                         )
 
@@ -247,6 +264,22 @@ public class DynEntityCommands {
     private static int syncPolicySet(CommandSourceStack source, Entity entity, IDynRenderedEntity<?> dynEntity, Holder<EntityDynSyncPolicy> policyHolder) throws CommandSyntaxException {
         dynEntity.setDynSyncPolicy(policyHolder.value());
         source.sendSuccess(() -> Component.translatable("commands.dyn.entity.sync.policy.set", entity.getDisplayName(), policyHolder.getRegisteredName()), false);
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int syncConfigGet(CommandSourceStack source, Entity entity, IDynRenderedEntity<?> dynEntity) throws CommandSyntaxException {
+        ProblemReporter.Collector collector = new ProblemReporter.Collector();
+        var configurator = dynEntity.getDynSyncConfigurator();
+
+        var tagOutput = TagValueOutput.createWithoutContext(collector);
+        configurator.writeConfiguration(tagOutput);
+
+        var tag = tagOutput.buildResult();
+        if (!collector.isEmpty()) {
+            throw ERROR_DYN_SYNC_CONFIG_READ.create(collector.getReport());
+        }
+
+        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.sync.config.get", entity.getDisplayName(), NbtUtils.prettyPrint(tag, false)), false);
         return Command.SINGLE_SUCCESS;
     }
 

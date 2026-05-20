@@ -16,7 +16,8 @@ import me.steinsut.entropylib.api.dyn.data.DynDataType;
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import me.steinsut.entropylib.api.dyn.entity.IDynRenderedEntity;
 import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncPolicy;
-import me.steinsut.entropylib.api.dyn.entity.sync.IEntityDynSyncHandler;
+import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncConfigReader;
+import me.steinsut.entropylib.api.dyn.entity.sync.handler.IEntityDynSyncHandler;
 import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRendererType;
 import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
 import me.steinsut.entropylib.network.ClientboundSetEntityDynRendererType;
@@ -91,6 +92,11 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
     public void setDynSyncPolicy(EntityDynSyncPolicy policy) {
         this.dynSyncPolicy = policy;
         this.dynSyncHandler = policy.create();
+    }
+
+    @Override
+    public EntityDynSyncConfigReader getDynSyncConfigurator() {
+        return new EntityDynSyncConfigReader(this.dynSyncHandler);
     }
 
     @Override

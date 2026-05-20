@@ -16,6 +16,7 @@ import me.steinsut.entropylib.api.dyn.IDynRendered;
 import me.steinsut.entropylib.api.dyn.contextless.ContextlessDynRenderer;
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncPolicy;
+import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncConfigReader;
 import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRendererType;
 import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
 
@@ -27,6 +28,8 @@ public interface IDynRenderedEntity<S extends DynRenderedEntityRenderState<S>> e
     EntityDynSyncPolicy getDynSyncPolicy();
 
     void setDynSyncPolicy(EntityDynSyncPolicy policy);
+
+    EntityDynSyncConfigReader getDynSyncConfigurator();
 
     ContextlessDynRenderer<?, ? super S> getFallbackDynRenderer();
 

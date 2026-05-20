@@ -28,8 +28,6 @@ public class EntropyLibServer {
     public EntropyLibServer(IEventBus modEventBus, ModContainer container) {
         LOGGER.info("Hello from EntropyLib Server! Overengineering in progress...");
 
-        container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
-
         ServerEventHandler serverEventHandler = new ServerEventHandler();
         serverEventHandler.registerModEventHandlers(modEventBus);
     }

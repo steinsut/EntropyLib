@@ -10,21 +10,34 @@ EntropyLib is distributed in the hope that it will be useful, but WITHOUT ANY WA
 You should have received a copy of the GNU Lesser General Public License along with EntropyLib. If not, see <https://www.gnu.org/licenses/>.
 */
 
-package me.steinsut.entropylib.api.dyn.entity.sync;
+package me.steinsut.entropylib.api.dyn.entity.sync.handler;
 
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-public interface IEntityDynSyncHandler {
-    void onDataUpdate();
+public class EntityDynAlwaysSyncHandler implements IEntityDynSyncHandler {
+    @Override
+    public void onDataUpdate() {
+    }
 
-    void onTick();
+    @Override
+    public void onTick() {
+    }
 
-    void reset();
+    @Override
+    public void reset() {
+    }
 
-    boolean needsSync();
+    @Override
+    public boolean needsSync() {
+        return true;
+    }
 
-    void readConfiguration(ValueInput input);
+    @Override
+    public void readConfiguration(ValueInput input) {
+    }
 
-    void writeConfiguration(ValueOutput output);
+    @Override
+    public void writeConfiguration(ValueOutput output) {
+    }
 }

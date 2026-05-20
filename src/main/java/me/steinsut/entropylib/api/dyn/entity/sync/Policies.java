@@ -1,5 +1,6 @@
 package me.steinsut.entropylib.api.dyn.entity.sync;
 
+import me.steinsut.entropylib.api.dyn.entity.sync.handler.*;
 import net.minecraft.core.Holder;
 
 import static me.steinsut.entropylib.registry.DynSyncPolicies.POLICIES;

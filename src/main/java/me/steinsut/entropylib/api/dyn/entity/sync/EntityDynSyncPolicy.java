@@ -13,6 +13,7 @@ You should have received a copy of the GNU Lesser General Public License along w
 package me.steinsut.entropylib.api.dyn.entity.sync;
 
 import com.mojang.serialization.Codec;
+import me.steinsut.entropylib.api.dyn.entity.sync.handler.IEntityDynSyncHandler;
 
 import java.util.function.Supplier;
 
