@@ -21,7 +21,7 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.world.entity.Entity;
 import org.jspecify.annotations.NonNull;
 
-public abstract class DynEntityRenderer<E extends Entity & IDynEntity<S>, S extends DynEntityRenderState<S>> extends EntityRenderer<E, S> {
+public abstract class DynEntityRenderer<E extends Entity & IDynEntity<S>, S extends DynEntityRenderState<S>> extends EntityRenderer<@NonNull E, S> {
     protected DynEntityRenderer(EntityRendererProvider.Context context) {
         super(context);
     }

@@ -32,16 +32,16 @@ import static me.steinsut.entropylib.EntropyLib.LOGGER;
 import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_RENDERER_TYPE_REGISTRY;
 import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_TYPE_REGISTRY_KEY;
 
-public final class EntityDynRendererType<R extends EntityDynRenderer<D, S>, D, S extends DynEntityRenderState<S>> extends BaseDynRendererType<R, D, S> {
-    public static final StreamCodec<RegistryFriendlyByteBuf, EntityDynRendererType<?, ?, ?>> STREAM_CODEC =
+public final class DynEntityRendererType<R extends EntityDynRenderer<D, S>, D, S extends DynEntityRenderState<S>> extends BaseDynRendererType<R, D, S> {
+    public static final StreamCodec<RegistryFriendlyByteBuf, DynEntityRendererType<?, ?, ?>> STREAM_CODEC =
             ByteBufCodecs.registry(DYN_ENTITY_TYPE_REGISTRY_KEY);
 
-    public static final Codec<EntityDynRendererType<?, ?, ?>> CODEC = DYN_ENTITY_RENDERER_TYPE_REGISTRY.byNameCodec();
+    public static final Codec<DynEntityRendererType<?, ?, ?>> CODEC = DYN_ENTITY_RENDERER_TYPE_REGISTRY.byNameCodec();
     private final BiFunction<EntityRendererProvider.Context, DynDataType<D>, R> dynRendererFactory;
     private final Set<Holder<EntityType<?>>> compatibleEntities;
     private R rendererInstance;
 
-    private EntityDynRendererType(DynDataType<D> dataType, BiFunction<EntityRendererProvider.Context, DynDataType<D>, R> dynRendererFactory, Set<Holder<EntityType<?>>> compatibleEntities) {
+    private DynEntityRendererType(DynDataType<D> dataType, BiFunction<EntityRendererProvider.Context, DynDataType<D>, R> dynRendererFactory, Set<Holder<EntityType<?>>> compatibleEntities) {
         super(dataType);
 
         this.compatibleEntities = compatibleEntities;
@@ -97,8 +97,8 @@ public final class EntityDynRendererType<R extends EntityDynRenderer<D, S>, D, S
             return this;
         }
 
-        public EntityDynRendererType<_R, _D, _S> build() {
-            return new EntityDynRendererType<>(this.dataType, this.dynRendererFactory, this.compatibleEntities);
+        public DynEntityRendererType<_R, _D, _S> build() {
+            return new DynEntityRendererType<>(this.dataType, this.dynRendererFactory, this.compatibleEntities);
         }
     }
 }

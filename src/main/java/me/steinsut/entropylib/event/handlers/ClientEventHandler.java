@@ -30,9 +30,7 @@ public class ClientEventHandler implements IModEventHandler {
     }
 
     private void onAddEntityRendererLayers(final EntityRenderersEvent.AddLayers event) {
-        DYN_ENTITY_RENDERER_TYPE_REGISTRY.forEach((t) -> {
-                t.instantiateDynRenderer(event.getContext());
-        });
+        DYN_ENTITY_RENDERER_TYPE_REGISTRY.forEach((t) -> t.instantiateDynRenderer(event.getContext()));
     }
 
     private void registerPayloads(final RegisterClientPayloadHandlersEvent event) {

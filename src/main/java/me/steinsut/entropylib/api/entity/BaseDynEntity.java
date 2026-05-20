@@ -15,10 +15,10 @@ package me.steinsut.entropylib.api.entity;
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
-import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncPolicy;
 import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncConfigReader;
+import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncPolicy;
 import me.steinsut.entropylib.api.dyn.entity.sync.handler.IEntityDynSyncHandler;
-import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRendererType;
+import me.steinsut.entropylib.api.dyn.renderer.entity.DynEntityRendererType;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
 import me.steinsut.entropylib.network.ClientboundSetEntityDynType;
 import net.minecraft.server.level.ServerLevel;
@@ -40,12 +40,12 @@ public abstract class BaseDynEntity<S extends DynEntityRenderState<S>> extends E
     public static final String VALUE_IO_SYNC_POLICY_KEY = "s_pol";
     public static final String VALUE_IO_SYNC_CONF_KEY = "s_conf";
 
-    protected EntityDynRendererType<?, ?, S> dynRendererType;
+    protected DynEntityRendererType<?, ?, S> dynRendererType;
     protected DynDataType.Holder<?> dynData;
     protected EntityDynSyncPolicy dynSyncPolicy;
     protected IEntityDynSyncHandler dynSyncHandler;
 
-    public BaseDynEntity(EntityType<?> type, Level level, EntityDynRendererType<?, ?, S> dynRendererType, EntityDynSyncPolicy dynSyncPolicy) {
+    public BaseDynEntity(EntityType<?> type, Level level, DynEntityRendererType<?, ?, S> dynRendererType, EntityDynSyncPolicy dynSyncPolicy) {
         super(type, level);
 
         this.setDynRendererType(dynRendererType);
@@ -53,15 +53,15 @@ public abstract class BaseDynEntity<S extends DynEntityRenderState<S>> extends E
     }
 
     @Override
-    public EntityDynRendererType<?, ?, S> getDynType() {
+    public DynEntityRendererType<?, ?, S> getDynType() {
         return this.dynRendererType;
     }
 
     @Override
-    public void setDynRendererType(EntityDynRendererType<?, ?, ?> type) {
+    public void setDynRendererType(DynEntityRendererType<?, ?, ?> type) {
         if (type.isCompatible(this.typeHolder())) {
             //noinspection unchecked
-            this.dynRendererType = (EntityDynRendererType<?, ?, S>) type;
+            this.dynRendererType = (DynEntityRendererType<?, ?, S>) type;
             this.dynData = type.getDataType().createHolder();
 
             if (!this.level().isClientSide()) {
@@ -84,14 +84,14 @@ public abstract class BaseDynEntity<S extends DynEntityRenderState<S>> extends E
     }
 
     @Override
-    public DynDataWriter<?> getDynDataWriter() {
-        return this.dynData.getWriter();
-    }
-
-    @Override
     public void setDynSyncPolicy(EntityDynSyncPolicy policy) {
         this.dynSyncPolicy = policy;
         this.dynSyncHandler = policy.create();
+    }
+
+    @Override
+    public DynDataWriter<?> getDynDataWriter() {
+        return this.dynData.getWriter();
     }
 
     @Override
@@ -121,9 +121,9 @@ public abstract class BaseDynEntity<S extends DynEntityRenderState<S>> extends E
     @Override
     protected void readAdditionalSaveData(@NonNull ValueInput input) {
         input.child(VALUE_IO_DYN_KEY).ifPresent((dynChild) -> {
-            dynChild.read(VALUE_IO_DYN_RENDERER_TYPE_KEY, EntityDynRendererType.CODEC).ifPresent((type) -> {
+            dynChild.read(VALUE_IO_DYN_RENDERER_TYPE_KEY, DynEntityRendererType.CODEC).ifPresent((type) -> {
                 //noinspection unchecked
-                this.dynRendererType = (EntityDynRendererType<?, ?, S>) type;
+                this.dynRendererType = (DynEntityRendererType<?, ?, S>) type;
                 this.dynData = this.dynRendererType.getDataType().createHolder();
 
                 this.dynData.getReader().readData(dynChild);
@@ -145,7 +145,7 @@ public abstract class BaseDynEntity<S extends DynEntityRenderState<S>> extends E
         ValueOutput dynChild = output.child(VALUE_IO_DYN_KEY);
 
         if (this.dynRendererType != null) {
-            dynChild.store(VALUE_IO_DYN_RENDERER_TYPE_KEY, EntityDynRendererType.CODEC, this.dynRendererType);
+            dynChild.store(VALUE_IO_DYN_RENDERER_TYPE_KEY, DynEntityRendererType.CODEC, this.dynRendererType);
             this.dynData.getWriter().storeData(dynChild);
         }
 

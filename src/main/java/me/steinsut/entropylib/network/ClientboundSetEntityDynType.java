@@ -14,7 +14,7 @@ package me.steinsut.entropylib.network;
 
 import me.steinsut.entropylib.api.EntropyLibApi;
 import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
-import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRendererType;
+import me.steinsut.entropylib.api.dyn.renderer.entity.DynEntityRendererType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -25,14 +25,14 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jspecify.annotations.NonNull;
 
 public record ClientboundSetEntityDynType(int id,
-                                          EntityDynRendererType<?, ?, ?> dynType) implements CustomPacketPayload {
+                                          DynEntityRendererType<?, ?, ?> dynType) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<ClientboundSetEntityDynType> TYPE =
             new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "set_ent_dynr_t"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundSetEntityDynType> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT,
             ClientboundSetEntityDynType::id,
-            EntityDynRendererType.STREAM_CODEC,
+            DynEntityRendererType.STREAM_CODEC,
             ClientboundSetEntityDynType::dynType,
             ClientboundSetEntityDynType::new
     );

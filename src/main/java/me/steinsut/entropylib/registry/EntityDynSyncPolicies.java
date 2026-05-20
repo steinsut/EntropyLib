@@ -6,7 +6,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_SYNC_POLICY_REGISTRY;
 
-public class DynSyncPolicies {
+public class EntityDynSyncPolicies {
     public static DeferredRegister<EntityDynSyncPolicy> POLICIES = DeferredRegister.create(
             DYN_ENTITY_SYNC_POLICY_REGISTRY,
             EntropyLibApi.MOD_ID

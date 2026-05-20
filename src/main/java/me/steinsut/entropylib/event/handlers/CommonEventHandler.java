@@ -28,7 +28,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
-import static me.steinsut.entropylib.registry.DynSyncPolicies.POLICIES;
+import static me.steinsut.entropylib.registry.EntityDynSyncPolicies.POLICIES;
 
 public class CommonEventHandler implements IModEventHandler, INeoEventHandler {
     @Override
