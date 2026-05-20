@@ -17,7 +17,7 @@ import me.steinsut.entropylib.api.registries.CommonRegistries;
 import me.steinsut.entropylib.commands.EntropyLibCommands;
 import me.steinsut.entropylib.event.IModEventHandler;
 import me.steinsut.entropylib.event.INeoEventHandler;
-import me.steinsut.entropylib.network.ClientboundSetEntityDynRendererType;
+import me.steinsut.entropylib.network.ClientboundSetEntityDynType;
 import me.steinsut.entropylib.network.ClientboundUpdateEntityDynData;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -51,8 +51,8 @@ public class CommonEventHandler implements IModEventHandler, INeoEventHandler {
 
     private void createNewRegistries(final NewRegistryEvent event) {
         event.register(CommonRegistries.DYN_RENDERER_DATA_TYPE_REGISTRY);
-        event.register(CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY);
-        event.register(CommonRegistries.ENTITY_DYN_SYNC_POLICY_REGISTRY);
+        event.register(CommonRegistries.DYN_ENTITY_RENDERER_TYPE_REGISTRY);
+        event.register(CommonRegistries.DYN_ENTITY_SYNC_POLICY_REGISTRY);
     }
 
     private void registerPayloads(final RegisterPayloadHandlersEvent event) {
@@ -62,8 +62,8 @@ public class CommonEventHandler implements IModEventHandler, INeoEventHandler {
         final PayloadRegistrar networkRegistrar = registrar.executesOn(HandlerThread.NETWORK);
 
         mainRegistrar.playToClient(
-                ClientboundSetEntityDynRendererType.TYPE,
-                ClientboundSetEntityDynRendererType.STREAM_CODEC
+                ClientboundSetEntityDynType.TYPE,
+                ClientboundSetEntityDynType.STREAM_CODEC
         );
 
         mainRegistrar.playToClient(

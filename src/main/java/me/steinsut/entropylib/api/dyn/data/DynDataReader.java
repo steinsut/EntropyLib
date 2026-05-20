@@ -1,6 +1,6 @@
 package me.steinsut.entropylib.api.dyn.data;
 
-import me.steinsut.entropylib.api.entity.BaseDynRenderedEntity;
+import me.steinsut.entropylib.api.entity.BaseDynEntity;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.level.storage.ValueInput;
 
@@ -23,7 +23,7 @@ public final class DynDataReader<D> {
     }
 
     public void readData(ValueInput in) {
-        in.read(BaseDynRenderedEntity.VALUE_IO_DYN_DATA_KEY, this.holder.getCodec()).ifPresent(this.holder::setData);
+        in.read(BaseDynEntity.VALUE_IO_DYN_DATA_KEY, this.holder.getCodec()).ifPresent(this.holder::setData);
     }
 
     public void decodeData(RegistryFriendlyByteBuf buf) {

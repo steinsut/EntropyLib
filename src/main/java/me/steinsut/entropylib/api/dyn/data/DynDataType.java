@@ -30,7 +30,7 @@ import static me.steinsut.entropylib.EntropyLib.LOGGER;
 
 public final class DynDataType<D> {
     public static final Codec<DynDataType<?>> CODEC = CommonRegistries.DYN_RENDERER_DATA_TYPE_REGISTRY.byNameCodec();
-    public static final StreamCodec<RegistryFriendlyByteBuf, DynDataType<?>> STREAM_CODEC = ByteBufCodecs.registry(CommonRegistries.DYN_RENDERER_DATA_TYPE_REGISTRY_KEY);
+    public static final StreamCodec<RegistryFriendlyByteBuf, DynDataType<?>> STREAM_CODEC = ByteBufCodecs.registry(CommonRegistries.DYN_DATA_TYPE_REGISTRY_KEY);
 
     private final Supplier<D> defaultSupplier;
     private final Map<Identifier, Supplier<D>> presets;

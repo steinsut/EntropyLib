@@ -17,10 +17,10 @@ import me.steinsut.entropylib.api.dyn.entity.sync.handler.IEntityDynSyncHandler;
 
 import java.util.function.Supplier;
 
-import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_SYNC_POLICY_REGISTRY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_SYNC_POLICY_REGISTRY;
 
 public class EntityDynSyncPolicy {
-    public static Codec<EntityDynSyncPolicy> CODEC = ENTITY_DYN_SYNC_POLICY_REGISTRY.byNameCodec();
+    public static Codec<EntityDynSyncPolicy> CODEC = DYN_ENTITY_SYNC_POLICY_REGISTRY.byNameCodec();
 
     private final Supplier<IEntityDynSyncHandler> handlerSupplier;
 

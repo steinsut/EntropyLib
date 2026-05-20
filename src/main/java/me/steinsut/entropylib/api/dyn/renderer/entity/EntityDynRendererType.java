@@ -15,7 +15,7 @@ package me.steinsut.entropylib.api.dyn.renderer.entity;
 import com.mojang.serialization.Codec;
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
 import me.steinsut.entropylib.api.dyn.renderer.BaseDynRendererType;
-import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
+import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -29,14 +29,14 @@ import java.util.Set;
 import java.util.function.BiFunction;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
-import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY;
-import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_RENDERER_TYPE_REGISTRY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_TYPE_REGISTRY_KEY;
 
-public final class EntityDynRendererType<R extends EntityDynRenderer<D, S>, D, S extends DynRenderedEntityRenderState<S>> extends BaseDynRendererType<R, D, S> {
+public final class EntityDynRendererType<R extends EntityDynRenderer<D, S>, D, S extends DynEntityRenderState<S>> extends BaseDynRendererType<R, D, S> {
     public static final StreamCodec<RegistryFriendlyByteBuf, EntityDynRendererType<?, ?, ?>> STREAM_CODEC =
-            ByteBufCodecs.registry(ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY);
+            ByteBufCodecs.registry(DYN_ENTITY_TYPE_REGISTRY_KEY);
 
-    public static final Codec<EntityDynRendererType<?, ?, ?>> CODEC = ENTITY_DYN_RENDERER_TYPE_REGISTRY.byNameCodec();
+    public static final Codec<EntityDynRendererType<?, ?, ?>> CODEC = DYN_ENTITY_RENDERER_TYPE_REGISTRY.byNameCodec();
     private final BiFunction<EntityRendererProvider.Context, DynDataType<D>, R> dynRendererFactory;
     private final Set<Holder<EntityType<?>>> compatibleEntities;
     private R rendererInstance;
@@ -60,7 +60,7 @@ public final class EntityDynRendererType<R extends EntityDynRenderer<D, S>, D, S
         return Optional.ofNullable(this.rendererInstance);
     }
 
-    public static class Builder<_R extends EntityDynRenderer<_D, _S>, _D, _S extends DynRenderedEntityRenderState<_S>> {
+    public static class Builder<_R extends EntityDynRenderer<_D, _S>, _D, _S extends DynEntityRenderState<_S>> {
         private final BiFunction<EntityRendererProvider.Context, DynDataType<_D>, _R> dynRendererFactory;
         private final DynDataType<_D> dataType;
         private Set<Holder<EntityType<?>>> compatibleEntities;
@@ -70,7 +70,7 @@ public final class EntityDynRendererType<R extends EntityDynRenderer<D, S>, D, S
             this.dynRendererFactory = dynRendererFactory;
         }
 
-        public static <_R extends EntityDynRenderer<_D, _S>, _D, _S extends DynRenderedEntityRenderState<_S>> Builder<_R, _D, _S>
+        public static <_R extends EntityDynRenderer<_D, _S>, _D, _S extends DynEntityRenderState<_S>> Builder<_R, _D, _S>
         of(DynDataType<_D> dataType, BiFunction<EntityRendererProvider.Context, DynDataType<_D>, _R> dynRendererFactory) {
             return new Builder<>(dataType, dynRendererFactory);
         }

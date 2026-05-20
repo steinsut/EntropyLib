@@ -15,6 +15,6 @@ package me.steinsut.entropylib.api.dyn;
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import net.neoforged.neoforge.client.renderstate.BaseRenderState;
 
-public interface IDynRendered<S extends BaseRenderState> {
+public interface IDyn<S extends BaseRenderState> {
     DynDataWriter<?> getDynDataWriter();
 }

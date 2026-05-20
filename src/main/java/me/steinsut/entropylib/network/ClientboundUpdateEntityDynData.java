@@ -14,7 +14,7 @@ package me.steinsut.entropylib.network;
 
 import me.steinsut.entropylib.api.EntropyLibApi;
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
-import me.steinsut.entropylib.api.dyn.entity.IDynRenderedEntity;
+import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -38,7 +38,7 @@ public record ClientboundUpdateEntityDynData(int id, DynDataType.Holder<?> holde
 
     public static void handleOnMain(final ClientboundUpdateEntityDynData data, final IPayloadContext context) {
         Level level = context.player().level();
-        IDynRenderedEntity<?> entity = (IDynRenderedEntity<?>) level.getEntity(data.id);
+        IDynEntity<?> entity = (IDynEntity<?>) level.getEntity(data.id);
         if (entity != null) {
             entity.readDataFrom(data.holder.getWriter(), false);
         }

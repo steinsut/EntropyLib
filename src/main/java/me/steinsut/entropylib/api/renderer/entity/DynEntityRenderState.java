@@ -17,7 +17,7 @@ import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRenderer;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 
-public class DynRenderedEntityRenderState<S extends DynRenderedEntityRenderState<S>> extends EntityRenderState {
+public class DynEntityRenderState<S extends DynEntityRenderState<S>> extends EntityRenderState {
     public EntityDynRenderer<?, S> dynRenderer;
     public DynDataWriter<?> dynDataWriter;
     public ContextlessDynRenderer<?, ? super S> fallbackDynRenderer;

@@ -1,6 +1,6 @@
 package me.steinsut.entropylib.api.dyn.data;
 
-import me.steinsut.entropylib.api.entity.BaseDynRenderedEntity;
+import me.steinsut.entropylib.api.entity.BaseDynEntity;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.level.storage.ValueOutput;
 
@@ -23,8 +23,8 @@ public final class DynDataWriter<D> {
     }
 
     public void storeData(ValueOutput out) {
-        ValueOutput dataChild = out.child(BaseDynRenderedEntity.VALUE_IO_DYN_DATA_KEY);
-        dataChild.store(BaseDynRenderedEntity.VALUE_IO_DYN_DATA_KEY, this.holder.getCodec(), this.holder.getData());
+        ValueOutput dataChild = out.child(BaseDynEntity.VALUE_IO_DYN_DATA_KEY);
+        dataChild.store(BaseDynEntity.VALUE_IO_DYN_DATA_KEY, this.holder.getCodec(), this.holder.getData());
     }
 
     public void encodeData(RegistryFriendlyByteBuf buf) {

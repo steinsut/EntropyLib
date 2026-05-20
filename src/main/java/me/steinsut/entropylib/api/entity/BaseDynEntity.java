@@ -14,13 +14,13 @@ package me.steinsut.entropylib.api.entity;
 
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
-import me.steinsut.entropylib.api.dyn.entity.IDynRenderedEntity;
+import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
 import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncPolicy;
 import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncConfigReader;
 import me.steinsut.entropylib.api.dyn.entity.sync.handler.IEntityDynSyncHandler;
 import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRendererType;
-import me.steinsut.entropylib.api.renderer.entity.DynRenderedEntityRenderState;
-import me.steinsut.entropylib.network.ClientboundSetEntityDynRendererType;
+import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
+import me.steinsut.entropylib.network.ClientboundSetEntityDynType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -31,9 +31,9 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.NonNull;
 
 import static me.steinsut.entropylib.EntropyLib.LOGGER;
-import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_RENDERER_TYPE_REGISTRY;
 
-public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderState<S>> extends Entity implements IDynRenderedEntity<S> {
+public abstract class BaseDynEntity<S extends DynEntityRenderState<S>> extends Entity implements IDynEntity<S> {
     public static final String VALUE_IO_DYN_KEY = "dyn";
     public static final String VALUE_IO_DYN_RENDERER_TYPE_KEY = "r_type";
     public static final String VALUE_IO_DYN_DATA_KEY = "r_data";
@@ -45,7 +45,7 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
     protected EntityDynSyncPolicy dynSyncPolicy;
     protected IEntityDynSyncHandler dynSyncHandler;
 
-    public BaseDynRenderedEntity(EntityType<?> type, Level level, EntityDynRendererType<?, ?, S> dynRendererType, EntityDynSyncPolicy dynSyncPolicy) {
+    public BaseDynEntity(EntityType<?> type, Level level, EntityDynRendererType<?, ?, S> dynRendererType, EntityDynSyncPolicy dynSyncPolicy) {
         super(type, level);
 
         this.setDynRendererType(dynRendererType);
@@ -53,7 +53,7 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
     }
 
     @Override
-    public EntityDynRendererType<?, ?, S> getDynRendererType() {
+    public EntityDynRendererType<?, ?, S> getDynType() {
         return this.dynRendererType;
     }
 
@@ -68,12 +68,12 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
                 PacketDistributor.sendToPlayersTrackingChunk(
                         (ServerLevel) this.level(),
                         this.chunkPosition(),
-                        new ClientboundSetEntityDynRendererType(this.getId(), this.dynRendererType)
+                        new ClientboundSetEntityDynType(this.getId(), this.dynRendererType)
                 );
             }
         } else {
             LOGGER.warn("DynRendererType {} is incompatible with entity type {}",
-                    ENTITY_DYN_RENDERER_TYPE_REGISTRY.getKey(type),
+                    DYN_ENTITY_RENDERER_TYPE_REGISTRY.getKey(type),
                     this.typeHolder().getKey().identifier());
         }
     }
@@ -110,7 +110,7 @@ public abstract class BaseDynRenderedEntity<S extends DynRenderedEntityRenderSta
                 PacketDistributor.sendToPlayersTrackingChunk(
                         (ServerLevel) this.level(),
                         this.chunkPosition(),
-                        new ClientboundSetEntityDynRendererType(this.getId(), this.dynRendererType)
+                        new ClientboundSetEntityDynType(this.getId(), this.dynRendererType)
                 );
 
                 this.dynSyncHandler.reset();

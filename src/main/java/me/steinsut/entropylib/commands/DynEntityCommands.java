@@ -6,10 +6,10 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
-import me.steinsut.entropylib.api.dyn.entity.IDynRenderedEntity;
+import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
 import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncPolicy;
 import me.steinsut.entropylib.api.dyn.renderer.entity.EntityDynRendererType;
-import me.steinsut.entropylib.api.entity.BaseDynRenderedEntity;
+import me.steinsut.entropylib.api.entity.BaseDynEntity;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -26,8 +26,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.level.storage.TagValueOutput;
 
-import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY;
-import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_SYNC_POLICY_REGISTRY_KEY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_TYPE_REGISTRY_KEY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_SYNC_POLICY_REGISTRY_KEY;
 
 public class DynEntityCommands {
     private static final DynamicCommandExceptionType ERROR_INVALID_ENTITY = new DynamicCommandExceptionType(
@@ -51,9 +51,6 @@ public class DynEntityCommands {
     private static final DynamicCommandExceptionType ERROR_DYN_SYNC_CONFIG_READ = new DynamicCommandExceptionType(
             (m) -> Component.translatable("commands.dyn.entity.sync.config.error.read", m)
     );
-    private static final DynamicCommandExceptionType ERROR_DYN_SYNC_CONFIG_WRITE = new DynamicCommandExceptionType(
-            (m) -> Component.translatable("commands.dyn.entity.sync.config.error.write", m)
-    );
 
     private static void registerTypeCommands(ArgumentBuilder<CommandSourceStack, ?> parent, CommandBuildContext buildContext) {
         parent.then(
@@ -76,13 +73,13 @@ public class DynEntityCommands {
                                         .literal("set")
                                         .then(
                                                 Commands
-                                                        .argument("type", ResourceArgument.resource(buildContext, ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY))
+                                                        .argument("type", ResourceArgument.resource(buildContext, DYN_ENTITY_TYPE_REGISTRY_KEY))
                                                         .executes((context ->
                                                                         runOnDynEntity(
                                                                                 EntityArgument.getEntity(context, "entity"),
                                                                                 (e, d) -> typeSet(context.getSource(),
                                                                                         e, d,
-                                                                                        ResourceArgument.getResource(context, "type", ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY))
+                                                                                        ResourceArgument.getResource(context, "type", DYN_ENTITY_TYPE_REGISTRY_KEY))
                                                                         )
 
                                                                 )
@@ -153,13 +150,13 @@ public class DynEntityCommands {
                                                         .literal("set")
                                                         .then(
                                                                 Commands
-                                                                        .argument("policy", ResourceArgument.resource(buildContext, ENTITY_DYN_SYNC_POLICY_REGISTRY_KEY))
+                                                                        .argument("policy", ResourceArgument.resource(buildContext, DYN_ENTITY_SYNC_POLICY_REGISTRY_KEY))
                                                                         .executes((context ->
                                                                                         runOnDynEntity(
                                                                                                 EntityArgument.getEntity(context, "entity"),
                                                                                                 (e, d) -> syncPolicySet(context.getSource(),
                                                                                                         e, d,
-                                                                                                        ResourceArgument.getResource(context, "policy", ENTITY_DYN_SYNC_POLICY_REGISTRY_KEY))
+                                                                                                        ResourceArgument.getResource(context, "policy", DYN_ENTITY_SYNC_POLICY_REGISTRY_KEY))
                                                                                         )
 
                                                                                 )
@@ -180,31 +177,31 @@ public class DynEntityCommands {
         );
     }
 
-    private static int runOnDynEntity(Entity entity, ThrowingBiFunction<Entity, IDynRenderedEntity<?>> function) throws CommandSyntaxException {
-        if (entity instanceof IDynRenderedEntity<?> dynEntity) {
+    private static int runOnDynEntity(Entity entity, ThrowingBiFunction<Entity, IDynEntity<?>> function) throws CommandSyntaxException {
+        if (entity instanceof IDynEntity<?> dynEntity) {
             return function.run(entity, dynEntity);
         } else {
             throw ERROR_INVALID_ENTITY.create(entity.getDisplayName());
         }
     }
 
-    private static int typeGet(CommandSourceStack source, Entity entity, IDynRenderedEntity<?> dynEntity) throws CommandSyntaxException {
-        var dynRendererType = dynEntity.getDynRendererType();
-        if (dynRendererType == null) {
+    private static int typeGet(CommandSourceStack source, Entity entity, IDynEntity<?> dynEntity) throws CommandSyntaxException {
+        var dynType = dynEntity.getDynType();
+        if (dynType == null) {
             source.sendSuccess(() -> Component.translatable("commands.dyn.entity.type.get.fallback", entity.getDisplayName()), false);
             return Command.SINGLE_SUCCESS;
         }
 
-        var id = source.registryAccess().lookupOrThrow(ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY).getKey(dynRendererType);
+        var id = source.registryAccess().lookupOrThrow(DYN_ENTITY_TYPE_REGISTRY_KEY).getKey(dynType);
         if (id == null) {
-            throw ERROR_MISSING_DYN_RENDERER_TYPE.create(dynRendererType.toString());
+            throw ERROR_MISSING_DYN_RENDERER_TYPE.create(dynType.toString());
         }
 
         source.sendSuccess(() -> Component.translatable("commands.dyn.entity.type.get", entity.getDisplayName(), id.toString()), false);
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int typeSet(CommandSourceStack source, Entity entity, IDynRenderedEntity<?> dynEntity, Holder<EntityDynRendererType<?, ?, ?>> typeHolder) throws CommandSyntaxException {
+    private static int typeSet(CommandSourceStack source, Entity entity, IDynEntity<?> dynEntity, Holder<EntityDynRendererType<?, ?, ?>> typeHolder) throws CommandSyntaxException {
         var entityTypeHolder = entity.typeHolder();
         var dynType = typeHolder.value();
         if (!dynType.isCompatible(entityTypeHolder)) {
@@ -216,14 +213,14 @@ public class DynEntityCommands {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int dataGet(CommandSourceStack source, Entity entity, IDynRenderedEntity<?> dynEntity) throws CommandSyntaxException {
+    private static int dataGet(CommandSourceStack source, Entity entity, IDynEntity<?> dynEntity) throws CommandSyntaxException {
         ProblemReporter.Collector collector = new ProblemReporter.Collector();
         var dataWriter = dynEntity.getDynDataWriter();
 
         var tagOutput = TagValueOutput.createWithoutContext(collector);
         dataWriter.storeData(tagOutput);
 
-        var tag = tagOutput.buildResult().getCompoundOrEmpty(BaseDynRenderedEntity.VALUE_IO_DYN_DATA_KEY);
+        var tag = tagOutput.buildResult().getCompoundOrEmpty(BaseDynEntity.VALUE_IO_DYN_DATA_KEY);
         if (!collector.isEmpty()) {
             throw ERROR_DYN_DATA_READ.create(collector.getReport());
         }
@@ -232,12 +229,12 @@ public class DynEntityCommands {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int dataSet(CommandSourceStack source, Entity entity, IDynRenderedEntity<?> dynEntity, CompoundTag tag) throws CommandSyntaxException {
+    private static int dataSet(CommandSourceStack source, Entity entity, IDynEntity<?> dynEntity, CompoundTag tag) throws CommandSyntaxException {
         ProblemReporter.Collector collector = new ProblemReporter.Collector();
         CompoundTag dataTag = new CompoundTag();
 
-        dataTag.put(BaseDynRenderedEntity.VALUE_IO_DYN_DATA_KEY, tag);
-        var holder = dynEntity.getDynRendererType().getDataType().createHolder();
+        dataTag.put(BaseDynEntity.VALUE_IO_DYN_DATA_KEY, tag);
+        var holder = dynEntity.getDynType().getDataType().createHolder();
         var tagInput = TagValueInput.create(collector, source.registryAccess(), dataTag);
 
         holder.getReader().readData(tagInput);
@@ -250,9 +247,9 @@ public class DynEntityCommands {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int syncPolicyGet(CommandSourceStack source, Entity entity, IDynRenderedEntity<?> dynEntity) throws CommandSyntaxException {
+    private static int syncPolicyGet(CommandSourceStack source, Entity entity, IDynEntity<?> dynEntity) throws CommandSyntaxException {
         var policy = dynEntity.getDynSyncPolicy();
-        var id = source.registryAccess().lookupOrThrow(ENTITY_DYN_SYNC_POLICY_REGISTRY_KEY).getKey(policy);
+        var id = source.registryAccess().lookupOrThrow(DYN_ENTITY_SYNC_POLICY_REGISTRY_KEY).getKey(policy);
         if (id == null) {
             throw ERROR_MISSING_DYN_SYNC_POLICY.create(policy);
         }
@@ -261,13 +258,13 @@ public class DynEntityCommands {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int syncPolicySet(CommandSourceStack source, Entity entity, IDynRenderedEntity<?> dynEntity, Holder<EntityDynSyncPolicy> policyHolder) throws CommandSyntaxException {
+    private static int syncPolicySet(CommandSourceStack source, Entity entity, IDynEntity<?> dynEntity, Holder<EntityDynSyncPolicy> policyHolder) throws CommandSyntaxException {
         dynEntity.setDynSyncPolicy(policyHolder.value());
         source.sendSuccess(() -> Component.translatable("commands.dyn.entity.sync.policy.set", entity.getDisplayName(), policyHolder.getRegisteredName()), false);
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int syncConfigGet(CommandSourceStack source, Entity entity, IDynRenderedEntity<?> dynEntity) throws CommandSyntaxException {
+    private static int syncConfigGet(CommandSourceStack source, Entity entity, IDynEntity<?> dynEntity) throws CommandSyntaxException {
         ProblemReporter.Collector collector = new ProblemReporter.Collector();
         var configurator = dynEntity.getDynSyncConfigurator();
 
