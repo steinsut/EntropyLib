@@ -7,7 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
-import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncPolicy;
+import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncPolicy;
 import me.steinsut.entropylib.api.dyn.renderer.entity.DynEntityRendererType;
 import me.steinsut.entropylib.api.entity.BaseDynEntity;
 import net.minecraft.commands.CommandBuildContext;
@@ -258,7 +258,7 @@ public class DynEntityCommands {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int syncPolicySet(CommandSourceStack source, Entity entity, IDynEntity<?> dynEntity, Holder<EntityDynSyncPolicy> policyHolder) {
+    private static int syncPolicySet(CommandSourceStack source, Entity entity, IDynEntity<?> dynEntity, Holder<DynEntitySyncPolicy> policyHolder) {
         dynEntity.setDynSyncPolicy(policyHolder.value());
         source.sendSuccess(() -> Component.translatable("commands.dyn.entity.sync.policy.set", entity.getDisplayName(), policyHolder.getRegisteredName()), false);
 

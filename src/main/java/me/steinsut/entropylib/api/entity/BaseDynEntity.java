@@ -15,8 +15,8 @@ package me.steinsut.entropylib.api.entity;
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
-import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncConfigReader;
-import me.steinsut.entropylib.api.dyn.entity.sync.EntityDynSyncPolicy;
+import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncConfigReader;
+import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncPolicy;
 import me.steinsut.entropylib.api.dyn.entity.sync.handler.IEntityDynSyncHandler;
 import me.steinsut.entropylib.api.dyn.renderer.entity.DynEntityRendererType;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
@@ -42,10 +42,10 @@ public abstract class BaseDynEntity<S extends DynEntityRenderState<S>> extends E
 
     protected DynEntityRendererType<?, ?, S> dynRendererType;
     protected DynDataType.Holder<?> dynData;
-    protected EntityDynSyncPolicy dynSyncPolicy;
+    protected DynEntitySyncPolicy dynSyncPolicy;
     protected IEntityDynSyncHandler dynSyncHandler;
 
-    public BaseDynEntity(EntityType<?> type, Level level, DynEntityRendererType<?, ?, S> dynRendererType, EntityDynSyncPolicy dynSyncPolicy) {
+    public BaseDynEntity(EntityType<?> type, Level level, DynEntityRendererType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
         super(type, level);
 
         this.setDynRendererType(dynRendererType);
@@ -79,12 +79,12 @@ public abstract class BaseDynEntity<S extends DynEntityRenderState<S>> extends E
     }
 
     @Override
-    public EntityDynSyncPolicy getDynSyncPolicy() {
+    public DynEntitySyncPolicy getDynSyncPolicy() {
         return this.dynSyncPolicy;
     }
 
     @Override
-    public void setDynSyncPolicy(EntityDynSyncPolicy policy) {
+    public void setDynSyncPolicy(DynEntitySyncPolicy policy) {
         this.dynSyncPolicy = policy;
         this.dynSyncHandler = policy.create();
     }
@@ -95,8 +95,8 @@ public abstract class BaseDynEntity<S extends DynEntityRenderState<S>> extends E
     }
 
     @Override
-    public EntityDynSyncConfigReader getDynSyncConfigurator() {
-        return new EntityDynSyncConfigReader(this.dynSyncHandler);
+    public DynEntitySyncConfigReader getDynSyncConfigurator() {
+        return new DynEntitySyncConfigReader(this.dynSyncHandler);
     }
 
     @Override
@@ -129,7 +129,7 @@ public abstract class BaseDynEntity<S extends DynEntityRenderState<S>> extends E
                 this.dynData.getReader().readData(dynChild);
             });
 
-            dynChild.read(VALUE_IO_SYNC_POLICY_KEY, EntityDynSyncPolicy.CODEC).ifPresent((policy) -> {
+            dynChild.read(VALUE_IO_SYNC_POLICY_KEY, DynEntitySyncPolicy.CODEC).ifPresent((policy) -> {
                 this.dynSyncPolicy = policy;
                 this.dynSyncHandler = policy.create();
 
@@ -149,7 +149,7 @@ public abstract class BaseDynEntity<S extends DynEntityRenderState<S>> extends E
             this.dynData.getWriter().storeData(dynChild);
         }
 
-        dynChild.store(VALUE_IO_SYNC_POLICY_KEY, EntityDynSyncPolicy.CODEC, this.dynSyncPolicy);
+        dynChild.store(VALUE_IO_SYNC_POLICY_KEY, DynEntitySyncPolicy.CODEC, this.dynSyncPolicy);
         ValueOutput confChild = dynChild.child(VALUE_IO_SYNC_CONF_KEY);
         this.dynSyncHandler.writeConfiguration(confChild);
     }

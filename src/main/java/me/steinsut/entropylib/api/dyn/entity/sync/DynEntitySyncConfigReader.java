@@ -3,10 +3,10 @@ package me.steinsut.entropylib.api.dyn.entity.sync;
 import me.steinsut.entropylib.api.dyn.entity.sync.handler.IEntityDynSyncHandler;
 import net.minecraft.world.level.storage.ValueOutput;
 
-public class EntityDynSyncConfigReader {
+public class DynEntitySyncConfigReader {
     private final IEntityDynSyncHandler handler;
 
-    public EntityDynSyncConfigReader(IEntityDynSyncHandler handler) {
+    public DynEntitySyncConfigReader(IEntityDynSyncHandler handler) {
         this.handler = handler;
     }
 
