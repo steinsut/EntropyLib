@@ -22,8 +22,8 @@ public final class DynDataReader<D> {
         }
     }
 
-    public void readData(ValueInput in) {
-        in.read(BaseDynEntity.VALUE_IO_DYN_DATA_KEY, this.holder.getCodec()).ifPresent(this.holder::setData);
+    public void readData(ValueInput in, String childName) {
+        in.read(childName, this.holder.getCodec()).ifPresent(this.holder::setData);
     }
 
     public void decodeData(RegistryFriendlyByteBuf buf) {

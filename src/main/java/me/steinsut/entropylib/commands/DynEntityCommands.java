@@ -9,7 +9,6 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncPolicy;
 import me.steinsut.entropylib.api.dyn.renderer.entity.DynEntityRendererType;
-import me.steinsut.entropylib.api.entity.BaseDynEntity;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -218,9 +217,9 @@ public class DynEntityCommands {
         var dataWriter = dynEntity.getDynDataWriter();
 
         var tagOutput = TagValueOutput.createWithoutContext(collector);
-        dataWriter.storeData(tagOutput);
+        dataWriter.storeData(tagOutput, "d");
 
-        var tag = tagOutput.buildResult().getCompoundOrEmpty(BaseDynEntity.VALUE_IO_DYN_DATA_KEY);
+        var tag = tagOutput.buildResult().getCompoundOrEmpty("d");
         if (!collector.isEmpty()) {
             throw ERROR_DYN_DATA_READ.create(collector.getReport());
         }
@@ -233,11 +232,11 @@ public class DynEntityCommands {
         ProblemReporter.Collector collector = new ProblemReporter.Collector();
         CompoundTag dataTag = new CompoundTag();
 
-        dataTag.put(BaseDynEntity.VALUE_IO_DYN_DATA_KEY, tag);
+        dataTag.put("d", tag);
         var holder = dynEntity.getDynType().getDataType().createHolder();
         var tagInput = TagValueInput.create(collector, source.registryAccess(), dataTag);
 
-        holder.getReader().readData(tagInput);
+        holder.getReader().readData(tagInput, "d");
         if (!collector.isEmpty()) {
             throw ERROR_DYN_DATA_WRITE.create(collector.getReport());
         }

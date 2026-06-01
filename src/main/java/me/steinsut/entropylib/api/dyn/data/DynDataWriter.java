@@ -22,9 +22,9 @@ public final class DynDataWriter<D> {
         }
     }
 
-    public void storeData(ValueOutput out) {
-        ValueOutput dataChild = out.child(BaseDynEntity.VALUE_IO_DYN_DATA_KEY);
-        dataChild.store(BaseDynEntity.VALUE_IO_DYN_DATA_KEY, this.holder.getCodec(), this.holder.getData());
+    public void storeData(ValueOutput out, String childName) {
+        ValueOutput dataChild = out.child(childName);
+        dataChild.store(childName, this.holder.getCodec(), this.holder.getData());
     }
 
     public void encodeData(RegistryFriendlyByteBuf buf) {
