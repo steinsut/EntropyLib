@@ -12,6 +12,7 @@ You should have received a copy of the GNU Lesser General Public License along w
 
 package me.steinsut.entropylib.api.entity;
 
+import com.mojang.logging.LogUtils;
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
@@ -29,11 +30,13 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
 
-import static me.steinsut.entropylib.EntropyLib.LOGGER;
 import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_RENDERER_TYPE_REGISTRY;
 
 public abstract class BaseDynEntity<S extends DynEntityRenderState<S>> extends Entity implements IDynEntity<S> {
+    public static final Logger LOGGER = LogUtils.getLogger();
+
     public static final String VALUE_IO_DYN_KEY = "dyn";
     public static final String VALUE_IO_DYN_RENDERER_TYPE_KEY = "r_type";
     public static final String VALUE_IO_DYN_DATA_KEY = "r_data";

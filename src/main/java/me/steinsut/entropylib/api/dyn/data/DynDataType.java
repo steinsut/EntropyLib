@@ -12,6 +12,7 @@ You should have received a copy of the GNU Lesser General Public License along w
 
 package me.steinsut.entropylib.api.dyn.data;
 
+import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import me.steinsut.entropylib.api.registries.CommonRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -19,6 +20,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -26,9 +28,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import static me.steinsut.entropylib.EntropyLib.LOGGER;
-
 public final class DynDataType<D> {
+    public static final Logger LOGGER = LogUtils.getLogger();
+
     public static final Codec<DynDataType<?>> CODEC = CommonRegistries.DYN_RENDERER_DATA_TYPE_REGISTRY.byNameCodec();
     public static final StreamCodec<RegistryFriendlyByteBuf, DynDataType<?>> STREAM_CODEC = ByteBufCodecs.registry(CommonRegistries.DYN_DATA_TYPE_REGISTRY_KEY);
 

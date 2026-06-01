@@ -1,6 +1,5 @@
 package me.steinsut.entropylib.api.dyn.data;
 
-import me.steinsut.entropylib.api.entity.BaseDynEntity;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.level.storage.ValueOutput;
 

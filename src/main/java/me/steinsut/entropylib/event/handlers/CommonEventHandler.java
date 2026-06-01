@@ -12,6 +12,7 @@ You should have received a copy of the GNU Lesser General Public License along w
 
 package me.steinsut.entropylib.event.handlers;
 
+import com.mojang.logging.LogUtils;
 import me.steinsut.entropylib.api.EntropyLibApi;
 import me.steinsut.entropylib.api.registries.CommonRegistries;
 import me.steinsut.entropylib.commands.EntropyLibCommands;
@@ -26,11 +27,13 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
+import org.slf4j.Logger;
 
-import static me.steinsut.entropylib.EntropyLib.LOGGER;
 import static me.steinsut.entropylib.registry.DynEntitySyncPolicies.POLICIES;
 
 public class CommonEventHandler implements IModEventHandler, INeoEventHandler {
+    public static final Logger LOGGER = LogUtils.getLogger();
+
     @Override
     public void registerModEventHandlers(IEventBus bus) {
         POLICIES.register(bus);

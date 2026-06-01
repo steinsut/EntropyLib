@@ -1,12 +1,14 @@
 package me.steinsut.entropylib.api.dyn.data;
 
-import me.steinsut.entropylib.api.entity.BaseDynEntity;
+import com.mojang.logging.LogUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.level.storage.ValueInput;
+import org.slf4j.Logger;
 
-import static me.steinsut.entropylib.EntropyLib.LOGGER;
 
 public final class DynDataReader<D> {
+    public static final Logger LOGGER = LogUtils.getLogger();
+
     private final DynDataType.Holder<D> holder;
 
     public DynDataReader(DynDataType.Holder<D> holder) {
