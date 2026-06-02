@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 
 @Mod(value = EntropyLibApi.MOD_ID, dist = Dist.CLIENT)
 public class EntropyLibClient {
-    public static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     public EntropyLibClient(IEventBus modEventBus, ModContainer container) {
         LOGGER.info("Hello from EntropyLib Client! Overengineering in progress...");

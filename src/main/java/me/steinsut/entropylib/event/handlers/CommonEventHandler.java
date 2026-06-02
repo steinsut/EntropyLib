@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 import static me.steinsut.entropylib.registry.DynEntitySyncPolicies.POLICIES;
 
 public class CommonEventHandler implements IModEventHandler, INeoEventHandler {
-    public static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     @Override
     public void registerModEventHandlers(IEventBus bus) {

@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public final class DynDataType<D> {
-    public static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     public static final Codec<DynDataType<?>> CODEC = CommonRegistries.DYN_RENDERER_DATA_TYPE_REGISTRY.byNameCodec();
     public static final StreamCodec<RegistryFriendlyByteBuf, DynDataType<?>> STREAM_CODEC = ByteBufCodecs.registry(CommonRegistries.DYN_DATA_TYPE_REGISTRY_KEY);

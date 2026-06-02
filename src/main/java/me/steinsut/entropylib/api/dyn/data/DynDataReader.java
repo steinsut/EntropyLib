@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 
 
 public final class DynDataReader<D> {
-    public static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     private final DynDataType.Holder<D> holder;
 

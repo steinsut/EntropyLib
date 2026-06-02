@@ -34,7 +34,7 @@ import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_
 import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_TYPE_REGISTRY_KEY;
 
 public final class DynEntityRendererType<R extends EntityDynRenderer<D, S>, D, S extends DynEntityRenderState<S>> extends BaseDynRendererType<R, D, S> {
-    public static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     public static final StreamCodec<RegistryFriendlyByteBuf, DynEntityRendererType<?, ?, ?>> STREAM_CODEC =
             ByteBufCodecs.registry(DYN_ENTITY_TYPE_REGISTRY_KEY);

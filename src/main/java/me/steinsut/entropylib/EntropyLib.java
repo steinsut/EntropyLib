@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 
 @Mod(EntropyLibApi.MOD_ID)
 public class EntropyLib {
-    public static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     private static final Class<?>[] classes = new Class[]{
             Policies.class
