@@ -213,6 +213,14 @@ publishing {
                         url = "https://www.gnu.org/licenses/lgpl-3.0.en.html"
                     }
                 }
+
+                developers {
+                    developer {
+                        id = "steinsut"
+                        name = "steinsut"
+                        email = "dspblade@proton.me"
+                    }
+                }
             }
         }
     }
