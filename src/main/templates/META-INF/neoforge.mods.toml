@@ -39,10 +39,7 @@ displayName="${mod_name}" #mandatory
 authors="steinsut"
 
 # The description text for the mod (multi line!) (#mandatory)
-description='''
-Stuffs™ and Things™ for the mods I may end up making eventually maybe.
-'''
-
+description=${mod_description}
 # The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.
 [[mixins]]
 config="${mod_id}.mixins.json"

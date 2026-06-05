@@ -162,6 +162,7 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             mod_name               : mod_name,
             mod_license            : mod_license,
             mod_version            : mod_version,
+            mod_description        : mod_description
     ]
     inputs.properties replaceProperties
     expand replaceProperties
@@ -200,9 +201,11 @@ publishing {
             artifact apiJar
             artifact apiSourcesJar
 
+            artifactId = mod_id
+
             pom {
-                name = "EntropyLib"
-                description = "Stuffs™ and Things™ for the mods I may end up making eventually maybe."
+                name = mod_name
+                description = mod_description
                 inceptionYear = "2026"
                 packaging = "jar"
                 url = "418 I'm a teapot"
