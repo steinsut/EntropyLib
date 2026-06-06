@@ -31,8 +31,8 @@ dependencies {
     //actually adds the dependencies
     //compileOnly: Depend on the API classes ONLY for compiling
     //localRuntime: Use the full library implementation for running the client
-    compileOnly "me.steinut.entropylib:entropylib-api:${entropylib_version}"
-    localRuntime "me.steinut.entropylib:entropylib:${entropylib_version}"
+    compileOnly "me.steinut:entropylib-api:${entropylib_version}"
+    localRuntime "me.steinut:entropylib:${entropylib_version}"
 }
 ```
 4. ???

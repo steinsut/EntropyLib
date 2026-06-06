@@ -176,14 +176,15 @@ sourceSets.main.resources.srcDir generateModMetadata
 neoForge.ideSyncTask generateModMetadata
 
 tasks.register('apiJar', Jar) {
-    archiveClassifier.set("api")
+    archiveAppendix.set("api")
     include 'me/steinsut/entropylib/api/**/*'
     from sourceSets.main.output
     group = BasePlugin.BUILD_GROUP
 }
 
 tasks.register('apiSourcesJar', Jar) {
-    archiveClassifier.set("api-sources")
+    archiveAppendix.set("api")
+    archiveClassifier.set("sources")
     include 'me/steinsut/entropylib/api/**/*'
     from sourceSets.main.allSource
     group = BasePlugin.BUILD_GROUP
@@ -192,20 +193,50 @@ tasks.register('apiSourcesJar', Jar) {
 artifacts.add('archives', apiJar)
 artifacts.add('archives', apiSourcesJar)
 
+tasks.withType(GenerateModuleMetadata).configureEach {
+    enabled = false
+}
+
 // Example configuration to allow publishing using the maven-publish plugin
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
             from components.java
 
-            artifact apiJar
-            artifact apiSourcesJar
-
             artifactId = mod_id
 
             pom {
                 name = mod_name
                 description = mod_description
+                inceptionYear = "2026"
+                packaging = "jar"
+                url = "418 I'm a teapot"
+
+                licenses {
+                    license {
+                        name = "LGPL-3.0"
+                        url = "https://www.gnu.org/licenses/lgpl-3.0.en.html"
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = "steinsut"
+                        name = "steinsut"
+                        email = "dspblade@proton.me"
+                    }
+                }
+            }
+        }
+        register('apiMavenJava', MavenPublication) {
+            artifactId = "${mod_id}-api"
+
+            artifact apiJar
+            artifact apiSourcesJar
+
+            pom {
+                name = mod_name
+                description = "Public API part of the mod ${mod_id}"
                 inceptionYear = "2026"
                 packaging = "jar"
                 url = "418 I'm a teapot"
