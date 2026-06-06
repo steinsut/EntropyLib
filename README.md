@@ -19,7 +19,7 @@ Dyn entity implementations.
 No artifact uploads right now. (read: [W.I.P](https://dictionary.cambridge.org/dictionary/english/wip)). Current steps are:
 
 1. Clone the Git repository
-2. Publish to local Maven repository (Run the ``publishMavenJavaPublicationToMavenLocal`` task)
+2. Publish to local Maven repository (Run the ``publishToMavenLocal`` Gradle task)
 3. Add the following to your ``build.gradle`` file:
 ```groovy
 repositories {
