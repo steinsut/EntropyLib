@@ -34,7 +34,7 @@ public abstract class DynBlockAttachedEntity<S extends DynEntityRenderState<S>> 
 
         this.helper = new DynEntityHelper<>(this, dynRendererType, dynSyncPolicy);
 
-        this.setDynRendererType(dynRendererType);
+        this.setDynType(dynRendererType);
         this.setDynSyncPolicy(dynSyncPolicy);
     }
 
@@ -44,7 +44,7 @@ public abstract class DynBlockAttachedEntity<S extends DynEntityRenderState<S>> 
     }
 
     @Override
-    public void setDynRendererType(DynEntityType<?, ?, ?> type) {
+    public void setDynType(DynEntityType<?, ?, ?> type) {
         this.helper.setDynRendererType(type);
     }
 

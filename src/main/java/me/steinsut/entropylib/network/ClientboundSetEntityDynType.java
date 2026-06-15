@@ -41,7 +41,7 @@ public record ClientboundSetEntityDynType(int id,
         Level level = context.player().level();
         IDynEntity<?> entity = (IDynEntity<?>) level.getEntity(data.id);
         if (entity != null) {
-            entity.setDynRendererType(data.dynType);
+            entity.setDynType(data.dynType);
         }
     }
 

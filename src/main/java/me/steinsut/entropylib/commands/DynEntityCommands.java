@@ -207,7 +207,7 @@ public class DynEntityCommands {
             throw ERROR_INCOMPATIBLE_DYN_RENDERER_TYPE.create(typeHolder.getRegisteredName(), entityTypeHolder.getRegisteredName());
         }
 
-        dynEntity.setDynRendererType(typeHolder.value());
+        dynEntity.setDynType(typeHolder.value());
         source.sendSuccess(() -> Component.translatable("commands.dyn.entity.type.set", entity.getDisplayName(), typeHolder.getRegisteredName()), false);
         return Command.SINGLE_SUCCESS;
     }
