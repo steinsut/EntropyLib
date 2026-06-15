@@ -17,13 +17,12 @@ import me.steinsut.entropylib.api.dyn.contextless.ContextlessDynRenderer;
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncConfigReader;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncPolicy;
-import me.steinsut.entropylib.api.dyn.renderer.entity.DynEntityRendererType;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
 
 public interface IDynEntity<S extends DynEntityRenderState<S>> extends IDyn<S> {
-    DynEntityRendererType<?, ?, S> getDynType();
+    DynEntityType<?, ?, S> getDynType();
 
-    void setDynRendererType(DynEntityRendererType<?, ?, ?> dynRendererType);
+    void setDynRendererType(DynEntityType<?, ?, ?> dynRendererType);
 
     DynEntitySyncPolicy getDynSyncPolicy();
 

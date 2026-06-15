@@ -8,7 +8,7 @@ import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncPolicy;
-import me.steinsut.entropylib.api.dyn.renderer.entity.DynEntityRendererType;
+import me.steinsut.entropylib.api.dyn.entity.DynEntityType;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -200,7 +200,7 @@ public class DynEntityCommands {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int typeSet(CommandSourceStack source, Entity entity, IDynEntity<?> dynEntity, Holder<DynEntityRendererType<?, ?, ?>> typeHolder) throws CommandSyntaxException {
+    private static int typeSet(CommandSourceStack source, Entity entity, IDynEntity<?> dynEntity, Holder<DynEntityType<?, ?, ?>> typeHolder) throws CommandSyntaxException {
         var entityTypeHolder = entity.typeHolder();
         var dynType = typeHolder.value();
         if (!dynType.isCompatible(entityTypeHolder)) {

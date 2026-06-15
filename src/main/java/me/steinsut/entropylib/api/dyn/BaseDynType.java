@@ -10,15 +10,16 @@ EntropyLib is distributed in the hope that it will be useful, but WITHOUT ANY WA
 You should have received a copy of the GNU Lesser General Public License along with EntropyLib. If not, see <https://www.gnu.org/licenses/>.
 */
 
-package me.steinsut.entropylib.api.dyn.renderer;
+package me.steinsut.entropylib.api.dyn;
 
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
+import me.steinsut.entropylib.api.dyn.renderer.BaseDynRenderer;
 import net.neoforged.neoforge.client.renderstate.BaseRenderState;
 
-public abstract class BaseDynRendererType<R extends BaseDynRenderer<D, S>, D, S extends BaseRenderState> {
+public abstract class BaseDynType<R extends BaseDynRenderer<D, S>, D, S extends BaseRenderState> {
     protected final DynDataType<D> dataType;
 
-    protected BaseDynRendererType(DynDataType<D> dataType) {
+    protected BaseDynType(DynDataType<D> dataType) {
         this.dataType = dataType;
     }
 

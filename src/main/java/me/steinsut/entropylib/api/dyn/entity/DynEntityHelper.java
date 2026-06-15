@@ -18,7 +18,6 @@ import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncConfigReader;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncPolicy;
 import me.steinsut.entropylib.api.dyn.entity.sync.handler.IEntityDynSyncHandler;
-import me.steinsut.entropylib.api.dyn.renderer.entity.DynEntityRendererType;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
 import me.steinsut.entropylib.network.ClientboundSetEntityDynType;
 import net.minecraft.server.level.ServerLevel;
@@ -41,23 +40,23 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
     public static final String VALUE_IO_SYNC_CONF_KEY = "s_conf";
 
     private final Entity entity;
-    private DynEntityRendererType<?, ?, S> dynRendererType;
+    private DynEntityType<?, ?, S> dynRendererType;
     private DynDataType.Holder<?> dynData;
     private DynEntitySyncPolicy dynSyncPolicy;
     private IEntityDynSyncHandler dynSyncHandler;
 
-    public DynEntityHelper(Entity entity, DynEntityRendererType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
+    public DynEntityHelper(Entity entity, DynEntityType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
         this.entity = entity;
     }
 
-    public DynEntityRendererType<?, ?, S> getDynType() {
+    public DynEntityType<?, ?, S> getDynType() {
         return this.dynRendererType;
     }
 
-    public void setDynRendererType(DynEntityRendererType<?, ?, ?> type) {
+    public void setDynRendererType(DynEntityType<?, ?, ?> type) {
         if (type.isCompatible(this.entity.typeHolder())) {
             //noinspection unchecked
-            this.dynRendererType = (DynEntityRendererType<?, ?, S>) type;
+            this.dynRendererType = (DynEntityType<?, ?, S>) type;
             this.dynData = type.getDataType().createHolder();
 
             if (!this.entity.level().isClientSide()) {
@@ -111,9 +110,9 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
 
     public void readAdditionalSaveData(@NonNull ValueInput input) {
         input.child(VALUE_IO_DYN_KEY).ifPresent((dynChild) -> {
-            dynChild.read(VALUE_IO_DYN_RENDERER_TYPE_KEY, DynEntityRendererType.CODEC).ifPresent((type) -> {
+            dynChild.read(VALUE_IO_DYN_RENDERER_TYPE_KEY, DynEntityType.CODEC).ifPresent((type) -> {
                 //noinspection unchecked
-                this.dynRendererType = (DynEntityRendererType<?, ?, S>) type;
+                this.dynRendererType = (DynEntityType<?, ?, S>) type;
                 this.dynData = this.dynRendererType.getDataType().createHolder();
 
                 this.dynData.getReader().readData(dynChild, VALUE_IO_DYN_DATA_KEY);
@@ -134,7 +133,7 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
         ValueOutput dynChild = output.child(VALUE_IO_DYN_KEY);
 
         if (this.dynRendererType != null) {
-            dynChild.store(VALUE_IO_DYN_RENDERER_TYPE_KEY, DynEntityRendererType.CODEC, this.dynRendererType);
+            dynChild.store(VALUE_IO_DYN_RENDERER_TYPE_KEY, DynEntityType.CODEC, this.dynRendererType);
             this.dynData.getWriter().storeData(dynChild, VALUE_IO_DYN_DATA_KEY);
         }
 

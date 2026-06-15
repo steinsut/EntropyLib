@@ -17,7 +17,7 @@ import me.steinsut.entropylib.api.dyn.entity.DynEntityHelper;
 import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncConfigReader;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncPolicy;
-import me.steinsut.entropylib.api.dyn.renderer.entity.DynEntityRendererType;
+import me.steinsut.entropylib.api.dyn.entity.DynEntityType;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -29,7 +29,7 @@ import org.jspecify.annotations.NonNull;
 public abstract class DynProjectile<S extends DynEntityRenderState<S>> extends Projectile implements IDynEntity<S> {
     protected final DynEntityHelper<S> helper;
 
-    public DynProjectile(EntityType<? extends Projectile> type, Level level, DynEntityRendererType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
+    public DynProjectile(EntityType<? extends Projectile> type, Level level, DynEntityType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
         super(type, level);
 
         this.helper = new DynEntityHelper<>(this, dynRendererType, dynSyncPolicy);
@@ -39,12 +39,12 @@ public abstract class DynProjectile<S extends DynEntityRenderState<S>> extends P
     }
 
     @Override
-    public DynEntityRendererType<?, ?, S> getDynType() {
+    public DynEntityType<?, ?, S> getDynType() {
         return this.helper.getDynType();
     }
 
     @Override
-    public void setDynRendererType(DynEntityRendererType<?, ?, ?> type) {
+    public void setDynRendererType(DynEntityType<?, ?, ?> type) {
         this.helper.setDynRendererType(type);
     }
 
