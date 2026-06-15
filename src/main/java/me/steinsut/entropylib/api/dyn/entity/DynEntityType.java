@@ -31,7 +31,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 
-import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_RENDERER_TYPE_REGISTRY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_TYPE_REGISTRY;
 import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_TYPE_REGISTRY_KEY;
 
 public final class DynEntityType<R extends EntityDynRenderer<D, S>, D, S extends DynEntityRenderState<S>> extends BaseDynType<R, D, S> {
@@ -40,7 +40,7 @@ public final class DynEntityType<R extends EntityDynRenderer<D, S>, D, S extends
     public static final StreamCodec<RegistryFriendlyByteBuf, DynEntityType<?, ?, ?>> STREAM_CODEC =
             ByteBufCodecs.registry(DYN_ENTITY_TYPE_REGISTRY_KEY);
 
-    public static final Codec<DynEntityType<?, ?, ?>> CODEC = DYN_ENTITY_RENDERER_TYPE_REGISTRY.byNameCodec();
+    public static final Codec<DynEntityType<?, ?, ?>> CODEC = DYN_ENTITY_TYPE_REGISTRY.byNameCodec();
     private final BiFunction<EntityRendererProvider.Context, DynDataType<D>, R> dynRendererFactory;
     private final Set<Holder<EntityType<?>>> compatibleEntities;
     private R rendererInstance;

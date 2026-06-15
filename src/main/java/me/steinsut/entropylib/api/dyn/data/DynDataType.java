@@ -31,7 +31,7 @@ import java.util.function.Supplier;
 public final class DynDataType<D> {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final Codec<DynDataType<?>> CODEC = CommonRegistries.DYN_RENDERER_DATA_TYPE_REGISTRY.byNameCodec();
+    public static final Codec<DynDataType<?>> CODEC = CommonRegistries.DYN_DATA_TYPE_REGISTRY.byNameCodec();
     public static final StreamCodec<RegistryFriendlyByteBuf, DynDataType<?>> STREAM_CODEC = ByteBufCodecs.registry(CommonRegistries.DYN_DATA_TYPE_REGISTRY_KEY);
 
     private final Supplier<D> defaultSupplier;

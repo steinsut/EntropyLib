@@ -28,7 +28,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
-import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_RENDERER_TYPE_REGISTRY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_TYPE_REGISTRY;
 
 public class DynEntityHelper<S extends DynEntityRenderState<S>> {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -68,7 +68,7 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
             }
         } else {
             LOGGER.warn("DynRendererType {} is incompatible with entity type {}",
-                    DYN_ENTITY_RENDERER_TYPE_REGISTRY.getKey(type),
+                    DYN_ENTITY_TYPE_REGISTRY.getKey(type),
                     this.entity.typeHolder().getKey().identifier());
         }
     }
