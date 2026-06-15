@@ -10,10 +10,10 @@ EntropyLib is distributed in the hope that it will be useful, but WITHOUT ANY WA
 You should have received a copy of the GNU Lesser General Public License along with EntropyLib. If not, see <https://www.gnu.org/licenses/>.
 */
 
-package me.steinsut.entropylib.api.dyn.renderer.entity;
+package me.steinsut.entropylib.api.dyn.dynrenderer.entity;
 
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
-import me.steinsut.entropylib.api.dyn.renderer.BaseDynRenderer;
+import me.steinsut.entropylib.api.dyn.dynrenderer.BaseDynRenderer;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 

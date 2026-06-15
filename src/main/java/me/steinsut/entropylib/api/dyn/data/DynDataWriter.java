@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.slf4j.Logger;
+
 public final class DynDataWriter<D> {
     private static final Logger LOGGER = LogUtils.getLogger();
     private final DynDataType.Holder<D> holder;

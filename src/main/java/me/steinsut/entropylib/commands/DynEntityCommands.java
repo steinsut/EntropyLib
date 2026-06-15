@@ -6,9 +6,9 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import me.steinsut.entropylib.api.dyn.entity.EntityDynRendererType;
 import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncPolicy;
-import me.steinsut.entropylib.api.dyn.entity.DynEntityType;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -26,7 +26,7 @@ import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.level.storage.TagValueOutput;
 
 import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_SYNC_POLICY_REGISTRY_KEY;
-import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_TYPE_REGISTRY_KEY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY;
 
 public class DynEntityCommands {
     private static final DynamicCommandExceptionType ERROR_INVALID_ENTITY = new DynamicCommandExceptionType(
@@ -72,13 +72,13 @@ public class DynEntityCommands {
                                         .literal("set")
                                         .then(
                                                 Commands
-                                                        .argument("type", ResourceArgument.resource(buildContext, DYN_ENTITY_TYPE_REGISTRY_KEY))
+                                                        .argument("type", ResourceArgument.resource(buildContext, ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY))
                                                         .executes((context ->
                                                                         runOnDynEntity(
                                                                                 EntityArgument.getEntity(context, "entity"),
                                                                                 (e, d) -> typeSet(context.getSource(),
                                                                                         e, d,
-                                                                                        ResourceArgument.getResource(context, "type", DYN_ENTITY_TYPE_REGISTRY_KEY))
+                                                                                        ResourceArgument.getResource(context, "type", ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY))
                                                                         )
 
                                                                 )
@@ -191,7 +191,7 @@ public class DynEntityCommands {
             return Command.SINGLE_SUCCESS;
         }
 
-        var id = source.registryAccess().lookupOrThrow(DYN_ENTITY_TYPE_REGISTRY_KEY).getKey(dynType);
+        var id = source.registryAccess().lookupOrThrow(ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY).getKey(dynType);
         if (id == null) {
             throw ERROR_MISSING_DYN_RENDERER_TYPE.create(dynType.toString());
         }
@@ -200,7 +200,7 @@ public class DynEntityCommands {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int typeSet(CommandSourceStack source, Entity entity, IDynEntity<?> dynEntity, Holder<DynEntityType<?, ?, ?>> typeHolder) throws CommandSyntaxException {
+    private static int typeSet(CommandSourceStack source, Entity entity, IDynEntity<?> dynEntity, Holder<EntityDynRendererType<?, ?, ?>> typeHolder) throws CommandSyntaxException {
         var entityTypeHolder = entity.typeHolder();
         var dynType = typeHolder.value();
         if (!dynType.isCompatible(entityTypeHolder)) {

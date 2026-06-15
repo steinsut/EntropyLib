@@ -28,7 +28,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
-import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_TYPE_REGISTRY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY;
 
 public class DynEntityHelper<S extends DynEntityRenderState<S>> {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -40,23 +40,23 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
     public static final String VALUE_IO_SYNC_CONF_KEY = "s_conf";
 
     private final Entity entity;
-    private DynEntityType<?, ?, S> dynRendererType;
+    private EntityDynRendererType<?, ?, S> dynRendererType;
     private DynDataType.Holder<?> dynData;
     private DynEntitySyncPolicy dynSyncPolicy;
     private IEntityDynSyncHandler dynSyncHandler;
 
-    public DynEntityHelper(Entity entity, DynEntityType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
+    public DynEntityHelper(Entity entity, EntityDynRendererType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
         this.entity = entity;
     }
 
-    public DynEntityType<?, ?, S> getDynType() {
+    public EntityDynRendererType<?, ?, S> getDynType() {
         return this.dynRendererType;
     }
 
-    public void setDynRendererType(DynEntityType<?, ?, ?> type) {
+    public void setDynRendererType(EntityDynRendererType<?, ?, ?> type) {
         if (type.isCompatible(this.entity.typeHolder())) {
             //noinspection unchecked
-            this.dynRendererType = (DynEntityType<?, ?, S>) type;
+            this.dynRendererType = (EntityDynRendererType<?, ?, S>) type;
             this.dynData = type.getDataType().createHolder();
 
             if (!this.entity.level().isClientSide()) {
@@ -68,7 +68,7 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
             }
         } else {
             LOGGER.warn("DynRendererType {} is incompatible with entity type {}",
-                    DYN_ENTITY_TYPE_REGISTRY.getKey(type),
+                    ENTITY_DYN_RENDERER_TYPE_REGISTRY.getKey(type),
                     this.entity.typeHolder().getKey().identifier());
         }
     }
@@ -110,9 +110,9 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
 
     public void readAdditionalSaveData(@NonNull ValueInput input) {
         input.child(VALUE_IO_DYN_KEY).ifPresent((dynChild) -> {
-            dynChild.read(VALUE_IO_DYN_RENDERER_TYPE_KEY, DynEntityType.CODEC).ifPresent((type) -> {
+            dynChild.read(VALUE_IO_DYN_RENDERER_TYPE_KEY, EntityDynRendererType.CODEC).ifPresent((type) -> {
                 //noinspection unchecked
-                this.dynRendererType = (DynEntityType<?, ?, S>) type;
+                this.dynRendererType = (EntityDynRendererType<?, ?, S>) type;
                 this.dynData = this.dynRendererType.getDataType().createHolder();
 
                 this.dynData.getReader().readData(dynChild, VALUE_IO_DYN_DATA_KEY);
@@ -133,7 +133,7 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
         ValueOutput dynChild = output.child(VALUE_IO_DYN_KEY);
 
         if (this.dynRendererType != null) {
-            dynChild.store(VALUE_IO_DYN_RENDERER_TYPE_KEY, DynEntityType.CODEC, this.dynRendererType);
+            dynChild.store(VALUE_IO_DYN_RENDERER_TYPE_KEY, EntityDynRendererType.CODEC, this.dynRendererType);
             this.dynData.getWriter().storeData(dynChild, VALUE_IO_DYN_DATA_KEY);
         }
 

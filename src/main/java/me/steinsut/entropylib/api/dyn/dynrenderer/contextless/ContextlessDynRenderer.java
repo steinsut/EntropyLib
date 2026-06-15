@@ -10,10 +10,10 @@ EntropyLib is distributed in the hope that it will be useful, but WITHOUT ANY WA
 You should have received a copy of the GNU Lesser General Public License along with EntropyLib. If not, see <https://www.gnu.org/licenses/>.
 */
 
-package me.steinsut.entropylib.api.dyn.contextless;
+package me.steinsut.entropylib.api.dyn.dynrenderer.contextless;
 
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
-import me.steinsut.entropylib.api.dyn.renderer.BaseDynRenderer;
+import me.steinsut.entropylib.api.dyn.dynrenderer.BaseDynRenderer;
 import net.neoforged.neoforge.client.renderstate.BaseRenderState;
 
 public abstract class ContextlessDynRenderer<D, S extends BaseRenderState> extends BaseDynRenderer<D, S> {

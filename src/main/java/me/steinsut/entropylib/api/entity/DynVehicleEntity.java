@@ -14,10 +14,10 @@ package me.steinsut.entropylib.api.entity;
 
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import me.steinsut.entropylib.api.dyn.entity.DynEntityHelper;
+import me.steinsut.entropylib.api.dyn.entity.EntityDynRendererType;
 import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncConfigReader;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncPolicy;
-import me.steinsut.entropylib.api.dyn.entity.DynEntityType;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
@@ -29,7 +29,7 @@ import org.jspecify.annotations.NonNull;
 public abstract class DynVehicleEntity<S extends DynEntityRenderState<S>> extends VehicleEntity implements IDynEntity<S> {
     protected final DynEntityHelper<S> helper;
 
-    public DynVehicleEntity(EntityType<? extends VehicleEntity> type, Level level, DynEntityType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
+    public DynVehicleEntity(EntityType<? extends VehicleEntity> type, Level level, EntityDynRendererType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
         super(type, level);
 
         this.helper = new DynEntityHelper<>(this, dynRendererType, dynSyncPolicy);
@@ -39,12 +39,12 @@ public abstract class DynVehicleEntity<S extends DynEntityRenderState<S>> extend
     }
 
     @Override
-    public DynEntityType<?, ?, S> getDynType() {
+    public EntityDynRendererType<?, ?, S> getDynType() {
         return this.helper.getDynType();
     }
 
     @Override
-    public void setDynType(DynEntityType<?, ?, ?> type) {
+    public void setDynType(EntityDynRendererType<?, ?, ?> type) {
         this.helper.setDynRendererType(type);
     }
 
