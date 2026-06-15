@@ -27,12 +27,12 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.NonNull;
 
 public abstract class DynEntity<S extends DynEntityRenderState<S>> extends Entity implements IDynEntity<S> {
-    protected final DynEntityHelper<S> helper;
+    protected final DynEntityHelper<S> dynHelper;
 
     public DynEntity(EntityType<?> type, Level level, EntityDynRendererType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
         super(type, level);
 
-        this.helper = new DynEntityHelper<>(this, dynRendererType, dynSyncPolicy);
+        this.dynHelper = new DynEntityHelper<>(this, dynRendererType, dynSyncPolicy);
 
         this.setDynType(dynRendererType);
         this.setDynSyncPolicy(dynSyncPolicy);
@@ -40,53 +40,53 @@ public abstract class DynEntity<S extends DynEntityRenderState<S>> extends Entit
 
     @Override
     public EntityDynRendererType<?, ?, S> getDynType() {
-        return this.helper.getDynType();
+        return this.dynHelper.getDynType();
     }
 
     @Override
     public void setDynType(EntityDynRendererType<?, ?, ?> type) {
-        this.helper.setDynRendererType(type);
+        this.dynHelper.setDynRendererType(type);
     }
 
     @Override
     public DynEntitySyncPolicy getDynSyncPolicy() {
-        return this.helper.getDynSyncPolicy();
+        return this.dynHelper.getDynSyncPolicy();
     }
 
     @Override
     public void setDynSyncPolicy(DynEntitySyncPolicy policy) {
-        this.helper.setDynSyncPolicy(policy);
+        this.dynHelper.setDynSyncPolicy(policy);
     }
 
     @Override
     public DynDataWriter<?> getDynDataWriter() {
-        return this.helper.getDynDataWriter();
+        return this.dynHelper.getDynDataWriter();
     }
 
     @Override
     public DynEntitySyncConfigReader getDynSyncConfigurator() {
-        return this.helper.getDynSyncConfigurator();
+        return this.dynHelper.getDynSyncConfigurator();
     }
 
     @Override
     public void readDataFrom(DynDataWriter<?> writer, boolean forceSync) {
-        this.helper.readDataFrom(writer, forceSync);
+        this.dynHelper.readDataFrom(writer, forceSync);
     }
 
     @Override
     protected void readAdditionalSaveData(@NonNull ValueInput input) {
-        this.helper.readAdditionalSaveData(input);
+        this.dynHelper.readAdditionalSaveData(input);
     }
 
     @Override
     protected void addAdditionalSaveData(@NonNull ValueOutput output) {
-        this.helper.addAdditionalSaveData(output);
+        this.dynHelper.addAdditionalSaveData(output);
     }
 
     @Override
     public void tick() {
         super.tick();
 
-        this.helper.tick();
+        this.dynHelper.tick();
     }
 }

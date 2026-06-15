@@ -17,6 +17,7 @@ import me.steinsut.entropylib.api.dyn.data.DynDataType;
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.renderstate.BaseRenderState;
 
 public abstract class BaseDynRenderer<D, S extends BaseRenderState> {
@@ -30,6 +31,10 @@ public abstract class BaseDynRenderer<D, S extends BaseRenderState> {
 
     public void readDataFrom(DynDataWriter<?> writer) {
         writer.writeToHolder(this.dataHolder);
+    }
+
+    public void setDataToPreset(Identifier id) {
+        this.dataHolder.setToPreset(id);
     }
 
     public abstract void submit(S renderState, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState cameraState);

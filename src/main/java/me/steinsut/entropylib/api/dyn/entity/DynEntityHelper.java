@@ -20,6 +20,7 @@ import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncPolicy;
 import me.steinsut.entropylib.api.dyn.entity.sync.handler.IEntityDynSyncHandler;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
 import me.steinsut.entropylib.network.ClientboundSetEntityDynType;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.ValueInput;
@@ -90,9 +91,7 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
         return new DynEntitySyncConfigReader(this.dynSyncHandler);
     }
 
-    public void readDataFrom(DynDataWriter<?> writer, boolean forceSync) {
-        writer.writeToHolder(this.dynData);
-
+    private void dataUpdateSyncCheck(boolean forceSync) {
         if (!this.entity.level().isClientSide()) {
             this.dynSyncHandler.onDataUpdate();
 
@@ -106,6 +105,18 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
                 this.dynSyncHandler.reset();
             }
         }
+    }
+
+    public void readDataFrom(DynDataWriter<?> writer, boolean forceSync) {
+        writer.writeToHolder(this.dynData);
+
+        this.dataUpdateSyncCheck(forceSync);
+    }
+
+    public void setDataToPreset(Identifier id, boolean forceSync) {
+        this.dynData.setToPreset(id);
+
+        this.dataUpdateSyncCheck(forceSync);
     }
 
     public void readAdditionalSaveData(@NonNull ValueInput input) {
