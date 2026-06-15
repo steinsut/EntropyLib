@@ -109,19 +109,23 @@ public class DynEntityCommands {
                                                 .literal("set")
                                                 .then(
                                                         Commands
-                                                                .argument("nbt", CompoundTagArgument.compoundTag())
-                                                                .executes((context ->
-                                                                                runOnDynEntity(
-                                                                                        EntityArgument.getEntity(context, "entity"),
-                                                                                        (e, d) -> dataSet(
-                                                                                                context.getSource(),
-                                                                                                e, d, CompoundTagArgument.getCompoundTag(context, "nbt")
+                                                                .literal("nbt")
+                                                                .then(Commands
+                                                                        .argument("nbt", CompoundTagArgument.compoundTag())
+                                                                        .executes((context ->
+                                                                                        runOnDynEntity(
+                                                                                                EntityArgument.getEntity(context, "entity"),
+                                                                                                (e, d) -> dataSet(
+                                                                                                        context.getSource(),
+                                                                                                        e, d, CompoundTagArgument.getCompoundTag(context, "nbt")
+                                                                                                )
                                                                                         )
-                                                                                )
 
-                                                                        )
-                                                                )
+                                                                                )
+                                                                        ))
                                                 )
+                                                .then(Commands
+                                                        .literal("preset"))
                                 )
                 );
     }

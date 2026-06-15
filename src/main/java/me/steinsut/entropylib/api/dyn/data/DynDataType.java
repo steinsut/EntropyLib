@@ -14,6 +14,7 @@ package me.steinsut.entropylib.api.dyn.data;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
+import me.steinsut.entropylib.api.EntropyLibApi;
 import me.steinsut.entropylib.api.registries.CommonRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -30,6 +31,8 @@ import java.util.function.Supplier;
 
 public final class DynDataType<D> {
     private static final Logger LOGGER = LogUtils.getLogger();
+
+    public static final Identifier DEFAULT_PRESET_ID = Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "default");
 
     public static final Codec<DynDataType<?>> CODEC = CommonRegistries.DYN_DATA_TYPE_REGISTRY.byNameCodec();
     public static final StreamCodec<RegistryFriendlyByteBuf, DynDataType<?>> STREAM_CODEC = ByteBufCodecs.registry(CommonRegistries.DYN_DATA_TYPE_REGISTRY_KEY);
@@ -98,6 +101,7 @@ public final class DynDataType<D> {
         }
 
         public DynDataType<_D> build() {
+            this.presets.put(DEFAULT_PRESET_ID, defaultSupplier);
             return new DynDataType<>(this.codec, this.streamCodec, this.defaultSupplier, this.presets);
         }
     }
