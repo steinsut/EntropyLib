@@ -31,16 +31,16 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 
-import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY;
-import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_TYPE_REGISTRY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_TYPE_REGISTRY_KEY;
 
 public final class EntityDynType<R extends EntityDynRenderer<D, S>, D, S extends DynEntityRenderState<S>> extends BaseDynType<R, D, S> {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static final StreamCodec<RegistryFriendlyByteBuf, EntityDynType<?, ?, ?>> STREAM_CODEC =
-            ByteBufCodecs.registry(ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY);
+            ByteBufCodecs.registry(ENTITY_DYN_TYPE_REGISTRY_KEY);
 
-    public static final Codec<EntityDynType<?, ?, ?>> CODEC = ENTITY_DYN_RENDERER_TYPE_REGISTRY.byNameCodec();
+    public static final Codec<EntityDynType<?, ?, ?>> CODEC = ENTITY_DYN_TYPE_REGISTRY.byNameCodec();
     private final BiFunction<EntityRendererProvider.Context, DynDataType<D>, R> dynRendererFactory;
     private final Set<Holder<EntityType<?>>> compatibleEntities;
     private R rendererInstance;

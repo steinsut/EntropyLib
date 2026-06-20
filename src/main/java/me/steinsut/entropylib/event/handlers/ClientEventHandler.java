@@ -20,7 +20,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 
-import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_TYPE_REGISTRY;
 
 public class ClientEventHandler implements IModEventHandler {
     @Override
@@ -30,7 +30,7 @@ public class ClientEventHandler implements IModEventHandler {
     }
 
     private void onAddEntityRendererLayers(final EntityRenderersEvent.AddLayers event) {
-        ENTITY_DYN_RENDERER_TYPE_REGISTRY.forEach((t) -> t.instantiateDynRenderer(event.getContext()));
+        ENTITY_DYN_TYPE_REGISTRY.forEach((t) -> t.instantiateDynRenderer(event.getContext()));
     }
 
     private void registerPayloads(final RegisterClientPayloadHandlersEvent event) {

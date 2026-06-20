@@ -25,23 +25,23 @@ public class CommonRegistries {
     public static final ResourceKey<Registry<DynDataType<?>>> DYN_DATA_TYPE_REGISTRY_KEY = ResourceKey.createRegistryKey(
             Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "dyn_data_types")
     );
-    public static final ResourceKey<Registry<EntityDynType<?, ?, ?>>> ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY = ResourceKey.createRegistryKey(
-            Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "dyn_entity_types")
+    public static final ResourceKey<Registry<EntityDynType<?, ?, ?>>> ENTITY_DYN_TYPE_REGISTRY_KEY = ResourceKey.createRegistryKey(
+            Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "entity_dyn_types")
     );
     public static final ResourceKey<Registry<DynEntitySyncPolicy>> DYN_ENTITY_SYNC_POLICY_REGISTRY_KEY = ResourceKey.createRegistryKey(
             Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "sync_policies")
     );
 
-    private static final int DYN_RENDERER_DATA_TYPE_MAX_ID = 65535;
+    private static final int DYN_DATA_TYPE_MAX_ID = 65535;
     public static final Registry<DynDataType<?>> DYN_DATA_TYPE_REGISTRY = new RegistryBuilder<>(DYN_DATA_TYPE_REGISTRY_KEY)
             .sync(true)
-            .maxId(DYN_RENDERER_DATA_TYPE_MAX_ID)
+            .maxId(DYN_DATA_TYPE_MAX_ID)
             .create();
 
-    private static final int DYN_ENTITY_TYPE_MAX_ID = 65535;
-    public static final Registry<EntityDynType<?, ?, ?>> ENTITY_DYN_RENDERER_TYPE_REGISTRY = new RegistryBuilder<>(ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY)
+    private static final int ENTITY_DYN_TYPE_MAX_ID = 65535;
+    public static final Registry<EntityDynType<?, ?, ?>> ENTITY_DYN_TYPE_REGISTRY = new RegistryBuilder<>(ENTITY_DYN_TYPE_REGISTRY_KEY)
             .sync(true)
-            .maxId(DYN_ENTITY_TYPE_MAX_ID)
+            .maxId(ENTITY_DYN_TYPE_MAX_ID)
             .create();
 
     private static final int DYN_ENTITY_SYNC_POLICY_MAX_ID = 255;

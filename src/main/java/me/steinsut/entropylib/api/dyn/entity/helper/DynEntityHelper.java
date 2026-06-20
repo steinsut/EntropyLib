@@ -30,16 +30,16 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
-import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_TYPE_REGISTRY;
 
 public class DynEntityHelper<S extends DynEntityRenderState<S>> {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final String VALUE_IO_DYN_KEY = "dyn";
-    public static final String VALUE_IO_DYN_RENDERER_TYPE_KEY = "r_type";
-    public static final String VALUE_IO_DYN_DATA_KEY = "r_data";
-    public static final String VALUE_IO_SYNC_POLICY_KEY = "s_pol";
-    public static final String VALUE_IO_SYNC_CONF_KEY = "s_conf";
+    private static final String VALUE_IO_DYN_KEY = "dyn";
+    private static final String VALUE_IO_DYN_RENDERER_TYPE_KEY = "r_type";
+    private static final String VALUE_IO_DYN_DATA_KEY = "r_data";
+    private static final String VALUE_IO_SYNC_POLICY_KEY = "s_pol";
+    private static final String VALUE_IO_SYNC_CONF_KEY = "s_conf";
 
     private final Entity entity;
     private EntityDynType<?, ?, S> dynRendererType;
@@ -70,7 +70,7 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
             }
         } else {
             LOGGER.warn("DynRendererType {} is incompatible with entity type {}",
-                    ENTITY_DYN_RENDERER_TYPE_REGISTRY.getKey(type),
+                    ENTITY_DYN_TYPE_REGISTRY.getKey(type),
                     this.entity.typeHolder().getKey().identifier());
         }
     }

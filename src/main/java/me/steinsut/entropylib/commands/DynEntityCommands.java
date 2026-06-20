@@ -28,7 +28,7 @@ import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.level.storage.TagValueOutput;
 
 import static me.steinsut.entropylib.api.registries.CommonRegistries.DYN_ENTITY_SYNC_POLICY_REGISTRY_KEY;
-import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY;
+import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_TYPE_REGISTRY_KEY;
 
 public class DynEntityCommands {
     private static final DynamicCommandExceptionType ERROR_INVALID_ENTITY = new DynamicCommandExceptionType(
@@ -77,13 +77,13 @@ public class DynEntityCommands {
                                         .literal("set")
                                         .then(
                                                 Commands
-                                                        .argument("type", ResourceArgument.resource(buildContext, ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY))
+                                                        .argument("type", ResourceArgument.resource(buildContext, ENTITY_DYN_TYPE_REGISTRY_KEY))
                                                         .executes((context ->
                                                                         runOnDynEntity(
                                                                                 EntityArgument.getEntity(context, "entity"),
                                                                                 (e, d) -> typeSet(context.getSource(),
                                                                                         e, d,
-                                                                                        ResourceArgument.getResource(context, "type", ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY))
+                                                                                        ResourceArgument.getResource(context, "type", ENTITY_DYN_TYPE_REGISTRY_KEY))
                                                                         )
 
                                                                 )
@@ -209,7 +209,7 @@ public class DynEntityCommands {
             return Command.SINGLE_SUCCESS;
         }
 
-        var id = source.registryAccess().lookupOrThrow(ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY).getKey(dynType);
+        var id = source.registryAccess().lookupOrThrow(ENTITY_DYN_TYPE_REGISTRY_KEY).getKey(dynType);
         if (id == null) {
             throw ERROR_MISSING_DYN_RENDERER_TYPE.create(dynType.toString());
         }
@@ -250,7 +250,7 @@ public class DynEntityCommands {
     private static int dataSetPreset(CommandSourceStack source, Entity entity, IDynEntity<?> dynEntity, Identifier presetId) throws CommandSyntaxException {
         if (!dynEntity.getDynType().getDataType().hasPreset(presetId)) {
             var dynRendererType = dynEntity.getDynType();
-            var dynRendererTypeId = source.registryAccess().lookupOrThrow(ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY).getKey(dynEntity.getDynType());
+            var dynRendererTypeId = source.registryAccess().lookupOrThrow(ENTITY_DYN_TYPE_REGISTRY_KEY).getKey(dynEntity.getDynType());
             if (dynRendererTypeId == null) {
                 throw ERROR_MISSING_DYN_RENDERER_TYPE.create(dynRendererType);
             }
