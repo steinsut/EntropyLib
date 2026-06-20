@@ -14,7 +14,7 @@ package me.steinsut.entropylib.api.registries;
 
 import me.steinsut.entropylib.api.EntropyLibApi;
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
-import me.steinsut.entropylib.api.dyn.entity.EntityDynRendererType;
+import me.steinsut.entropylib.api.dyn.entity.EntityDynType;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncPolicy;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
@@ -25,7 +25,7 @@ public class CommonRegistries {
     public static final ResourceKey<Registry<DynDataType<?>>> DYN_DATA_TYPE_REGISTRY_KEY = ResourceKey.createRegistryKey(
             Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "dyn_data_types")
     );
-    public static final ResourceKey<Registry<EntityDynRendererType<?, ?, ?>>> ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY = ResourceKey.createRegistryKey(
+    public static final ResourceKey<Registry<EntityDynType<?, ?, ?>>> ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY = ResourceKey.createRegistryKey(
             Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "dyn_entity_types")
     );
     public static final ResourceKey<Registry<DynEntitySyncPolicy>> DYN_ENTITY_SYNC_POLICY_REGISTRY_KEY = ResourceKey.createRegistryKey(
@@ -39,7 +39,7 @@ public class CommonRegistries {
             .create();
 
     private static final int DYN_ENTITY_TYPE_MAX_ID = 65535;
-    public static final Registry<EntityDynRendererType<?, ?, ?>> ENTITY_DYN_RENDERER_TYPE_REGISTRY = new RegistryBuilder<>(ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY)
+    public static final Registry<EntityDynType<?, ?, ?>> ENTITY_DYN_RENDERER_TYPE_REGISTRY = new RegistryBuilder<>(ENTITY_DYN_RENDERER_TYPE_REGISTRY_KEY)
             .sync(true)
             .maxId(DYN_ENTITY_TYPE_MAX_ID)
             .create();

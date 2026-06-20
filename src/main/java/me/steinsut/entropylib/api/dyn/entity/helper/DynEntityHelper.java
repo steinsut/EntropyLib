@@ -10,11 +10,12 @@ EntropyLib is distributed in the hope that it will be useful, but WITHOUT ANY WA
 You should have received a copy of the GNU Lesser General Public License along with EntropyLib. If not, see <https://www.gnu.org/licenses/>.
 */
 
-package me.steinsut.entropylib.api.dyn.entity;
+package me.steinsut.entropylib.api.dyn.entity.helper;
 
 import com.mojang.logging.LogUtils;
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
+import me.steinsut.entropylib.api.dyn.entity.EntityDynType;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncConfigReader;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncPolicy;
 import me.steinsut.entropylib.api.dyn.entity.sync.handler.IEntityDynSyncHandler;
@@ -41,23 +42,23 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
     public static final String VALUE_IO_SYNC_CONF_KEY = "s_conf";
 
     private final Entity entity;
-    private EntityDynRendererType<?, ?, S> dynRendererType;
+    private EntityDynType<?, ?, S> dynRendererType;
     private DynDataType.Holder<?> dynData;
     private DynEntitySyncPolicy dynSyncPolicy;
     private IEntityDynSyncHandler dynSyncHandler;
 
-    public DynEntityHelper(Entity entity, EntityDynRendererType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
+    public DynEntityHelper(Entity entity, EntityDynType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
         this.entity = entity;
     }
 
-    public EntityDynRendererType<?, ?, S> getDynType() {
+    public EntityDynType<?, ?, S> getDynType() {
         return this.dynRendererType;
     }
 
-    public void setDynRendererType(EntityDynRendererType<?, ?, ?> type) {
+    public void setDynRendererType(EntityDynType<?, ?, ?> type) {
         if (type.isCompatible(this.entity.typeHolder())) {
             //noinspection unchecked
-            this.dynRendererType = (EntityDynRendererType<?, ?, S>) type;
+            this.dynRendererType = (EntityDynType<?, ?, S>) type;
             this.dynData = type.getDataType().createHolder();
 
             if (!this.entity.level().isClientSide()) {
@@ -121,9 +122,9 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
 
     public void readAdditionalSaveData(@NonNull ValueInput input) {
         input.child(VALUE_IO_DYN_KEY).ifPresent((dynChild) -> {
-            dynChild.read(VALUE_IO_DYN_RENDERER_TYPE_KEY, EntityDynRendererType.CODEC).ifPresent((type) -> {
+            dynChild.read(VALUE_IO_DYN_RENDERER_TYPE_KEY, EntityDynType.CODEC).ifPresent((type) -> {
                 //noinspection unchecked
-                this.dynRendererType = (EntityDynRendererType<?, ?, S>) type;
+                this.dynRendererType = (EntityDynType<?, ?, S>) type;
                 this.dynData = this.dynRendererType.getDataType().createHolder();
 
                 this.dynData.getReader().readData(dynChild, VALUE_IO_DYN_DATA_KEY);
@@ -144,7 +145,7 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
         ValueOutput dynChild = output.child(VALUE_IO_DYN_KEY);
 
         if (this.dynRendererType != null) {
-            dynChild.store(VALUE_IO_DYN_RENDERER_TYPE_KEY, EntityDynRendererType.CODEC, this.dynRendererType);
+            dynChild.store(VALUE_IO_DYN_RENDERER_TYPE_KEY, EntityDynType.CODEC, this.dynRendererType);
             this.dynData.getWriter().storeData(dynChild, VALUE_IO_DYN_DATA_KEY);
         }
 

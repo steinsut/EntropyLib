@@ -13,12 +13,13 @@ You should have received a copy of the GNU Lesser General Public License along w
 package me.steinsut.entropylib.api.entity;
 
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
-import me.steinsut.entropylib.api.dyn.entity.DynEntityHelper;
-import me.steinsut.entropylib.api.dyn.entity.EntityDynRendererType;
+import me.steinsut.entropylib.api.dyn.entity.helper.DynEntityHelper;
+import me.steinsut.entropylib.api.dyn.entity.EntityDynType;
 import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncConfigReader;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncPolicy;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -29,7 +30,7 @@ import org.jspecify.annotations.NonNull;
 public abstract class DynEntity<S extends DynEntityRenderState<S>> extends Entity implements IDynEntity<S> {
     protected final DynEntityHelper<S> dynHelper;
 
-    public DynEntity(EntityType<?> type, Level level, EntityDynRendererType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
+    public DynEntity(EntityType<?> type, Level level, EntityDynType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
         super(type, level);
 
         this.dynHelper = new DynEntityHelper<>(this, dynRendererType, dynSyncPolicy);
@@ -39,13 +40,13 @@ public abstract class DynEntity<S extends DynEntityRenderState<S>> extends Entit
     }
 
     @Override
-    public EntityDynRendererType<?, ?, S> getDynType() {
+    public EntityDynType<?, ?, S> getDynType() {
         return this.dynHelper.getDynType();
     }
 
     @Override
-    public void setDynType(EntityDynRendererType<?, ?, ?> type) {
-        this.dynHelper.setDynRendererType(type);
+    public void setDynType(EntityDynType<?, ?, ?> dynType) {
+        this.dynHelper.setDynRendererType(dynType);
     }
 
     @Override
@@ -69,8 +70,13 @@ public abstract class DynEntity<S extends DynEntityRenderState<S>> extends Entit
     }
 
     @Override
-    public void readDataFrom(DynDataWriter<?> writer, boolean forceSync) {
+    public void readDynDataFrom(DynDataWriter<?> writer, boolean forceSync) {
         this.dynHelper.readDataFrom(writer, forceSync);
+    }
+
+    @Override
+    public void setDynDataToPreset(Identifier presetId, boolean forceSync) {
+        this.dynHelper.setDataToPreset(presetId, forceSync);
     }
 
     @Override

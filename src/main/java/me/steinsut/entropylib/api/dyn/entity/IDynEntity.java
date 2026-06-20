@@ -18,9 +18,10 @@ import me.steinsut.entropylib.api.dyn.dynrenderer.contextless.ContextlessDynRend
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncConfigReader;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncPolicy;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
+import net.minecraft.resources.Identifier;
 
-public interface IDynEntity<S extends DynEntityRenderState<S>> extends IDyn<EntityDynRendererType<?, ?, S>, S> {
-    void setDynType(EntityDynRendererType<?, ?, ?> dynRendererType);
+public interface IDynEntity<S extends DynEntityRenderState<S>> extends IDyn<EntityDynType<?, ?, S>, S> {
+    void setDynType(EntityDynType<?, ?, ?> dynType);
 
     DynEntitySyncPolicy getDynSyncPolicy();
 
@@ -30,5 +31,7 @@ public interface IDynEntity<S extends DynEntityRenderState<S>> extends IDyn<Enti
 
     ContextlessDynRenderer<?, ? super S> getFallbackDynRenderer();
 
-    void readDataFrom(DynDataWriter<?> writer, boolean forceSync);
+    void readDynDataFrom(DynDataWriter<?> writer, boolean forceSync);
+
+    void setDynDataToPreset(Identifier preset, boolean forceSync);
 }

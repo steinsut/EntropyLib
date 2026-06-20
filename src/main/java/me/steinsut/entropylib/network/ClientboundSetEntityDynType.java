@@ -13,7 +13,7 @@ You should have received a copy of the GNU Lesser General Public License along w
 package me.steinsut.entropylib.network;
 
 import me.steinsut.entropylib.api.EntropyLibApi;
-import me.steinsut.entropylib.api.dyn.entity.EntityDynRendererType;
+import me.steinsut.entropylib.api.dyn.entity.EntityDynType;
 import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -25,14 +25,14 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jspecify.annotations.NonNull;
 
 public record ClientboundSetEntityDynType(int id,
-                                          EntityDynRendererType<?, ?, ?> dynType) implements CustomPacketPayload {
+                                          EntityDynType<?, ?, ?> dynType) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<ClientboundSetEntityDynType> TYPE =
             new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "set_ent_dynr_t"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundSetEntityDynType> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT,
             ClientboundSetEntityDynType::id,
-            EntityDynRendererType.STREAM_CODEC,
+            EntityDynType.STREAM_CODEC,
             ClientboundSetEntityDynType::dynType,
             ClientboundSetEntityDynType::new
     );
