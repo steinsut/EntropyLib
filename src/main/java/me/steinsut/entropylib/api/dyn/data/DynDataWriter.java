@@ -23,8 +23,7 @@ public final class DynDataWriter<D> {
     }
 
     public void storeData(ValueOutput out, String childName) {
-        ValueOutput dataChild = out.child(childName);
-        dataChild.store(childName, this.holder.getCodec(), this.holder.getData());
+        out.store(childName, this.holder.getCodec(), this.holder.getData());
     }
 
     public void encodeData(RegistryFriendlyByteBuf buf) {
