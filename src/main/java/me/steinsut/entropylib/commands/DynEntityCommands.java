@@ -235,14 +235,14 @@ public class DynEntityCommands {
         var dataWriter = dynEntity.getDynDataWriter();
 
         var tagOutput = TagValueOutput.createWithoutContext(collector);
-        dataWriter.storeData(tagOutput, "d");
+        dataWriter.storeData(tagOutput, "data");
 
-        var tag = tagOutput.buildResult().getCompoundOrEmpty("d");
+        var tag = tagOutput.buildResult().getCompoundOrEmpty("data");
         if (!collector.isEmpty()) {
             throw ERROR_DYN_DATA_READ.create(collector.getReport());
         }
 
-        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.data.get", entity.getDisplayName(), NbtUtils.prettyPrint(tag, false)), false);
+        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.data.get", entity.getDisplayName(), NbtUtils.prettyPrint(tag, true)), false);
         return Command.SINGLE_SUCCESS;
     }
 
@@ -267,11 +267,11 @@ public class DynEntityCommands {
         ProblemReporter.Collector collector = new ProblemReporter.Collector();
         CompoundTag dataTag = new CompoundTag();
 
-        dataTag.put("d", tag);
+        dataTag.put("data", tag);
         var holder = dynEntity.getDynType().getDataType().createHolder();
         var tagInput = TagValueInput.create(collector, source.registryAccess(), dataTag);
 
-        holder.getReader().readData(tagInput, "d");
+        holder.getReader().readData(tagInput, "data");
         if (!collector.isEmpty()) {
             throw ERROR_DYN_DATA_WRITE.create(collector.getReport());
         }

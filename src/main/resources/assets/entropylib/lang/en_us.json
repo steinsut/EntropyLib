@@ -6,7 +6,7 @@
   "commands.dyn.entity.type.get": "%s has the following Dyn renderer type: %s",
   "commands.dyn.entity.type.get.fallback": "%s uses its fallback Dyn renderer",
   "commands.dyn.entity.type.set": "Changed Dyn renderer type of %s",
-  "commands.dyn.entity.data.get": "%s has the following Dyn renderer data: %s",
+  "commands.dyn.entity.data.get": "%s has the following Dyn renderer data:\n%s",
   "commands.dyn.entity.data.set": "Modified Dyn renderer data of %s",
   "commands.dyn.entity.sync.policy.get": "%s has the following Dyn sync policy: %s",
   "commands.dyn.entity.sync.policy.set": "Changed Dyn sync policy of %s",
