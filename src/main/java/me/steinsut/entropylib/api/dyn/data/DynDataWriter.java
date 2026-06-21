@@ -15,7 +15,7 @@ public final class DynDataWriter<D> {
 
     @SuppressWarnings("unchecked")
     public void writeToHolder(DynDataType.Holder<?> holder) {
-        if (this.holder.getDataType() != holder.getDataType()) {
+        if (this.holder.getDataType() == holder.getDataType()) {
             ((DynDataType.Holder<D>) holder).setData(this.holder.getData());
         } else {
             LOGGER.warn("Cannot copy value to holder, holders belong to different data types");
