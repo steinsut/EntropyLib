@@ -53,7 +53,7 @@ public final class EntityDynType<R extends EntityDynRenderer<D, S>, D, S extends
     }
 
     public boolean isCompatible(Holder<EntityType<?>> typeHolder) {
-        return typeHolder.kind() == Holder.Kind.REFERENCE && (this.compatibleEntities.isEmpty() || this.compatibleEntities.contains(typeHolder));
+        return (this.compatibleEntities.isEmpty() || this.compatibleEntities.contains(typeHolder));
     }
 
     public void instantiateDynRenderer(EntityRendererProvider.Context context) {
@@ -101,7 +101,15 @@ public final class EntityDynType<R extends EntityDynRenderer<D, S>, D, S extends
             return this;
         }
 
+        private boolean isComplete() {
+            return this.compatibleEntities != null;
+        }
+
         public EntityDynType<_R, _D, _S> build() {
+            if (!this.isComplete()) {
+                throw new IllegalStateException("Entity Dyn type is not complete");
+            }
+
             return new EntityDynType<>(this.dataType, this.dynRendererFactory, this.compatibleEntities);
         }
     }
