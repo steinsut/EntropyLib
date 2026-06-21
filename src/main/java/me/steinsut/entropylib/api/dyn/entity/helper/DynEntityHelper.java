@@ -36,7 +36,7 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private static final String VALUE_IO_DYN_KEY = "dyn";
-    private static final String VALUE_IO_DYN_RENDERER_TYPE_KEY = "r_type";
+    private static final String VALUE_IO_DYN_TYPE_KEY = "type";
     private static final String VALUE_IO_DYN_DATA_KEY = "r_data";
     private static final String VALUE_IO_SYNC_POLICY_KEY = "s_pol";
     private static final String VALUE_IO_SYNC_CONF_KEY = "s_conf";
@@ -122,7 +122,7 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
 
     public void readAdditionalSaveData(@NonNull ValueInput input) {
         input.child(VALUE_IO_DYN_KEY).ifPresent((dynChild) -> {
-            dynChild.read(VALUE_IO_DYN_RENDERER_TYPE_KEY, EntityDynType.CODEC).ifPresent((type) -> {
+            dynChild.read(VALUE_IO_DYN_TYPE_KEY, EntityDynType.CODEC).ifPresent((type) -> {
                 //noinspection unchecked
                 this.dynRendererType = (EntityDynType<?, ?, S>) type;
                 this.dynData = this.dynRendererType.getDataType().createHolder();
@@ -145,7 +145,7 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
         ValueOutput dynChild = output.child(VALUE_IO_DYN_KEY);
 
         if (this.dynRendererType != null) {
-            dynChild.store(VALUE_IO_DYN_RENDERER_TYPE_KEY, EntityDynType.CODEC, this.dynRendererType);
+            dynChild.store(VALUE_IO_DYN_TYPE_KEY, EntityDynType.CODEC, this.dynRendererType);
             this.dynData.getWriter().storeData(dynChild, VALUE_IO_DYN_DATA_KEY);
         }
 
