@@ -46,7 +46,7 @@ public abstract class DynProjectile<S extends DynEntityRenderState<S>> extends P
 
     @Override
     public void setDynType(EntityDynType<?, ?, ?> dynType) {
-        this.dynHelper.setDynRendererType(dynType);
+        this.dynHelper.setDynType(dynType);
     }
 
     @Override

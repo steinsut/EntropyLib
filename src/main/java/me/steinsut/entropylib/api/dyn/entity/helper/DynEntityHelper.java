@@ -22,7 +22,6 @@ import me.steinsut.entropylib.api.dyn.entity.sync.handler.IEntityDynSyncHandler;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
 import me.steinsut.entropylib.network.payload.ClientboundSetEntityDynType;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -55,16 +54,15 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
         return this.dynRendererType;
     }
 
-    public void setDynRendererType(EntityDynType<?, ?, ?> type) {
+    public void setDynType(EntityDynType<?, ?, ?> type) {
         if (type.isCompatible(this.entity.typeHolder())) {
             //noinspection unchecked
             this.dynRendererType = (EntityDynType<?, ?, S>) type;
             this.dynData = type.getDataType().createHolder();
 
             if (!this.entity.level().isClientSide()) {
-                PacketDistributor.sendToPlayersTrackingChunk(
-                        (ServerLevel) this.entity.level(),
-                        this.entity.chunkPosition(),
+                PacketDistributor.sendToPlayersTrackingEntity(
+                        this.entity,
                         new ClientboundSetEntityDynType(this.entity.getId(), this.dynRendererType)
                 );
             }

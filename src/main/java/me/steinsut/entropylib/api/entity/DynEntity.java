@@ -46,7 +46,7 @@ public abstract class DynEntity<S extends DynEntityRenderState<S>> extends Entit
 
     @Override
     public void setDynType(EntityDynType<?, ?, ?> dynType) {
-        this.dynHelper.setDynRendererType(dynType);
+        this.dynHelper.setDynType(dynType);
     }
 
     @Override
