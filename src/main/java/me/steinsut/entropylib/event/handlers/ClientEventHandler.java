@@ -13,8 +13,8 @@ You should have received a copy of the GNU Lesser General Public License along w
 package me.steinsut.entropylib.event.handlers;
 
 import me.steinsut.entropylib.event.IModEventHandler;
-import me.steinsut.entropylib.network.ClientboundSetEntityDynType;
-import me.steinsut.entropylib.network.ClientboundUpdateEntityDynData;
+import me.steinsut.entropylib.network.payload.ClientboundSetEntityDynType;
+import me.steinsut.entropylib.network.payload.ClientboundUpdateEntityDynData;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;

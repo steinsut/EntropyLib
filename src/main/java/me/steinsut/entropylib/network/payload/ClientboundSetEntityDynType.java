@@ -10,10 +10,10 @@ EntropyLib is distributed in the hope that it will be useful, but WITHOUT ANY WA
 You should have received a copy of the GNU Lesser General Public License along with EntropyLib. If not, see <https://www.gnu.org/licenses/>.
 */
 
-package me.steinsut.entropylib.network;
+package me.steinsut.entropylib.network.payload;
 
 import me.steinsut.entropylib.api.EntropyLibApi;
-import me.steinsut.entropylib.api.dyn.data.DynDataType;
+import me.steinsut.entropylib.api.dyn.entity.EntityDynType;
 import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -24,23 +24,24 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jspecify.annotations.NonNull;
 
-public record ClientboundUpdateEntityDynData(int id, DynDataType.Holder<?> holder) implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<ClientboundUpdateEntityDynData> TYPE =
-            new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "set_ent_dyndata"));
+public record ClientboundSetEntityDynType(int id,
+                                          EntityDynType<?, ?, ?> dynType) implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<ClientboundSetEntityDynType> TYPE =
+            new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "set_ent_dynr_t"));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundUpdateEntityDynData> STREAM_CODEC = StreamCodec.composite(
+    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundSetEntityDynType> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT,
-            ClientboundUpdateEntityDynData::id,
-            DynDataType.Holder.STREAM_CODEC,
-            ClientboundUpdateEntityDynData::holder,
-            ClientboundUpdateEntityDynData::new
+            ClientboundSetEntityDynType::id,
+            EntityDynType.STREAM_CODEC,
+            ClientboundSetEntityDynType::dynType,
+            ClientboundSetEntityDynType::new
     );
 
-    public static void handleOnMain(final ClientboundUpdateEntityDynData data, final IPayloadContext context) {
+    public static void handleOnMain(final ClientboundSetEntityDynType data, final IPayloadContext context) {
         Level level = context.player().level();
         IDynEntity<?> entity = (IDynEntity<?>) level.getEntity(data.id);
         if (entity != null) {
-            entity.readDynDataFrom(data.holder.getWriter(), false);
+            entity.setDynType(data.dynType);
         }
     }
 

@@ -33,7 +33,7 @@ public abstract class DynVehicleEntity<S extends DynEntityRenderState<S>> extend
     public DynVehicleEntity(EntityType<? extends VehicleEntity> type, Level level, EntityDynType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
         super(type, level);
 
-        this.dynHelper = new DynEntityHelper<>(this, dynRendererType, dynSyncPolicy);
+        this.dynHelper = new DynEntityHelper<>(this);
 
         this.setDynType(dynRendererType);
         this.setDynSyncPolicy(dynSyncPolicy);

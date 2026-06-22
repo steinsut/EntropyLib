@@ -32,7 +32,7 @@ public abstract class DynPartEntity<T extends Entity, S extends DynEntityRenderS
     public DynPartEntity(T parent, EntityDynType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
         super(parent);
 
-        this.dynHelper = new DynEntityHelper<>(this, dynRendererType, dynSyncPolicy);
+        this.dynHelper = new DynEntityHelper<>(this);
 
         this.setDynType(dynRendererType);
         this.setDynSyncPolicy(dynSyncPolicy);
