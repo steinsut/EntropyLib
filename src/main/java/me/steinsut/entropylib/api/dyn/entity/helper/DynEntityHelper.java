@@ -21,10 +21,13 @@ import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncPolicy;
 import me.steinsut.entropylib.api.dyn.entity.sync.handler.IEntityDynSyncHandler;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
 import me.steinsut.entropylib.network.payload.ClientboundSetEntityDynType;
+import me.steinsut.entropylib.network.payload.ClientboundUpdateEntityDynData;
+import me.steinsut.entropylib.network.payload.ServerboundRequestEntityDynType;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
@@ -48,6 +51,17 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
 
     public DynEntityHelper(Entity entity) {
         this.entity = entity;
+    }
+
+    public void init(EntityDynType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
+        this.setDynType(dynRendererType);
+        this.setDynSyncPolicy(dynSyncPolicy);
+
+        if (this.entity.level().isClientSide()) {
+            ClientPacketDistributor.sendToServer(
+                    new ServerboundRequestEntityDynType(this.entity.getId())
+            );
+        }
     }
 
     public EntityDynType<?, ?, S> getDynType() {
@@ -97,7 +111,7 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
             if (forceSync || this.dynSyncHandler.needsSync()) {
                 PacketDistributor.sendToPlayersTrackingEntity(
                         this.entity,
-                        new ClientboundSetEntityDynType(this.entity.getId(), this.dynRendererType)
+                        new ClientboundUpdateEntityDynData(this.entity.getId(), this.dynData)
                 );
 
                 this.dynSyncHandler.reset();

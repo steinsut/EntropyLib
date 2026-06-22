@@ -12,7 +12,6 @@ You should have received a copy of the GNU Lesser General Public License along w
 
 package me.steinsut.entropylib.event.handlers;
 
-import me.steinsut.entropylib.event.IModEventHandler;
 import net.neoforged.bus.api.IEventBus;
 
 public class ServerEventHandler implements IModEventHandler {

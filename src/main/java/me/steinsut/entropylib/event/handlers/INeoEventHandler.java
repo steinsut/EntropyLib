@@ -10,10 +10,10 @@ EntropyLib is distributed in the hope that it will be useful, but WITHOUT ANY WA
 You should have received a copy of the GNU Lesser General Public License along with EntropyLib. If not, see <https://www.gnu.org/licenses/>.
 */
 
-package me.steinsut.entropylib.event;
+package me.steinsut.entropylib.event.handlers;
 
 import net.neoforged.bus.api.IEventBus;
 
-public interface IModEventHandler {
-    void registerModEventHandlers(final IEventBus bus);
+public interface INeoEventHandler {
+    void registerNeoEventHandlers(final IEventBus bus);
 }

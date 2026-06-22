@@ -34,48 +34,46 @@ public abstract class DynBlockAttachedEntity<S extends DynEntityRenderState<S>> 
         super(type, level);
 
         this.dynHelper = new DynEntityHelper<>(this);
-
-        this.setDynType(dynRendererType);
-        this.setDynSyncPolicy(dynSyncPolicy);
+        this.dynHelper.init(dynRendererType, dynSyncPolicy);
     }
 
     @Override
-    public EntityDynType<?, ?, S> getDynType() {
+    public final EntityDynType<?, ?, S> getDynType() {
         return this.dynHelper.getDynType();
     }
 
     @Override
-    public void setDynType(EntityDynType<?, ?, ?> dynType) {
+    public final void setDynType(EntityDynType<?, ?, ?> dynType) {
         this.dynHelper.setDynType(dynType);
     }
 
     @Override
-    public DynEntitySyncPolicy getDynSyncPolicy() {
+    public final DynEntitySyncPolicy getDynSyncPolicy() {
         return this.dynHelper.getDynSyncPolicy();
     }
 
     @Override
-    public void setDynSyncPolicy(DynEntitySyncPolicy policy) {
+    public final void setDynSyncPolicy(DynEntitySyncPolicy policy) {
         this.dynHelper.setDynSyncPolicy(policy);
     }
 
     @Override
-    public DynDataWriter<?> getDynDataWriter() {
+    public final DynDataWriter<?> getDynDataWriter() {
         return this.dynHelper.getDynDataWriter();
     }
 
     @Override
-    public DynEntitySyncConfigReader getDynSyncConfigurator() {
+    public final DynEntitySyncConfigReader getDynSyncConfigurator() {
         return this.dynHelper.getDynSyncConfigurator();
     }
 
     @Override
-    public void readDynDataFrom(DynDataWriter<?> writer, boolean forceSync) {
+    public final void readDynDataFrom(DynDataWriter<?> writer, boolean forceSync) {
         this.dynHelper.readDataFrom(writer, forceSync);
     }
 
     @Override
-    public void setDynDataToPreset(Identifier presetId, boolean forceSync) {
+    public final void setDynDataToPreset(Identifier presetId, boolean forceSync) {
         this.dynHelper.setDataToPreset(presetId, forceSync);
     }
 
