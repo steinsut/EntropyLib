@@ -19,6 +19,11 @@ public class Policies {
             () -> new DynEntitySyncPolicy(EntityDynUpdateSyncHandler::new)
     );
 
+    public static Holder<DynEntitySyncPolicy> PER_UDPATE = POLICIES.register(
+            "per_update",
+            () -> new DynEntitySyncPolicy(() -> new EntityDynUpdateSyncHandler(1))
+    );
+
     public static Holder<DynEntitySyncPolicy> TICK_COUNT = POLICIES.register(
             "tick_count",
             () -> new DynEntitySyncPolicy(EntityDynTickSyncHandler::new)
