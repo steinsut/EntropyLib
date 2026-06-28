@@ -22,12 +22,11 @@ import me.steinsut.entropylib.api.dyn.entity.sync.handler.IEntityDynSyncHandler;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
 import me.steinsut.entropylib.network.payload.ClientboundSetEntityDynType;
 import me.steinsut.entropylib.network.payload.ClientboundUpdateEntityDynData;
-import me.steinsut.entropylib.network.payload.ServerboundRequestEntityDynType;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
@@ -56,12 +55,6 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
     public void init(EntityDynType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
         this.setDynType(dynRendererType);
         this.setDynSyncPolicy(dynSyncPolicy);
-
-        if (this.entity.level().isClientSide()) {
-            ClientPacketDistributor.sendToServer(
-                    new ServerboundRequestEntityDynType(this.entity.getId())
-            );
-        }
     }
 
     public EntityDynType<?, ?, S> getDynType() {
@@ -163,6 +156,16 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
         dynChild.store(VALUE_IO_SYNC_POLICY_KEY, DynEntitySyncPolicy.CODEC, this.dynSyncPolicy);
         ValueOutput confChild = dynChild.child(VALUE_IO_SYNC_CONF_KEY);
         this.dynSyncHandler.writeConfiguration(confChild);
+    }
+
+    public void readSpawnData(RegistryFriendlyByteBuf buffer) {
+        this.setDynType(EntityDynType.STREAM_CODEC.decode(buffer));
+        DynDataType.Holder.STREAM_CODEC.decode(buffer).getWriter().writeToHolder(this.dynData);
+    }
+
+    public void writeSpawnData(RegistryFriendlyByteBuf buffer) {
+        EntityDynType.STREAM_CODEC.encode(buffer, this.dynRendererType);
+        DynDataType.Holder.STREAM_CODEC.encode(buffer, this.dynData);
     }
 
     public void tick() {

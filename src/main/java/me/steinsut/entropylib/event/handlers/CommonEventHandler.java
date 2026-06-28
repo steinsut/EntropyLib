@@ -14,11 +14,11 @@ package me.steinsut.entropylib.event.handlers;
 
 import com.mojang.logging.LogUtils;
 import me.steinsut.entropylib.api.EntropyLibApi;
+import me.steinsut.entropylib.api.network.payload.ServerboundRequestEntityDynType;
 import me.steinsut.entropylib.api.registries.CommonRegistries;
 import me.steinsut.entropylib.commands.EntropyLibCommands;
 import me.steinsut.entropylib.network.payload.ClientboundSetEntityDynType;
 import me.steinsut.entropylib.network.payload.ClientboundUpdateEntityDynData;
-import me.steinsut.entropylib.network.payload.ServerboundRequestEntityDynType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;

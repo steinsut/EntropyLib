@@ -23,15 +23,15 @@ import net.minecraft.resources.Identifier;
 public interface IDynEntity<S extends DynEntityRenderState<S>> extends IDyn<EntityDynType<?, ?, S>, S> {
     void setDynType(EntityDynType<?, ?, ?> dynType);
 
-    DynEntitySyncPolicy getDynSyncPolicy();
+    DynEntitySyncPolicy getSyncPolicy();
 
-    void setDynSyncPolicy(DynEntitySyncPolicy policy);
+    void setSyncPolicy(DynEntitySyncPolicy policy);
 
-    DynEntitySyncConfigReader getDynSyncConfigurator();
+    DynEntitySyncConfigReader getSyncConfigurator();
 
     ContextlessDynRenderer<?, ? super S> getFallbackDynRenderer();
 
-    void readDynDataFrom(DynDataWriter<?> writer, boolean forceSync);
+    void readDataFrom(DynDataWriter<?> writer, boolean forceSync);
 
-    void setDynDataToPreset(Identifier preset, boolean forceSync);
+    void setDataToPreset(Identifier preset, boolean forceSync);
 }

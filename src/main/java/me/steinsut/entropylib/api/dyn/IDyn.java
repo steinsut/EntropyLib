@@ -18,5 +18,5 @@ import net.neoforged.neoforge.client.renderstate.BaseRenderState;
 public interface IDyn<T extends BaseDynType<?, ?, S>, S extends BaseRenderState> {
     T getDynType();
 
-    DynDataWriter<?> getDynDataWriter();
+    DynDataWriter<?> getDataWriter();
 }

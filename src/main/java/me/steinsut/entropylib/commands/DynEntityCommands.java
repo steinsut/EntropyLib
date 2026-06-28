@@ -232,7 +232,7 @@ public class DynEntityCommands {
 
     private static int dataGet(CommandSourceStack source, Entity entity, IDynEntity<?> dynEntity) throws CommandSyntaxException {
         ProblemReporter.Collector collector = new ProblemReporter.Collector();
-        var dataWriter = dynEntity.getDynDataWriter();
+        var dataWriter = dynEntity.getDataWriter();
 
         var tagOutput = TagValueOutput.createWithoutContext(collector);
         dataWriter.storeData(tagOutput, "data");
@@ -258,7 +258,7 @@ public class DynEntityCommands {
             throw ERROR_DYN_DATA_PRESET_NOT_FOUND.create(dynRendererTypeId.toString(), presetId.toString());
         }
 
-        dynEntity.setDynDataToPreset(presetId, true);
+        dynEntity.setDataToPreset(presetId, true);
         source.sendSuccess(() -> Component.translatable("commands.dyn.entity.data.set", entity.getDisplayName()), false);
         return Command.SINGLE_SUCCESS;
     }
@@ -276,13 +276,13 @@ public class DynEntityCommands {
             throw ERROR_DYN_DATA_WRITE.create(collector.getReport());
         }
 
-        dynEntity.readDynDataFrom(holder.getWriter(), true);
+        dynEntity.readDataFrom(holder.getWriter(), true);
         source.sendSuccess(() -> Component.translatable("commands.dyn.entity.data.set", entity.getDisplayName()), false);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int syncPolicyGet(CommandSourceStack source, Entity entity, IDynEntity<?> dynEntity) throws CommandSyntaxException {
-        var policy = dynEntity.getDynSyncPolicy();
+        var policy = dynEntity.getSyncPolicy();
         var id = source.registryAccess().lookupOrThrow(DYN_ENTITY_SYNC_POLICY_REGISTRY_KEY).getKey(policy);
         if (id == null) {
             throw ERROR_MISSING_DYN_SYNC_POLICY.create(policy);
@@ -293,7 +293,7 @@ public class DynEntityCommands {
     }
 
     private static int syncPolicySet(CommandSourceStack source, Entity entity, IDynEntity<?> dynEntity, Holder<DynEntitySyncPolicy> policyHolder) {
-        dynEntity.setDynSyncPolicy(policyHolder.value());
+        dynEntity.setSyncPolicy(policyHolder.value());
         source.sendSuccess(() -> Component.translatable("commands.dyn.entity.sync.policy.set", entity.getDisplayName()), false);
 
         return Command.SINGLE_SUCCESS;
@@ -301,7 +301,7 @@ public class DynEntityCommands {
 
     private static int syncConfigGet(CommandSourceStack source, Entity entity, IDynEntity<?> dynEntity) throws CommandSyntaxException {
         ProblemReporter.Collector collector = new ProblemReporter.Collector();
-        var configurator = dynEntity.getDynSyncConfigurator();
+        var configurator = dynEntity.getSyncConfigurator();
 
         var tagOutput = TagValueOutput.createWithoutContext(collector);
         configurator.writeConfiguration(tagOutput);

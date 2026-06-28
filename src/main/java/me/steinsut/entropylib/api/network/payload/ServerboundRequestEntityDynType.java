@@ -1,8 +1,9 @@
-package me.steinsut.entropylib.network.payload;
+package me.steinsut.entropylib.api.network.payload;
 
 import io.netty.buffer.ByteBuf;
 import me.steinsut.entropylib.api.EntropyLibApi;
 import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
+import me.steinsut.entropylib.network.payload.ClientboundSetEntityDynType;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;

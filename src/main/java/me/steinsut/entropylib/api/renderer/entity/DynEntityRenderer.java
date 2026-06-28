@@ -31,7 +31,7 @@ public abstract class DynEntityRenderer<E extends Entity & IDynEntity<S>, S exte
         super.extractRenderState(entity, reusedState, partialTick);
 
         reusedState.dynRenderer = entity.getDynType().getDynRendererInstance().orElse(null);
-        reusedState.dynDataWriter = entity.getDynDataWriter();
+        reusedState.dynDataWriter = entity.getDataWriter();
         reusedState.fallbackDynRenderer = entity.getFallbackDynRenderer();
     }
 

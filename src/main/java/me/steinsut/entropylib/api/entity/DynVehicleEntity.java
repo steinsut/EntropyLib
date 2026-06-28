@@ -19,15 +19,17 @@ import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncConfigReader;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncPolicy;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import org.jspecify.annotations.NonNull;
 
-public abstract class DynVehicleEntity<S extends DynEntityRenderState<S>> extends VehicleEntity implements IDynEntity<S> {
+public abstract class DynVehicleEntity<S extends DynEntityRenderState<S>> extends VehicleEntity implements IDynEntity<S>, IEntityWithComplexSpawn {
     protected final DynEntityHelper<S> dynHelper;
 
     public DynVehicleEntity(EntityType<? extends VehicleEntity> type, Level level, EntityDynType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {
@@ -48,32 +50,32 @@ public abstract class DynVehicleEntity<S extends DynEntityRenderState<S>> extend
     }
 
     @Override
-    public final DynEntitySyncPolicy getDynSyncPolicy() {
+    public final DynEntitySyncPolicy getSyncPolicy() {
         return this.dynHelper.getDynSyncPolicy();
     }
 
     @Override
-    public final void setDynSyncPolicy(DynEntitySyncPolicy policy) {
+    public final void setSyncPolicy(DynEntitySyncPolicy policy) {
         this.dynHelper.setDynSyncPolicy(policy);
     }
 
     @Override
-    public final DynDataWriter<?> getDynDataWriter() {
+    public final DynDataWriter<?> getDataWriter() {
         return this.dynHelper.getDynDataWriter();
     }
 
     @Override
-    public final DynEntitySyncConfigReader getDynSyncConfigurator() {
+    public final DynEntitySyncConfigReader getSyncConfigurator() {
         return this.dynHelper.getDynSyncConfigurator();
     }
 
     @Override
-    public final void readDynDataFrom(DynDataWriter<?> writer, boolean forceSync) {
+    public final void readDataFrom(DynDataWriter<?> writer, boolean forceSync) {
         this.dynHelper.readDataFrom(writer, forceSync);
     }
 
     @Override
-    public final void setDynDataToPreset(Identifier presetId, boolean forceSync) {
+    public final void setDataToPreset(Identifier presetId, boolean forceSync) {
         this.dynHelper.setDataToPreset(presetId, forceSync);
     }
 
@@ -85,6 +87,16 @@ public abstract class DynVehicleEntity<S extends DynEntityRenderState<S>> extend
     @Override
     protected void addAdditionalSaveData(@NonNull ValueOutput output) {
         this.dynHelper.addAdditionalSaveData(output);
+    }
+
+    @Override
+    public void readSpawnData(@NonNull RegistryFriendlyByteBuf buffer) {
+        this.dynHelper.readSpawnData(buffer);
+    }
+
+    @Override
+    public void writeSpawnData(@NonNull RegistryFriendlyByteBuf buffer) {
+        this.dynHelper.writeSpawnData(buffer);
     }
 
     @Override
