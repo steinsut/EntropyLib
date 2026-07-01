@@ -14,10 +14,11 @@ package me.steinsut.entropylib.api.dyn.entity;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
-import me.steinsut.entropylib.api.dyn.BaseDynType;
+import me.steinsut.entropylib.api.dyn.DynType;
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
 import me.steinsut.entropylib.api.dyn.dynrenderer.entity.EntityDynRenderer;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
+import me.steinsut.entropylib.util.Cloneable;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -34,7 +35,7 @@ import java.util.function.BiFunction;
 import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_TYPE_REGISTRY;
 import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_TYPE_REGISTRY_KEY;
 
-public final class EntityDynType<R extends EntityDynRenderer<D, S>, D, S extends DynEntityRenderState<S>> extends BaseDynType<R, D, S> {
+public final class EntityDynType<R extends EntityDynRenderer<D, S>, D extends Cloneable<D>, S extends DynEntityRenderState<S>> extends DynType<R, D, S> {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static final StreamCodec<RegistryFriendlyByteBuf, EntityDynType<?, ?, ?>> STREAM_CODEC =
@@ -64,7 +65,7 @@ public final class EntityDynType<R extends EntityDynRenderer<D, S>, D, S extends
         return Optional.ofNullable(this.rendererInstance);
     }
 
-    public static class Builder<_R extends EntityDynRenderer<_D, _S>, _D, _S extends DynEntityRenderState<_S>> {
+    public static class Builder<_R extends EntityDynRenderer<_D, _S>, _D extends Cloneable<_D>, _S extends DynEntityRenderState<_S>> {
         private final BiFunction<EntityRendererProvider.Context, DynDataType<_D>, _R> dynRendererFactory;
         private final DynDataType<_D> dataType;
         private Set<Holder<EntityType<?>>> compatibleEntities;
@@ -74,7 +75,7 @@ public final class EntityDynType<R extends EntityDynRenderer<D, S>, D, S extends
             this.dynRendererFactory = dynRendererFactory;
         }
 
-        public static <_R extends EntityDynRenderer<_D, _S>, _D, _S extends DynEntityRenderState<_S>> Builder<_R, _D, _S>
+        public static <_R extends EntityDynRenderer<_D, _S>, _D extends Cloneable<_D>, _S extends DynEntityRenderState<_S>> Builder<_R, _D, _S>
         of(DynDataType<_D> dataType, BiFunction<EntityRendererProvider.Context, DynDataType<_D>, _R> dynRendererFactory) {
             return new Builder<>(dataType, dynRendererFactory);
         }

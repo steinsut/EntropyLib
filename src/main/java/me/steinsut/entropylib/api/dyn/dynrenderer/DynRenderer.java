@@ -15,16 +15,17 @@ package me.steinsut.entropylib.api.dyn.dynrenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
+import me.steinsut.entropylib.util.Cloneable;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.renderstate.BaseRenderState;
 
-public abstract class BaseDynRenderer<D, S extends BaseRenderState> {
+public abstract class DynRenderer<D extends Cloneable<D>, S extends BaseRenderState> {
     protected final DynDataType<D> dataType;
     protected final DynDataType.Holder<D> dataHolder;
 
-    public BaseDynRenderer(DynDataType<D> dataType) {
+    public DynRenderer(DynDataType<D> dataType) {
         this.dataType = dataType;
         this.dataHolder = dataType.createHolder();
     }

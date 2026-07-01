@@ -10,10 +10,21 @@ EntropyLib is distributed in the hope that it will be useful, but WITHOUT ANY WA
 You should have received a copy of the GNU Lesser General Public License along with EntropyLib. If not, see <https://www.gnu.org/licenses/>.
 */
 
-package me.steinsut.entropylib.event.handlers;
+package me.steinsut.entropylib.api.dyn;
 
-import net.neoforged.bus.api.IEventBus;
+import me.steinsut.entropylib.api.dyn.data.DynDataType;
+import me.steinsut.entropylib.api.dyn.dynrenderer.DynRenderer;
+import me.steinsut.entropylib.util.Cloneable;
+import net.neoforged.neoforge.client.renderstate.BaseRenderState;
 
-public interface INeoEventHandler {
-    void registerNeoEventHandlers(final IEventBus bus);
+public abstract class DynType<R extends DynRenderer<D, S>, D extends Cloneable<D>, S extends BaseRenderState> {
+    protected final DynDataType<D> dataType;
+
+    protected DynType(DynDataType<D> dataType) {
+        this.dataType = dataType;
+    }
+
+    public final DynDataType<D> getDataType() {
+        return this.dataType;
+    }
 }

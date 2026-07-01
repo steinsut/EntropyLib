@@ -14,7 +14,7 @@ package me.steinsut.entropylib.event.handlers;
 
 import net.neoforged.bus.api.IEventBus;
 
-public class ServerEventHandler implements IModEventHandler {
+public class ServerEventHandler implements ModEventHandler {
     @Override
     public void registerModEventHandlers(IEventBus bus) {
     }

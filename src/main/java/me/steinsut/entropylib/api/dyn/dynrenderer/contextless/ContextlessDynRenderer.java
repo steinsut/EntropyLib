@@ -13,10 +13,11 @@ You should have received a copy of the GNU Lesser General Public License along w
 package me.steinsut.entropylib.api.dyn.dynrenderer.contextless;
 
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
-import me.steinsut.entropylib.api.dyn.dynrenderer.BaseDynRenderer;
+import me.steinsut.entropylib.api.dyn.dynrenderer.DynRenderer;
+import me.steinsut.entropylib.util.Cloneable;
 import net.neoforged.neoforge.client.renderstate.BaseRenderState;
 
-public abstract class ContextlessDynRenderer<D, S extends BaseRenderState> extends BaseDynRenderer<D, S> {
+public abstract class ContextlessDynRenderer<D extends Cloneable<D>, S extends BaseRenderState> extends DynRenderer<D, S> {
     public ContextlessDynRenderer(DynDataType<D> dataType) {
         super(dataType);
     }

@@ -15,7 +15,6 @@ package me.steinsut.entropylib.api.entity;
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import me.steinsut.entropylib.api.dyn.entity.helper.DynEntityHelper;
 import me.steinsut.entropylib.api.dyn.entity.EntityDynType;
-import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncConfigReader;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncPolicy;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
@@ -29,7 +28,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import org.jspecify.annotations.NonNull;
 
-public abstract class DynEntity<S extends DynEntityRenderState<S>> extends Entity implements IDynEntity<S>, IEntityWithComplexSpawn {
+public abstract class DynEntity<S extends DynEntityRenderState<S>> extends Entity implements me.steinsut.entropylib.api.dyn.entity.DynEntity<S>, IEntityWithComplexSpawn {
     protected final DynEntityHelper<S> dynHelper;
 
     public DynEntity(EntityType<?> type, Level level, EntityDynType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {

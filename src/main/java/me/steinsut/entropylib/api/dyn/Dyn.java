@@ -13,17 +13,11 @@ You should have received a copy of the GNU Lesser General Public License along w
 package me.steinsut.entropylib.api.dyn;
 
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
-import me.steinsut.entropylib.api.dyn.dynrenderer.BaseDynRenderer;
+import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import net.neoforged.neoforge.client.renderstate.BaseRenderState;
 
-public abstract class BaseDynType<R extends BaseDynRenderer<D, S>, D, S extends BaseRenderState> {
-    protected final DynDataType<D> dataType;
+public interface Dyn<T extends DynType<?, ?, S>, S extends BaseRenderState> {
+    T getDynType();
 
-    protected BaseDynType(DynDataType<D> dataType) {
-        this.dataType = dataType;
-    }
-
-    public final DynDataType<D> getDataType() {
-        return this.dataType;
-    }
+    DynDataWriter<?> getDataWriter();
 }

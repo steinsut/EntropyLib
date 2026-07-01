@@ -14,6 +14,6 @@ package me.steinsut.entropylib.event.handlers;
 
 import net.neoforged.bus.api.IEventBus;
 
-public interface IModEventHandler {
+public interface ModEventHandler {
     void registerModEventHandlers(final IEventBus bus);
 }

@@ -12,10 +12,11 @@ You should have received a copy of the GNU Lesser General Public License along w
 
 package me.steinsut.entropylib.api.entity;
 
+import me.steinsut.entropylib.api.dyn.data.DynDataType;
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
 import me.steinsut.entropylib.api.dyn.entity.helper.DynEntityHelper;
 import me.steinsut.entropylib.api.dyn.entity.EntityDynType;
-import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
+import me.steinsut.entropylib.api.dyn.entity.DynEntity;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncConfigReader;
 import me.steinsut.entropylib.api.dyn.entity.sync.DynEntitySyncPolicy;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
@@ -29,7 +30,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import org.jspecify.annotations.NonNull;
 
-public abstract class DynBlockAttachedEntity<S extends DynEntityRenderState<S>> extends BlockAttachedEntity implements IDynEntity<S>, IEntityWithComplexSpawn {
+public abstract class DynBlockAttachedEntity<S extends DynEntityRenderState<S>> extends BlockAttachedEntity implements DynEntity<S>, IEntityWithComplexSpawn {
     protected final DynEntityHelper<S> dynHelper;
 
     public DynBlockAttachedEntity(EntityType<? extends BlockAttachedEntity> type, Level level, EntityDynType<?, ?, S> dynRendererType, DynEntitySyncPolicy dynSyncPolicy) {

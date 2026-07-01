@@ -21,7 +21,7 @@ import net.neoforged.neoforge.network.registration.HandlerThread;
 
 import static me.steinsut.entropylib.api.registries.CommonRegistries.ENTITY_DYN_TYPE_REGISTRY;
 
-public class ClientEventHandler implements IModEventHandler {
+public class ClientEventHandler implements ModEventHandler {
     @Override
     public void registerModEventHandlers(IEventBus bus) {
         bus.addListener(this::onAddEntityRendererLayers);

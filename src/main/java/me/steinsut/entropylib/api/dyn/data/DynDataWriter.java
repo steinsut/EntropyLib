@@ -1,11 +1,12 @@
 package me.steinsut.entropylib.api.dyn.data;
 
 import com.mojang.logging.LogUtils;
+import me.steinsut.entropylib.util.Cloneable;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.slf4j.Logger;
 
-public final class DynDataWriter<D> {
+public final class DynDataWriter<D extends Cloneable<D>> {
     private static final Logger LOGGER = LogUtils.getLogger();
     private final DynDataType.Holder<D> holder;
 
@@ -13,10 +14,14 @@ public final class DynDataWriter<D> {
         this.holder = holder;
     }
 
+    public DynDataType.Holder<D> makeHolderClone() {
+        return this.holder.makeClone();
+    }
+
     @SuppressWarnings("unchecked")
     public void writeToHolder(DynDataType.Holder<?> holder) {
         if (this.holder.getDataType() == holder.getDataType()) {
-            ((DynDataType.Holder<D>) holder).setData(this.holder.getData());
+            ((DynDataType.Holder<D>) holder).setData(this.holder.getData().makeClone());
         } else {
             LOGGER.warn("Cannot copy value to holder, holders belong to different data types");
         }

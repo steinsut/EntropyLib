@@ -13,11 +13,12 @@ You should have received a copy of the GNU Lesser General Public License along w
 package me.steinsut.entropylib.api.dyn.dynrenderer.entity;
 
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
-import me.steinsut.entropylib.api.dyn.dynrenderer.BaseDynRenderer;
+import me.steinsut.entropylib.api.dyn.dynrenderer.DynRenderer;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
+import me.steinsut.entropylib.util.Cloneable;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
-public abstract class EntityDynRenderer<D, S extends DynEntityRenderState<S>> extends BaseDynRenderer<D, S> {
+public abstract class EntityDynRenderer<D extends Cloneable<D>, S extends DynEntityRenderState<S>> extends DynRenderer<D, S> {
     public EntityDynRenderer(EntityRendererProvider.Context context, DynDataType<D> dataType) {
         super(dataType);
     }

@@ -14,6 +14,7 @@ package me.steinsut.entropylib.event.handlers;
 
 import com.mojang.logging.LogUtils;
 import me.steinsut.entropylib.api.EntropyLibApi;
+import me.steinsut.entropylib.api.network.payload.ServerboundRequestEntityDynData;
 import me.steinsut.entropylib.api.network.payload.ServerboundRequestEntityDynType;
 import me.steinsut.entropylib.api.registries.CommonRegistries;
 import me.steinsut.entropylib.commands.EntropyLibCommands;
@@ -30,7 +31,7 @@ import org.slf4j.Logger;
 
 import static me.steinsut.entropylib.registry.DynEntitySyncPolicies.POLICIES;
 
-public class CommonEventHandler implements IModEventHandler, INeoEventHandler {
+public class CommonEventHandler implements ModEventHandler, NeoEventHandler {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @Override
@@ -77,6 +78,12 @@ public class CommonEventHandler implements IModEventHandler, INeoEventHandler {
                 ServerboundRequestEntityDynType.TYPE,
                 ServerboundRequestEntityDynType.STREAM_CODEC,
                 ServerboundRequestEntityDynType::handleOnMain
+        );
+
+        mainRegistrar.playToServer(
+                ServerboundRequestEntityDynData.TYPE,
+                ServerboundRequestEntityDynData.STREAM_CODEC,
+                ServerboundRequestEntityDynData::handleOnMain
         );
     }
 

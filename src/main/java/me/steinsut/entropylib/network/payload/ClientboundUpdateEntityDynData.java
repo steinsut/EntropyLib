@@ -14,7 +14,7 @@ package me.steinsut.entropylib.network.payload;
 
 import me.steinsut.entropylib.api.EntropyLibApi;
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
-import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
+import me.steinsut.entropylib.api.dyn.entity.DynEntity;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -24,13 +24,13 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jspecify.annotations.NonNull;
 
-public record ClientboundUpdateEntityDynData(int id, DynDataType.Holder<?> holder) implements CustomPacketPayload {
+public record ClientboundUpdateEntityDynData(int entityId, DynDataType.Holder<?> holder) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<ClientboundUpdateEntityDynData> TYPE =
             new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "set_ent_dyndata"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundUpdateEntityDynData> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT,
-            ClientboundUpdateEntityDynData::id,
+            ClientboundUpdateEntityDynData::entityId,
             DynDataType.Holder.STREAM_CODEC,
             ClientboundUpdateEntityDynData::holder,
             ClientboundUpdateEntityDynData::new
@@ -38,7 +38,7 @@ public record ClientboundUpdateEntityDynData(int id, DynDataType.Holder<?> holde
 
     public static void handleOnMain(final ClientboundUpdateEntityDynData data, final IPayloadContext context) {
         Level level = context.player().level();
-        IDynEntity<?> entity = (IDynEntity<?>) level.getEntity(data.id);
+        DynEntity<?> entity = (DynEntity<?>) level.getEntity(data.entityId);
         if (entity != null) {
             entity.readDataFrom(data.holder.getWriter(), false);
         }

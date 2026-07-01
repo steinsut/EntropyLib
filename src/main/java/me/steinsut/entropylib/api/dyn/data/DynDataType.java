@@ -16,6 +16,7 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import me.steinsut.entropylib.api.EntropyLibApi;
 import me.steinsut.entropylib.api.registries.CommonRegistries;
+import me.steinsut.entropylib.util.Cloneable;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -29,7 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public final class DynDataType<D> {
+public final class DynDataType<D extends Cloneable<D>> {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static final Identifier DEFAULT_PRESET_ID = Identifier.fromNamespaceAndPath(EntropyLibApi.MOD_ID, "default");
@@ -74,7 +75,7 @@ public final class DynDataType<D> {
         return Collections.unmodifiableSet(this.presets.keySet());
     }
 
-    public static final class Builder<_D> {
+    public static final class Builder<_D extends Cloneable<_D>> {
         private final Supplier<_D> defaultSupplier;
         private final Map<Identifier, Supplier<_D>> presets;
         private final Codec<_D> codec;
@@ -87,7 +88,7 @@ public final class DynDataType<D> {
             this.streamCodec = streamCodec;
         }
 
-        public static <_D> Builder<_D> of(Codec<_D> codec, StreamCodec<? super RegistryFriendlyByteBuf, _D> streamCodec, Supplier<_D> defaultSupplier) {
+        public static <_D extends Cloneable<_D>> Builder<_D> of(Codec<_D> codec, StreamCodec<? super RegistryFriendlyByteBuf, _D> streamCodec, Supplier<_D> defaultSupplier) {
             return new Builder<>(codec, streamCodec, defaultSupplier);
         }
 
@@ -106,7 +107,7 @@ public final class DynDataType<D> {
         }
     }
 
-    public static final class Holder<_D> {
+    public static final class Holder<_D extends Cloneable<_D>> implements Cloneable<Holder<_D>> {
         public static StreamCodec<RegistryFriendlyByteBuf, Holder<?>> STREAM_CODEC = new StreamCodec<>() {
             @Override
             public void encode(@NonNull RegistryFriendlyByteBuf buf, Holder<?> holder) {
@@ -169,6 +170,11 @@ public final class DynDataType<D> {
             } else {
                 LOGGER.warn("Data dynType does not have preset {}", id);
             }
+        }
+
+        @Override
+        public Holder<_D> makeClone() {
+            return new Holder<>(this.dataType, this.data.makeClone());
         }
     }
 }

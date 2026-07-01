@@ -2,7 +2,7 @@ package me.steinsut.entropylib.api.network.payload;
 
 import io.netty.buffer.ByteBuf;
 import me.steinsut.entropylib.api.EntropyLibApi;
-import me.steinsut.entropylib.api.dyn.entity.IDynEntity;
+import me.steinsut.entropylib.api.dyn.entity.DynEntity;
 import me.steinsut.entropylib.network.payload.ClientboundSetEntityDynType;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -28,7 +28,7 @@ public record ServerboundRequestEntityDynType(int entityId) implements CustomPac
         ServerPlayer player = (ServerPlayer) context.player();
         Entity entity = player.level().getEntity(payload.entityId);
 
-        if (entity instanceof IDynEntity<?> dynEntity) {
+        if (entity instanceof DynEntity<?> dynEntity) {
             PacketDistributor.sendToPlayer(player, new ClientboundSetEntityDynType(
                     payload.entityId,
                     dynEntity.getDynType()
