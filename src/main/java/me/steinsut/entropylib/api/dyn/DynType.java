@@ -14,7 +14,7 @@ package me.steinsut.entropylib.api.dyn;
 
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
 import me.steinsut.entropylib.api.dyn.dynrenderer.DynRenderer;
-import me.steinsut.entropylib.util.Cloneable;
+import me.steinsut.entropylib.api.util.Cloneable;
 import net.neoforged.neoforge.client.renderstate.BaseRenderState;
 
 public abstract class DynType<R extends DynRenderer<D, S>, D extends Cloneable<D>, S extends BaseRenderState> {

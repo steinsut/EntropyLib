@@ -15,7 +15,7 @@ package me.steinsut.entropylib.api.dyn.dynrenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import me.steinsut.entropylib.api.dyn.data.DynDataType;
 import me.steinsut.entropylib.api.dyn.data.DynDataWriter;
-import me.steinsut.entropylib.util.Cloneable;
+import me.steinsut.entropylib.api.util.Cloneable;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.resources.Identifier;

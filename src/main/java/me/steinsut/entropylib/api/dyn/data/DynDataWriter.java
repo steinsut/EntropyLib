@@ -1,7 +1,7 @@
 package me.steinsut.entropylib.api.dyn.data;
 
 import com.mojang.logging.LogUtils;
-import me.steinsut.entropylib.util.Cloneable;
+import me.steinsut.entropylib.api.util.Cloneable;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.slf4j.Logger;

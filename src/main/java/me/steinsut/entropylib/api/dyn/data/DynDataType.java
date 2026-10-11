@@ -16,7 +16,7 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import me.steinsut.entropylib.api.EntropyLibApi;
 import me.steinsut.entropylib.api.registries.CommonRegistries;
-import me.steinsut.entropylib.util.Cloneable;
+import me.steinsut.entropylib.api.util.Cloneable;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
