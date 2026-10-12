@@ -22,6 +22,7 @@ import me.steinsut.entropylib.api.dyn.entity.sync.handler.IEntityDynSyncHandler;
 import me.steinsut.entropylib.api.renderer.entity.DynEntityRenderState;
 import me.steinsut.entropylib.network.payload.ClientboundSetEntityDynType;
 import me.steinsut.entropylib.network.payload.ClientboundUpdateEntityDynData;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
@@ -76,7 +77,7 @@ public class DynEntityHelper<S extends DynEntityRenderState<S>> {
         } else {
             LOGGER.warn("DynRendererType {} is incompatible with entity type {}",
                     ENTITY_DYN_TYPE_REGISTRY.getKey(type),
-                    this.entity.typeHolder().getKey().identifier());
+                    BuiltInRegistries.ENTITY_TYPE.getKey(this.entity.getType()));
         }
     }
 

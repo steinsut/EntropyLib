@@ -242,7 +242,7 @@ public class DynEntityCommands {
             throw ERROR_DYN_DATA_READ.create(collector.getReport());
         }
 
-        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.data.get", entity.getDisplayName(), NbtUtils.prettyPrint(tag, true)), false);
+        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.data.get", entity.getDisplayName(), NbtUtils.toPrettyComponent(tag)), false);
         return Command.SINGLE_SUCCESS;
     }
 
@@ -311,7 +311,7 @@ public class DynEntityCommands {
             throw ERROR_DYN_SYNC_CONFIG_READ.create(collector.getReport());
         }
 
-        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.sync.config.get", entity.getDisplayName(), NbtUtils.prettyPrint(tag, false)), false);
+        source.sendSuccess(() -> Component.translatable("commands.dyn.entity.sync.config.get", entity.getDisplayName(), NbtUtils.toPrettyComponent(tag)), false);
         return Command.SINGLE_SUCCESS;
     }
 

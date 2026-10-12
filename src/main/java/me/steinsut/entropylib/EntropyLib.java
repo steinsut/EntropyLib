@@ -35,7 +35,7 @@ public class EntropyLib {
         LOGGER.info("Hello from EntropyLib! Overengineering in progress...");
         forceLoadClasses();
 
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.LOCAL, Config.SPEC);
 
         CommonEventHandler commonEventHandler = new CommonEventHandler();
 
